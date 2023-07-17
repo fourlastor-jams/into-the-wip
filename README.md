@@ -1,5 +1,7 @@
 # Libgdx Java starter
 
+## Documents
+[Concept Document](/documents/concept%20document.md)
 
 ## Credits
 
