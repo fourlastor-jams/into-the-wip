@@ -3,8 +3,7 @@ A high-level description of this game. What it's about and its feel. This is a '
 
 * [High-Level Concepts](#high-level-concepts)
 * [Product Description](#product-description)
-    * [Mechanics](#mechanics-the-rules-of-the-game-world)
-    * [Dynamics](#dynamics)
+    * [Player Experience](#player-experience)
     * [Aesthetics](#aesthetics)
     * [Monetization](#monetization)
     * [Technology, Tools and Platform](#technology-tools-and-platform)
@@ -21,15 +20,25 @@ High-level information about the game quickly and concisely.
     Roguelike, Turn based strategy, Creature collection, (deck building)        
     
 * #### What is the target audience?
-   non-casual gamers, men and women age 21-35
+    The target players are non-casual gamers on Steam looking for a fun challenge, men and women aged 21-35.
+
+    ##### Psychographics
+    Primary motivators are TODO
+
+    ##### Demographics
+    Men and women from age 21-35.
+
+    ##### Technological/Environmental Context
+    Players will be using the game store page Steam to find and play the game.
     
 * #### What other games are similar?
 Pokemon, "Into the Breach", Coromon
 
-* #### Why play this game?
-   Want more of a tactical challenge than the average pokemon game. It also offers harder consequences like death and blood, etc than a pokemon game. The tactical challenge mechanics are similar to "Into the Breach". The strategic challenge is roguelike-ish.
+* #### Unique Selling point
+    ##### Why play this game?
+    Want more of a tactical challenge than the average pokemon game. It also offers harder consequences like death and blood, etc than a pokemon game. The tactical challenge mechanics are similar to "Into the Breach". The strategic challenge is roguelike-ish.
 
-* #### What makes the game fun?
+    ##### What makes the game fun?
     Progressing, proficiency/mastery,
 
 * #### What is the 'One Question'?
@@ -38,11 +47,13 @@ Pokemon, "Into the Breach", Coromon
     
 ## Product Description
 A Product-oriented description that describes an overview of the player experience in the game and the game systems that support the overall vision.
-### Mechanics: the rules of the game world
-* #### What are the character's goals?        
+
+### Player Experience
+#### Mechanics: the rules of the game world
+* ##### What are the character's goals?        
     Defeat enemies, and capture other pokemons. Obtain abilities and powerups, items, etc. Gain experience points.
 
-* #### What abilities does the character have?
+* ##### What abilities does the character have?
     The avatar:
     * move around the overworld
     * interact with npc's
@@ -53,7 +64,7 @@ A Product-oriented description that describes an overview of the player experien
     * heal
     * support
     
-* #### What obstacles or difficulties will the character face?    
+* ##### What obstacles or difficulties will the character face?    
     Overworld:
     * choosing your best strategic board
     
@@ -64,19 +75,19 @@ A Product-oriented description that describes an overview of the player experien
     * capturing pokemons
     * getting items
 
-* #### What items can the character obtain
+* ##### What items can the character obtain
     Other pokemons, items like potions & stuff, abilities
     
-* #### What resources must be managed?
+* ##### What resources must be managed?
     Pokemon health, collected abilities and items, a money currency, different tactical board options, time? space on the tactical board
     
-### Dynamics
+#### Dynamics
 The interaction between the player and the game mechanics
     
-* #### What type of proficiency will the player need to develop to become proficient at the game?
+* ##### What type of proficiency will the player need to develop to become proficient at the game?
     It's a long-term cognitive strategic game. Thinking ahead in turns, and planning on how to be efficient in battle/combat. Being able to capture different pokemons on the strategic and/or tactical board, and knowing when to use them.
 
-* #### How does the player interact with the game at the software level?
+* ##### How does the player interact with the game at the software level?
     The player interacts with the keyboard & mouse, or controller.
 
 ### Aesthetics
