@@ -16,7 +16,7 @@ import io.github.fourlastor.harlequin.animation.AnimationNode;
 import io.github.fourlastor.harlequin.ui.AnimationStateMachine;
 import javax.inject.Inject;
 
-public class IntroScreen extends ScreenAdapter {
+public class DemoScreen extends ScreenAdapter {
 
     public static final Color CLEAR_COLOR = Color.valueOf("000000");
 
@@ -26,7 +26,7 @@ public class IntroScreen extends ScreenAdapter {
     private final AnimationStateMachine animationGroup;
 
     @Inject
-    public IntroScreen(InputMultiplexer inputMultiplexer, AssetManager assetManager) {
+    public DemoScreen(InputMultiplexer inputMultiplexer, AssetManager assetManager) {
         this.inputMultiplexer = inputMultiplexer;
 
         viewport = new FitViewport(256, 144);

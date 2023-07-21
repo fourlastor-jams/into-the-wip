@@ -7,16 +7,16 @@ import io.github.fourlastor.game.route.Router;
 
 @ScreenScoped
 @Subcomponent
-public interface IntroComponent {
+public interface DemoComponent {
 
     @ScreenScoped
-    IntroScreen screen();
+    DemoScreen screen();
 
     @Subcomponent.Builder
     interface Builder {
 
         Builder router(@BindsInstance Router router);
 
-        IntroComponent build();
+        DemoComponent build();
     }
 }
