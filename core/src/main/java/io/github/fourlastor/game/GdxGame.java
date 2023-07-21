@@ -5,26 +5,22 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
 import io.github.fourlastor.game.di.GameComponent;
-import io.github.fourlastor.game.intro.IntroComponent;
-import io.github.fourlastor.game.level.di.LevelComponent;
+import io.github.fourlastor.game.intro.DemoComponent;
 import io.github.fourlastor.game.route.Router;
+import javax.inject.Inject;
 
 public class GdxGame extends Game implements Router {
 
     private final InputMultiplexer multiplexer;
 
-    private final LevelComponent.Builder levelScreenFactory;
-    private final IntroComponent.Builder introScreenFactory;
+    private final DemoComponent.Builder demoComponentBuilder;
 
     private Screen pendingScreen = null;
 
-    public GdxGame(
-            InputMultiplexer multiplexer,
-            LevelComponent.Builder levelScreenFactory,
-            IntroComponent.Builder introScreenFactory) {
+    @Inject
+    public GdxGame(InputMultiplexer multiplexer, DemoComponent.Builder demoComponentBuilder) {
         this.multiplexer = multiplexer;
-        this.levelScreenFactory = levelScreenFactory;
-        this.introScreenFactory = introScreenFactory;
+        this.demoComponentBuilder = demoComponentBuilder;
     }
 
     @Override
@@ -37,7 +33,7 @@ public class GdxGame extends Game implements Router {
         //            Gdx.graphics.setCursor(customCursor);
         //        }
         Gdx.input.setInputProcessor(multiplexer);
-        goToIntro();
+        goToDemo();
     }
 
     @Override
@@ -54,12 +50,12 @@ public class GdxGame extends Game implements Router {
     }
 
     @Override
-    public void goToIntro() {
-        pendingScreen = introScreenFactory.router(this).build().screen();
+    public void goToDemo() {
+        pendingScreen = demoComponentBuilder.router(this).build().screen();
     }
 
     @Override
     public void goToLevel() {
-        pendingScreen = levelScreenFactory.router(this).build().screen();
+        Gdx.app.error("GdxGame", "Level screen is missing");
     }
 }
