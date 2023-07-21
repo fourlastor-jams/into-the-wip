@@ -41,12 +41,6 @@ public class AssetsModule {
         assetManager.setLoader(SpineEntity.class, spineLoader);
         assetManager.setLoader(AnimationNode.Group.class, dragonBonesLoader);
         assetManager.load(PATH_TEXTURE_ATLAS, TextureAtlas.class);
-        assetManager.load(PATH_SPINE_JSON, SpineEntity.class);
-        assetManager.load(
-                PATH_DRAGON_BONES_JSON,
-                AnimationNode.Group.class,
-                new DragonBonesLoader.Parameters(PATH_TEXTURE_ATLAS, "animations/dancer/texture"));
-        assetManager.load(PATH_WAVE_SHADER, ShaderProgram.class);
         assetManager.finishLoading();
         return assetManager;
     }
