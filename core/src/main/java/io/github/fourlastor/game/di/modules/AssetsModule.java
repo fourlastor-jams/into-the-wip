@@ -3,7 +3,6 @@ package io.github.fourlastor.game.di.modules;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.utils.JsonReader;
 import dagger.Module;
 import dagger.Provides;
