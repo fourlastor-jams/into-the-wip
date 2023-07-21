@@ -13,8 +13,8 @@ harlequin="1.1.0"
 shadow = "7.1.2"
 spotless = "6.10.0"
 perceptual = "1.0.0"
-regexodus = "0.1.13"
-textratypist = "0.7.2"
+regexodus = "0.1.15"
+textratypist = "0.8.3"
 [libraries]
 ashley = { module = "com.badlogicgames.ashley:ashley", version.ref = "ashley" }
 dagger-core = { module = "com.google.dagger:dagger", version.ref = "dagger"}
@@ -24,9 +24,6 @@ java-inject = { module = "javax.inject:javax.inject", version.ref = "javax" }
 gdx-core = { module = "com.badlogicgames.gdx:gdx", version.ref = "gdx" }
 gdx-platform = { module = "com.badlogicgames.gdx:gdx-platform", version.ref = "gdx" }
 gdx-ai = { module = "com.badlogicgames.gdx:gdx-ai", version.ref = "gdxAi" }
-gdx-box2d-core = { module = "com.badlogicgames.gdx:gdx-box2d", version.ref = "gdx" }
-gdx-box2d-gwt = { module = "com.badlogicgames.gdx:gdx-box2d-gwt", version.ref = "gdx" }
-gdx-box2d-platform = { module = "com.badlogicgames.gdx:gdx-box2d-platform", version.ref = "gdx" }
 gdx-controllers-core = { module = "com.badlogicgames.gdx-controllers:gdx-controllers-core", version.ref = "controllers" }
 gdx-controllers-desktop = { module = "com.badlogicgames.gdx-controllers:gdx-controllers-desktop", version.ref = "controllers" }
 gdx-controllers-gwt = { module = "com.badlogicgames.gdx-controllers:gdx-controllers-gwt", version.ref = "controllers" }
