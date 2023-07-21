@@ -7,7 +7,6 @@ import com.badlogic.gdx.Screen;
 import io.github.fourlastor.game.di.GameComponent;
 import io.github.fourlastor.game.intro.DemoComponent;
 import io.github.fourlastor.game.route.Router;
-
 import javax.inject.Inject;
 
 public class GdxGame extends Game implements Router {

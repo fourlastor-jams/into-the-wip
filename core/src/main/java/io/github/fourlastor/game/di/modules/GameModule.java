@@ -2,7 +2,6 @@ package io.github.fourlastor.game.di.modules;
 
 import dagger.Module;
 import dagger.Provides;
-
 import java.util.Random;
 
 @Module
