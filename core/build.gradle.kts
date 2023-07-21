@@ -52,8 +52,6 @@ tasks.compileJava.configure {
 }
 
 dependencies {
-    implementation(project(":gdx-auto-pool"))
-    implementation(project(":gdx-ldtk-loader"))
     implementation(libs.harlequin.core)
     implementation(libs.harlequin.ashley)
     implementation(libs.perceptual)
