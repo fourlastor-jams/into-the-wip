@@ -8,13 +8,16 @@ Other documents:
 
 ## Index
 * [Game Parts](#game-parts)
+    * [Physical](#physical)
+    * [Nonphysical](#nonphysical)
+    * [Game-Representational](#game-representational)
 
 ## Game Parts
 
-### Physicals
+### Physical
 Physical objects such as a character, an army, a tree, etc.
 
-### Nonphysicals
+### Nonphysical
 Nonphysical concept, such as area of control, emotion, time, etc.
 
 ### Game-Representational

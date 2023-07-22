@@ -22,7 +22,7 @@ High-level information about the game quickly and concisely.
     It's a pokemon vs "Into the breach" game. Tactical, isometric grid combat with lots of systematic gameplay opportunities.
                          
 * #### Describe the genre:
-    Roguelike, Turn based strategy, Creature collection, (deck building)        
+    Roguelike, Turn based strategy, Creature collection
     
 * #### What is the target audience?
     The target players are non-casual gamers on Steam looking for a fun challenge, men and women aged 21-35.
@@ -34,21 +34,23 @@ High-level information about the game quickly and concisely.
     Men and women from age 21-35.
 
     ##### Technological/Environmental Context
+    There will be a demo up on itch.
     Players will be using the game store page Steam to find and play the game.
     
 * #### What other games are similar?
-Pokemon, "Into the Breach", Coromon
+    Pokemon, "Into the Breach", Coromon, Wesnoth
 
 * #### Unique Selling point
     ##### Why play this game?
-    Want more of a tactical challenge than the average pokemon game. It also offers harder consequences like death and blood, etc than a pokemon game. The tactical challenge mechanics are similar to "Into the Breach". The strategic challenge is roguelike-ish.
+    Want more of a tactical challenge than the average pokemon game. It also offers harder consequences like death and blood, etc than a pokemon game. The tactical challenge mechanics are similar to "Into the Breach". 
+    The strategic challenge is roguelike-ish, maybe like "Slay the Spire" and "Faster than Light".
 
     ##### What makes the game fun?
-    Progressing, proficiency/mastery,
+    Progressing, proficiency/mastery, Roguelike procedural randomness, Unlocking new features / Achievements.
 
 * #### What is the 'One Question'?
     The one question that can be used to resolve design questions is:
-
+    > Is it collectable?
     
 ## Product Description
 A Product-oriented description that describes an overview of the player experience in the game and the game systems that support the overall vision.
@@ -56,12 +58,12 @@ A Product-oriented description that describes an overview of the player experien
 ### Player Experience
 #### Mechanics: the rules of the game world
 * ##### What are the character's goals?        
-    Defeat enemies, and capture other pokemons. Obtain abilities and powerups, items, etc. Gain experience points.
+    Defeat enemies, and capture other pokemons. Obtain abilities and powerups, items, etc. Gain experience and level up.
 
 * ##### What abilities does the character have?
     The avatar:
-    * move around the overworld
-    * interact with npc's
+    * move around the strategic map
+    * interact with npc's and other exciting nodes
     
     The pokemons (on the strategic board):
     * move
@@ -70,10 +72,10 @@ A Product-oriented description that describes an overview of the player experien
     * support
     
 * ##### What obstacles or difficulties will the character face?    
-    Overworld:
-    * choosing your best strategic board
+    Strategic map:
+    * choosing your best strategic path to gain challenges and rewards
     
-    Strategic board:
+    Tactical board:
     * strategic missions
     * Other enemies
     * environmental hazards
@@ -81,7 +83,7 @@ A Product-oriented description that describes an overview of the player experien
     * getting items
 
 * ##### What items can the character obtain
-    Other pokemons, items like potions & stuff, abilities
+    Other pokemons, items like potions & stuff, abilities, gear, weapons
     
 * ##### What resources must be managed?
     Pokemon health, collected abilities and items, a money currency, different tactical board options, time? space on the tactical board
@@ -98,7 +100,10 @@ The interaction between the player and the game mechanics
 ### Aesthetics
 The visual, audio, narrative, and psychological aspects of the game
 * #### Describe the style and feel of the game
-    Pokemon vs "Into the breach", need to think more about this. Serious/realistic vs Playful cutsy theme??
+    Cyberpunk mechanimals. Gritty like 'Into the Breach', and still cutsy.
+    Based on animals, instead mechs.
+
+    Cute, animal, mechanical.
 
 * #### Does the game use pixel art, line art, or realistic graphics?    
     Pixel art, isometric.
@@ -108,16 +113,17 @@ The visual, audio, narrative, and psychological aspects of the game
 
 * #### What is the relevant backstory for the game?    
     Something, collecting pokemons and a.. challenge
+    A non-welcoming world. Why are there mechanical animals? where are they from? who made them? are they still being made? post-apocalyptic (adventure time?)
 
 * #### What emotional state(s) does the game try to provoke?    
-    Powerful & Brave(?)
+    Powerful & Brave(?), desperate(?)
     
 ### Monetization
 * #### What are the plans for monetization?
     TODO: Possibly the game will be made available on the game store publication (Steam). Single price, paid once.
 
 * #### What localizations will the game offer?
-    English
+    English, Norwegian, Italian
 
 * #### What are the plans for Marketing/PR?
     We will tweet about the game progression, possibly when we enter preproduction. Maybe devlogs? -On youtube, itch/github.
@@ -132,7 +138,7 @@ The visual, audio, narrative, and psychological aspects of the game
     * Are there any improvement suggestions?
 
 * #### What is the project's scope?
-    TODO
+    1 year, A demo in 2 months.
 
 ### Development
 * #### What equipment is needed for this project? 
@@ -177,19 +183,31 @@ The visual, audio, narrative, and psychological aspects of the game
 ## Detailed Design
 ### Game Design 
  * #### What are the core loops?
+    * Progression loop: catching pokemons and unlockin content.
+    * The strategical: Traversing the strategic board after each tactical battle.
+    * The tactical turn based board of moving, atacking and using other abilities.
+
  * #### What are the player objectives and progression?
+
+
  * #### Briefly describe the narrative and its elements
+
+
  * #### Briefly describe the main game systems
+    Tactical combat based on abilities, and different pokemons. Merchant/NPC interactions to buy and sell ..things.
 
  * #### What are the primary forms of interactivity?
     * Desktop needs to have a functional mouse, keyboard, and screen. This game will not require a powerful computer. Controller support is wanted.
     * Android needs a basic Android device.
 
     ##### Player interactivity budget
-    TODO
+    slow paced in the strategic board.
+    medium paced inside the tactical board.
+    Wanting to focus on short-term and long-term interactivity.
 
  * #### What gameplay data is displayed during the game?
     On the strategic board: 
+    * locations
     * money/currency 
     * npcs 
     * health? 
@@ -200,6 +218,8 @@ The visual, audio, narrative, and psychological aspects of the game
     * the different available abilities 
     * turn counter 
     * objectives information
+    * you own pokemons
+    * enemies
     
  * #### What menus, screens, or overlays will there be?
     * splash screen
@@ -207,9 +227,7 @@ The visual, audio, narrative, and psychological aspects of the game
     * options screen
     * overworld/strategic screen
     * tactical screen
-    * pokemon list overlay
-    * (meta progression, how far along in the game you are)
-    * ...
+    * pokemon list overlay, index (meta progression, how far along in the game you are)
 
 ## Other
 ### Questions to consider:
