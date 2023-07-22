@@ -11,8 +11,6 @@ import io.github.fourlastor.harlequin.animation.AnimationNode;
 import io.github.fourlastor.harlequin.loader.dragonbones.DragonBonesLoader;
 import io.github.fourlastor.harlequin.loader.spine.SpineLoader;
 import io.github.fourlastor.harlequin.loader.spine.model.SpineEntity;
-import io.github.fourlastor.ldtk.LdtkLoader;
-import io.github.fourlastor.ldtk.model.LdtkMapData;
 import javax.inject.Named;
 import javax.inject.Singleton;
 
@@ -38,14 +36,11 @@ public class AssetsModule {
 
     @Provides
     @Singleton
-    public AssetManager assetManager(
-            LdtkLoader ldtkLoader, SpineLoader spineLoader, DragonBonesLoader dragonBonesLoader) {
+    public AssetManager assetManager(SpineLoader spineLoader, DragonBonesLoader dragonBonesLoader) {
         AssetManager assetManager = new AssetManager();
-        assetManager.setLoader(LdtkMapData.class, ldtkLoader);
         assetManager.setLoader(SpineEntity.class, spineLoader);
         assetManager.setLoader(AnimationNode.Group.class, dragonBonesLoader);
         assetManager.load(PATH_TEXTURE_ATLAS, TextureAtlas.class);
-        assetManager.load(PATH_LEVELS, LdtkMapData.class);
         assetManager.load(PATH_SPINE_JSON, SpineEntity.class);
         assetManager.load(
                 PATH_DRAGON_BONES_JSON,
