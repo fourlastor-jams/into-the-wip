@@ -4,9 +4,9 @@ import com.badlogic.gdx.math.GridPoint2;
 import com.badlogic.gdx.math.Vector2;
 
 public class Coordinate {
-    private static final int TILE_WIDTH = 32;
+    private static final int TILE_WIDTH = 64;
     private static final float HALF_WIDTH = TILE_WIDTH / 2f;
-    private static final int TILE_HEIGHT = 16;
+    private static final int TILE_HEIGHT = 32;
     private static final float HALF_HEIGHT = TILE_HEIGHT / 2f;
     private static final int TILE_THICKNESS = 16;
 
