@@ -101,6 +101,8 @@ The interaction between the player and the game mechanics
 
 ### Aesthetics
 The visual, audio, narrative, and psychological aspects of the game
+
+The projects [Reference art](https://www.pinterest.com/Sandra_776/into-the-wip).
 * #### Describe the style and feel of the game
     Cyberpunk mechanimals. Gritty like 'Into the Breach', and still cutsy.
     Based on animals, instead mechs.
