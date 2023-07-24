@@ -28,7 +28,9 @@ High-level information about the game quickly and concisely.
     The target players are non-casual gamers on Steam looking for a fun challenge, men and women aged 21-35.
 
     ##### Psychographics
-    Primary motivators are TODO
+    Primary motivators are Mastery-Achievement: completion, strategy and challenge, culminating in a motivation for gaining power. There is also a minor motivation to immerse oneself in the world design and discovery. 
+
+    The game leans towards a cerebral-world motivation. Where it's fun to discover and think through your moves beforehand.
 
     ##### Demographics
     Men and women from age 21-35.
@@ -138,7 +140,7 @@ The visual, audio, narrative, and psychological aspects of the game
     * Are there any improvement suggestions?
 
 * #### What is the project's scope?
-    1 year, A demo in 2 months.
+    1 year. A demo in 2 months (by end of September 2023).
 
 ### Development
 * #### What equipment is needed for this project? 
@@ -159,6 +161,8 @@ The visual, audio, narrative, and psychological aspects of the game
     This project will be completed in a team; audio will be obtained from third-party websites that make their assets available under the Creative Commons license for commercial purposes.
 
     Main task will be design, programming and creating graphics.
+
+    TODO: Sign a contract about ownership and money?
 
 * #### What are the tasks that need to be accomplished to create this game?        
     The three phases this project will go through will be:
@@ -188,10 +192,14 @@ The visual, audio, narrative, and psychological aspects of the game
     * The tactical turn based board of moving, atacking and using other abilities.
 
  * #### What are the player objectives and progression?
+    The players objectives is to overcome every tactical and strategical challenges.
+    The strategic map offers choices the player must choose between to gain better odds and power. On the strategic map the player must best all opponents with the boards limits and abilities available. The player progress by becoming more powerful, and being able to barter for the best abilities/choices available.
 
+    * Immediate short-term: gain XP and money from a tactical fight
+    * Immediate long-term: progress the strategic map to completion
 
  * #### Briefly describe the narrative and its elements
-
+    
 
  * #### Briefly describe the main game systems
     Tactical combat based on abilities, and different pokemons. Merchant/NPC interactions to buy and sell ..things.
