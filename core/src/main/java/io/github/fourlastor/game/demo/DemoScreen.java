@@ -63,7 +63,7 @@ public class DemoScreen extends ScreenAdapter {
     public DemoScreen(TextureAtlas atlas, Random random) {
         this.atlas = atlas;
         this.random = random;
-        viewport = new FitViewport(800, 600);
+        viewport = new FitViewport(128 * 16, 72 * 16);
         stage = new Stage(viewport);
 
         genWorld();
@@ -100,7 +100,7 @@ public class DemoScreen extends ScreenAdapter {
             }
         }
 
-        TextureRegion region = atlas.findRegion("tile-gray-tall");
+        TextureRegion region = atlas.findRegion("tile-gray-tall-64");
         for (Tile tile : tiles) {
             Image image = new Image(region);
             Vector2 position = Coordinate.toWorldAtOrigin(tile.position, LEFT, BOTTOM);
