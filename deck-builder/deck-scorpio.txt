@@ -1,0 +1,3 @@
+LINK="1Ctf9-MYhRUY52dNVv5-7zsv2Tc5k6PeWZNIqmwwy-q4!Chain scorpio"
+INCLUDE = "deck-base.txt"
+DISPLAY = "tts_deck_scorpio.png", , , 5x4
