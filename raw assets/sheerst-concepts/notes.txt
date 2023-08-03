@@ -1,7 +1,7 @@
 general notes
 
 atmosfin - head needs to be bigger, general sprite could be a little bigger, right side jet turbine hard to see
-pyrosaur - add hidden claw on left head (it's right hand)
+pyrosaur - add hidden claw on left head (it's right hand), move left leg up slightly
 armbryo - larger tentacles, better tentacle detail, be less generic
 goozie - add dark blue leaks/oozes to bottom of sprite on ground area
 
