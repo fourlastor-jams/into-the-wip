@@ -98,7 +98,7 @@ The interaction between the player and the game mechanics
 ### Aesthetics
 The visual, audio, narrative, and psychological aspects of the game
 * #### Describe the style and feel of the game
-    Pokemon vs "Into the breach", need to think more about this. Serious/realistic vs Playful cutsy theme??
+    The world is Post-apocalyptic and marked by nuclear waste and ruined cities and such. Though dystopian the game feels cutsy and cheerful.
 
 * #### Does the game use pixel art, line art, or realistic graphics?    
     Pixel art, isometric.

@@ -1,6 +1,7 @@
 # The Detailed Design Document
 
-TODO: description
+This document is a reminder of why each part is important, and provides a technical definition for implementation.
+Describe the details of parts, attributes, values and behaviours. Include a design rationale for these and a specific behavioural description.
 
 Other documents:
 * [The Concept Document](/documents/The%20Concept%20Document.md)
@@ -8,6 +9,9 @@ Other documents:
 
 ## Index
 * [Game Parts](#game-parts)
+    * [Physical](#physical)
+    * [Nonphysical](#nonphysical)
+    * [Game-Representational](#game-representational)
 
 ## Game Parts
 
@@ -18,4 +22,4 @@ Physical objects such as a character, an army, a tree, etc.
 Nonphysical concept, such as area of control, emotion, time, etc.
 
 ### Game-Representational
-Purely representational and related to game rules, maximum number of cards in a hand, displays of control in the game's user interface, or client turn order in a game.
+Purely representational and related to game rules. E.g maximum number of cards in a hand, displays of control in the game's user interface, or client turn order in a game.
