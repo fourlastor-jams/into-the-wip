@@ -108,3 +108,6 @@ html/war
 
 ### Packaging output
 packaging/out
+
+### Android Studio
+/local.properties
