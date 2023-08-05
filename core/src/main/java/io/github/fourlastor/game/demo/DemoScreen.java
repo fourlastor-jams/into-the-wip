@@ -14,7 +14,6 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import io.github.fourlastor.game.ui.YSort;
-
 import java.util.Random;
 import javax.inject.Inject;
 
@@ -56,7 +55,6 @@ public class DemoScreen extends ScreenAdapter {
         stage.addActor(tilesGroup);
         map.dispose();
     }
-
 
     @Override
     public void resize(int width, int height) {
