@@ -54,6 +54,7 @@ public class DemoScreen extends ScreenAdapter {
             }
         }
         stage.addActor(tilesGroup);
+        map.dispose();
     }
 
 
