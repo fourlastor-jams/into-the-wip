@@ -1,7 +1,7 @@
 package io.github.fourlastor.game.di.modules;
 
 import dagger.Module;
-import io.github.fourlastor.game.intro.DemoComponent;
+import io.github.fourlastor.game.demo.DemoComponent;
 
 @Module(
         subcomponents = {

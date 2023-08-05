@@ -1,4 +1,4 @@
-package io.github.fourlastor.game.intro;
+package io.github.fourlastor.game.demo;
 
 import dagger.BindsInstance;
 import dagger.Subcomponent;
