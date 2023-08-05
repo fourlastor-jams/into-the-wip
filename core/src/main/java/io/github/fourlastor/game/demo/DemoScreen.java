@@ -4,6 +4,7 @@ import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.tiled.TiledMap;
@@ -47,6 +48,7 @@ public class DemoScreen extends ScreenAdapter {
             float staggerSpacing = tileHeight / 2f;
             YSort tilesGroup = new YSort();
             TiledMapTileSet tileSet = map.getTileSets().getTileSet(mapLayer.getName());
+            AtlasRegion atlasRegion = atlas.findRegion(mapLayer.getName());
 
             for (int x = 0; x < tiles.getWidth(); ++x) {
                 for (int y = 0; y < tiles.getHeight(); ++y) {
@@ -61,7 +63,14 @@ public class DemoScreen extends ScreenAdapter {
                     float drawY = stagger + y * tileHeight;
 
                     final TiledMapTile tile = tiles.getCell(x, y).getTile();
-                    TextureRegion textureRegion = tileSet.getTile(tile.getId()).getTextureRegion();
+                    TextureRegion tileRegion = tileSet.getTile(tile.getId()).getTextureRegion();
+                    // Use the packed TextureRegion instead of the one loaded into the TiledMap.
+                    TextureRegion textureRegion = new TextureRegion(
+                            atlasRegion.getTexture(),
+                            atlasRegion.getRegionX() + tileRegion.getRegionX(),
+                            atlasRegion.getRegionY() + tileRegion.getRegionY(),
+                            tileRegion.getRegionWidth(),
+                            tileRegion.getRegionHeight());
 
                     Image image = new Image(textureRegion);
                     image.setPosition(drawX, drawY);
@@ -71,7 +80,7 @@ public class DemoScreen extends ScreenAdapter {
             stage.addActor(tilesGroup);
         }
 
-        // map.dispose();  // <-- this released all of the TextureRegions from the TiledMapTiles
+        map.dispose();
     }
 
     @Override
