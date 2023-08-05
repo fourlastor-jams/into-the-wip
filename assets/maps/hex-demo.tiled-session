@@ -1,0 +1,52 @@
+{
+    "Map/SizeTest": {
+        "height": 4300,
+        "width": 2
+    },
+    "activeFile": "Tiles.tsx",
+    "expandedProjectPaths": [
+        "."
+    ],
+    "fileStates": {
+        "": {
+            "scaleInDock": 1
+        },
+        "#Tiles": {
+            "dynamicWrapping": true,
+            "scaleInEditor": 1
+        },
+        "Tiles.tsx": {
+            "dynamicWrapping": true,
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "demo.tmx": {
+            "scale": 1.9541,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 153.2674888695563,
+                "y": 120.00409395629701
+            }
+        }
+    },
+    "last.imagePath": "/home/daniele/Documents/into-the-wip/raw assets",
+    "map.height": 8,
+    "map.lastUsedFormat": "tmx",
+    "map.layerDataFormat": null,
+    "map.orientation": null,
+    "map.tileHeight": 30,
+    "map.tileWidth": 62,
+    "map.width": 8,
+    "openFiles": [
+        "demo.tmx",
+        "Tiles.tsx"
+    ],
+    "project": "hex-demo.tiled-project",
+    "recentFiles": [
+        "Tiles.tsx",
+        "demo.tmx"
+    ],
+    "tileset.embedInMap": false,
+    "tileset.lastUsedFormat": "tsx",
+    "tileset.type": 1
+}
