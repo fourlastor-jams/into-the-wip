@@ -14,28 +14,21 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import io.github.fourlastor.game.ui.YSort;
-import java.util.Random;
 import javax.inject.Inject;
 
 public class DemoScreen extends ScreenAdapter {
 
     private final Stage stage;
     private final Viewport viewport;
-    private final TextureAtlas atlas;
-    private final Random random;
-    private final TiledMapTileLayer tiles;
-    private final SpriteBatch batch;
 
     @Inject
-    public DemoScreen(TextureAtlas atlas, Random random) {
-        this.atlas = atlas;
-        this.random = random;
+    public DemoScreen(TextureAtlas atlas) {
         viewport = new FitViewport(512, 288);
-        batch = new SpriteBatch();
+        SpriteBatch batch = new SpriteBatch();
         stage = new Stage(viewport, batch);
         TiledMap map = new TmxMapLoader().load("maps/demo.tmx");
         int hexsidelength = map.getProperties().get("hexsidelength", Integer.class);
-        tiles = ((TiledMapTileLayer) map.getLayers().get("Tiles"));
+        TiledMapTileLayer tiles = ((TiledMapTileLayer) map.getLayers().get("Tiles"));
         int tileWidth = tiles.getTileWidth();
         float horizontalSpacing = (tileWidth - hexsidelength) / 2f + hexsidelength;
         float tileHeight = tiles.getTileHeight();
