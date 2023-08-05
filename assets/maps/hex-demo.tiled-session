@@ -15,6 +15,9 @@
             "dynamicWrapping": true,
             "scaleInEditor": 1
         },
+        "Monsters.tsx": {
+            "dynamicWrapping": true
+        },
         "Tiles.tsx": {
             "dynamicWrapping": true,
             "scaleInDock": 1,

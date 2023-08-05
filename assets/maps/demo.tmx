@@ -1,9 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.1" orientation="hexagonal" renderorder="right-down" width="8" height="8" tilewidth="62" tileheight="31" infinite="0" hexsidelength="32" staggeraxis="x" staggerindex="odd" nextlayerid="2" nextobjectid="1">
+<map version="1.10" tiledversion="1.10.1" orientation="hexagonal" renderorder="right-down" width="8" height="8" tilewidth="62" tileheight="31" infinite="0" hexsidelength="32" staggeraxis="x" staggerindex="odd" nextlayerid="4" nextobjectid="6">
  <tileset firstgid="1" source="Tiles.tsx"/>
- <layer id="1" name="Tile Layer 1" width="8" height="8">
+ <tileset firstgid="4" source="Monsters.tsx"/>
+ <layer id="1" name="Tiles" width="8" height="8">
   <data encoding="base64">
    AwAAAAMAAAADAAAAAwAAAAMAAAADAAAAAwAAAAMAAAADAAAAAwAAAAMAAAADAAAAAwAAAAMAAAADAAAAAwAAAAMAAAADAAAAAwAAAAMAAAADAAAAAwAAAAMAAAADAAAAAwAAAAMAAAADAAAAAwAAAAMAAAADAAAAAwAAAAMAAAADAAAAAwAAAAMAAAADAAAAAwAAAAMAAAADAAAAAwAAAAMAAAADAAAAAwAAAAMAAAADAAAAAwAAAAMAAAADAAAAAwAAAAMAAAADAAAAAwAAAAMAAAADAAAAAwAAAAMAAAADAAAAAwAAAAMAAAADAAAAAwAAAAMAAAADAAAAAwAAAA==
+  </data>
+ </layer>
+ <layer id="3" name="Monsters" width="8" height="8">
+  <data encoding="base64">
+   AAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==
   </data>
  </layer>
 </map>
