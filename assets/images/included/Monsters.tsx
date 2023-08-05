@@ -1,8 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<tileset version="1.10" tiledversion="1.10.2" name="Monsters" tilewidth="32" tileheight="32" tilecount="1" columns="0" objectalignment="bottomleft">
+<tileset version="1.10" tiledversion="1.10.2" name="Monsters" tilewidth="32" tileheight="64" tilecount="4" columns="2" objectalignment="bottomleft">
  <tileoffset x="16" y="0"/>
- <grid orientation="orthogonal" width="1" height="1"/>
+ <image source="monsters.png" width="64" height="128"/>
  <tile id="0">
-  <image width="32" height="32" source="mon.png"/>
+  <animation>
+   <frame tileid="0" duration="250"/>
+   <frame tileid="2" duration="250"/>
+  </animation>
+ </tile>
+ <tile id="1">
+  <animation>
+   <frame tileid="1" duration="250"/>
+   <frame tileid="3" duration="250"/>
+  </animation>
  </tile>
 </tileset>
