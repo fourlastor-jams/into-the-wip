@@ -20,9 +20,6 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import io.github.fourlastor.game.coordinates.Coordinate;
 import io.github.fourlastor.game.coordinates.MapGraph;
 import io.github.fourlastor.game.coordinates.Tile;
-import io.github.fourlastor.scope.Group;
-import io.github.fourlastor.scope.ObjectScope;
-import io.github.fourlastor.scope.ScopeRenderer;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -36,14 +33,9 @@ public class DemoScreen extends ScreenAdapter {
     private static final int BOTTOM = 150;
     private final Stage stage;
     private final Viewport viewport;
-    private final ScopeRenderer renderer = new ScopeRenderer(42);
-
     private final WorldSettings worldSettings = new WorldSettings();
     private final PathSettings pathSettings = new PathSettings();
 
-    private final Group worldGroup = new Group(new ObjectScope("World", worldSettings), this::genWorld);
-
-    private final Group pathGroup = new Group(new ObjectScope("Path", pathSettings), this::findPath);
     private final TextureAtlas atlas;
     private final Random random;
     private MapGraph graph = new MapGraph();
@@ -143,9 +135,5 @@ public class DemoScreen extends ScreenAdapter {
         ScreenUtils.clear(Color.DARK_GRAY, true);
         stage.act(delta);
         stage.draw();
-        renderer.start();
-        renderer.render(worldGroup);
-        renderer.render(pathGroup);
-        renderer.end();
     }
 }
