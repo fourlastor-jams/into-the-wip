@@ -13,11 +13,14 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
+import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
@@ -92,9 +95,6 @@ public class DemoScreen extends ScreenAdapter {
 
                     Image image = new Image(textureRegion);
                     image.setPosition(drawX, drawY);
-                    // NOTE: image.setAlign() may not work depending on how scene-2d / ysort handles rendering order
-                    // (remove this comment once confirmed to work).
-                    // image.setAlign(Align.center);
                     tilesGroup.addActor(image);
                     setClickListener(image, mapLayer.getName());
                 }
@@ -105,10 +105,9 @@ public class DemoScreen extends ScreenAdapter {
     }
 
     private void setClickListener(Actor actor, String actorType) {
-        // NOTE (SheerSt): imo the clickListener approach is hard to read
-        // and (probably) debug.
-        // Ideally all of the stage's click/state logic would just be in
-        // one single place to solve this issue.
+        // NOTE (SheerSt): imo the clickListener approach is hard to read and (probably) debug.
+        // Ideally all of the stage's click/state logic would just be in one single place to solve this issue.
+        // (Remove this comment).
         // Enemy onClick listener.
         if (actorType.equals("monsters")) {
             actor.addListener(new InputListener() {
@@ -118,19 +117,18 @@ public class DemoScreen extends ScreenAdapter {
                     // TODO: move this property to have a stronger coupling with a Tile;
                     Rectangle bounds = new Rectangle(actor.getX(), actor.getY(), 32, 32);
                     currBounds.set(bounds);
-
                     if (!bounds.contains(x, y)) {
                         Gdx.app.log("Click", "Monster missed!");
-                        return false;
+                        // return false;  // NOTE: not working as intended.
                     }
 
                     Gdx.app.log("Click", "Monster clicked!");
-                    if (state == State.SELECT_UNIT) {
-                        state = State.SELECT_MOVE;
-                        selectedUnit = actor;
-                        return true;
+                    if (state != State.SELECT_UNIT) {
+                        return false;
                     }
-                    return false;
+                    state = State.SELECT_MOVE;
+                    selectedUnit = actor;
+                    return true;
                 }
             });
         }
@@ -143,21 +141,23 @@ public class DemoScreen extends ScreenAdapter {
                     // TODO: move this property to have a stronger coupling with a Monster;
                     Rectangle bounds = new Rectangle(actor.getX(), actor.getY(), 61, 48);
                     currBounds.set(bounds);
-
                     if (!bounds.contains(x, y)) {
                         Gdx.app.log("Click", "Tile missed!");
-                        return false;
+                        // return false;  // NOTE: not working as intended.
                     }
 
                     Gdx.app.log("Click", "Tile clicked!");
-                    if (state == State.SELECT_MOVE) {
-                        // TODO: tween
-                        selectedUnit.setPosition(actor.getX(), actor.getY());
+                    if (state != State.SELECT_MOVE) {
+                        return false;
+                    }
+                    SequenceAction sequence = new SequenceAction();
+                    sequence.addAction(Actions.moveTo(actor.getX(), actor.getY(), 0.25f, Interpolation.sine));
+                    sequence.addAction(Actions.run(() -> {
                         state = State.SELECT_UNIT;
                         selectedUnit = null;
-                        return true;
-                    }
-                    return false;
+                    }));
+                    selectedUnit.addAction(sequence);
+                    return true;
                 }
             });
         }
