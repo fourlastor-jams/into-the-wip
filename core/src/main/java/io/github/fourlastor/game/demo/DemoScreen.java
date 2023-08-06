@@ -19,9 +19,11 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.utils.Null;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -93,7 +95,15 @@ public class DemoScreen extends ScreenAdapter {
                             tileRegion.getRegionWidth(),
                             tileRegion.getRegionHeight());
 
-                    Image image = new Image(textureRegion);
+                    Image image = new Image(textureRegion) {
+                        @Null
+                        @Override
+                        public Actor hit(float x, float y, boolean touchable) {
+                            if (touchable && this.getTouchable() != Touchable.enabled) return null;
+                            if (!isVisible()) return null;
+                            return x >= 0 && x < getWidth() && y >= 0 && y < getHeight() - 15 ? this : null;
+                        }
+                    };
                     image.setPosition(drawX, drawY);
                     tilesGroup.addActor(image);
                     setClickListener(image, mapLayer.getName());
