@@ -106,9 +106,9 @@ public class DemoScreen extends ScreenAdapter {
 
     private void setClickListener(Actor actor, String actorType) {
         // NOTE (SheerSt): imo the clickListener approach is hard to read and (probably) debug.
-        // Ideally all of the stage's click/state logic would just be in one single place to solve this issue.
-        // (Remove this comment).
-        // Enemy onClick listener.
+        // Personal opinion - Ideally all of the stage's click/state logic would just be in one single place.
+        // (Remove this comment in the future).
+        // Monster onClick listener.
         if (actorType.equals("monsters")) {
             actor.addListener(new InputListener() {
                 @Override
