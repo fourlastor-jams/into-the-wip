@@ -8,10 +8,8 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.tiled.TiledMap;
-import com.badlogic.gdx.maps.tiled.TiledMapTile;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
-import com.badlogic.gdx.maps.tiled.TiledMapTileSet;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
@@ -47,7 +45,9 @@ public class DemoScreen extends ScreenAdapter {
             float tileHeight = tiles.getTileHeight();
             float staggerSpacing = tileHeight / 2f;
             YSort tilesGroup = new YSort();
-            TiledMapTileSet tileSet = map.getTileSets().getTileSet(mapLayer.getName());
+
+            // NOTE: in the future there's the possibility of multiple
+            // tilesets per mapLayer, this won't work in that case.
             AtlasRegion atlasRegion = atlas.findRegion(mapLayer.getName());
 
             for (int x = 0; x < tiles.getWidth(); ++x) {
@@ -62,8 +62,7 @@ public class DemoScreen extends ScreenAdapter {
                     float stagger = x % 2 == 0 ? 0f : staggerSpacing;
                     float drawY = stagger + y * tileHeight;
 
-                    final TiledMapTile tile = tiles.getCell(x, y).getTile();
-                    TextureRegion tileRegion = tileSet.getTile(tile.getId()).getTextureRegion();
+                    TextureRegion tileRegion = cell.getTile().getTextureRegion();
                     // Use the packed TextureRegion instead of the one loaded into the TiledMap.
                     TextureRegion textureRegion = new TextureRegion(
                             atlasRegion.getTexture(),
@@ -79,7 +78,6 @@ public class DemoScreen extends ScreenAdapter {
             }
             stage.addActor(tilesGroup);
         }
-
         map.dispose();
     }
 
