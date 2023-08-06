@@ -41,8 +41,8 @@ public class DemoScreen extends ScreenAdapter {
             TiledMapTileLayer tiles = (TiledMapTileLayer) mapLayer;
 
             int tileWidth = tiles.getTileWidth();
-            float horizontalSpacing = (tileWidth - hexsidelength) / 2f + hexsidelength;
-            float tileHeight = tiles.getTileHeight();
+            float horizontalSpacing = (tileWidth - hexsidelength) / 2f + hexsidelength - 1;
+            float tileHeight = tiles.getTileHeight() - 1;
             float staggerSpacing = tileHeight / 2f;
             YSort tilesGroup = new YSort();
 
