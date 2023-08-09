@@ -50,3 +50,5 @@ Reference art:
 | 1 | 2 | 3 |
 | --- | --- | --- |
 | ![image](https://github.com/fourlastor-jams/into-the-wip/assets/4059636/09c8c243-126a-4f01-b83a-49d7444bcfdb) | ![image](https://github.com/fourlastor-jams/into-the-wip/assets/4059636/5d29237e-10d4-4899-8001-4f9790852c4c) | ![image](https://github.com/fourlastor-jams/into-the-wip/assets/4059636/ee84687a-56f2-4200-85a5-9f39fd2c3c0d) |
+
+### Yokai
