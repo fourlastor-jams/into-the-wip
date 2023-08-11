@@ -4,8 +4,8 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
+import io.github.fourlastor.game.demo.DemoComponent;
 import io.github.fourlastor.game.di.GameComponent;
-import io.github.fourlastor.game.intro.DemoComponent;
 import io.github.fourlastor.game.route.Router;
 import javax.inject.Inject;
 
@@ -16,6 +16,8 @@ public class GdxGame extends Game implements Router {
     private final DemoComponent.Builder demoComponentBuilder;
 
     private Screen pendingScreen = null;
+
+    public static boolean debugMode = true;
 
     @Inject
     public GdxGame(InputMultiplexer multiplexer, DemoComponent.Builder demoComponentBuilder) {

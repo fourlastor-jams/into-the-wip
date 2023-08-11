@@ -1,0 +1,66 @@
+{
+    "Map/SizeTest": {
+        "height": 4300,
+        "width": 2
+    },
+    "activeFile": "/home/daniele/Documents/into-the-wip/assets/images/included/Monsters.tsx",
+    "expandedProjectPaths": [
+        "."
+    ],
+    "fileStates": {
+        "": {
+            "scaleInDock": 1
+        },
+        "#Tiles": {
+            "dynamicWrapping": true,
+            "scaleInEditor": 1
+        },
+        "/home/daniele/Documents/into-the-wip/assets/images/included/Monsters.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "/home/daniele/Documents/into-the-wip/assets/images/included/Tileset.tsx": {
+            "scaleInDock": 1
+        },
+        "Monsters.tsx": {
+            "dynamicWrapping": true,
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "Tiles.tsx": {
+            "dynamicWrapping": true,
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "demo.tmx": {
+            "scale": 1.9541,
+            "selectedLayer": 1,
+            "viewCenter": {
+                "x": 189.85722327414155,
+                "y": 179.87820480016376
+            }
+        }
+    },
+    "last.imagePath": "/home/daniele/Documents/into-the-wip/raw assets",
+    "map.height": 8,
+    "map.lastUsedFormat": "tmx",
+    "map.layerDataFormat": null,
+    "map.orientation": null,
+    "map.tileHeight": 30,
+    "map.tileWidth": 62,
+    "map.width": 8,
+    "openFiles": [
+        "demo.tmx",
+        "/home/daniele/Documents/into-the-wip/assets/images/included/Monsters.tsx"
+    ],
+    "project": "hex-demo.tiled-project",
+    "recentFiles": [
+        "demo.tmx",
+        "/home/daniele/Documents/into-the-wip/assets/images/included/Monsters.tsx",
+        "Tiles.tsx",
+        "Monsters.tsx"
+    ],
+    "tileset.embedInMap": false,
+    "tileset.lastUsedFormat": "tsx",
+    "tileset.type": 1
+}

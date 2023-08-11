@@ -19,12 +19,7 @@ sourceSets.main.configure {
     resources.srcDir(assetsDir)
 }
 
-
-val gwtCompatPath = "io/github/fourlastor/gwtCompat"
-idea.module { excludeDirs.add(file("src/main/java/$gwtCompatPath")) }
-listOf(tasks.compileJava, tasks.compileTestJava, tasks.javadoc).forEach {
-    it.configure { exclude(gwtCompatPath) }
-}
+idea.module { excludeDirs.add(file("src/gwtCompat")) }
 
 spotless {
     isEnforceCheck = false
