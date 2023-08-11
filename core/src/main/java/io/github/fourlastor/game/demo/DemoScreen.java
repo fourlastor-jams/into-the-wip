@@ -2,126 +2,174 @@ package io.github.fourlastor.game.demo;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
-import com.badlogic.gdx.ai.pfa.GraphPath;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.math.GridPoint2;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.maps.MapLayer;
+import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
+import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.math.Interpolation;
-import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.IntMap;
+import com.badlogic.gdx.utils.Null;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import io.github.fourlastor.game.coordinates.Coordinate;
-import io.github.fourlastor.game.coordinates.MapGraph;
-import io.github.fourlastor.game.coordinates.Tile;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import io.github.fourlastor.game.GdxGame;
+import io.github.fourlastor.game.ui.YSort;
 import javax.inject.Inject;
 
 public class DemoScreen extends ScreenAdapter {
 
-    private static final int WIDTH = 20;
-    private static final int HEIGHT = 20;
-    private static final int LEFT = 400;
-    private static final int BOTTOM = 150;
     private final Stage stage;
     private final Viewport viewport;
-    private final WorldSettings worldSettings = new WorldSettings();
-    private final PathSettings pathSettings = new PathSettings();
+    private ShapeRenderer shapeRenderer = new ShapeRenderer();
+    private Rectangle currBounds = new Rectangle(0, 0, 0, 0);
 
-    private final TextureAtlas atlas;
-    private final Random random;
-    private MapGraph graph = new MapGraph();
-
-    public static class WorldSettings {
-        public int width = WIDTH;
-        public int height = HEIGHT;
-        public float density = 1f;
+    private enum State {
+        SELECT_MOVE,
+        SELECT_UNIT,
+        ;
     }
 
-    public static class PathSettings {
-        public GridPoint2 start = new GridPoint2(0, 0);
-        public GridPoint2 end = new GridPoint2(WIDTH - 1, HEIGHT - 1);
-    }
+    Actor selectedUnit = null;
+    private State state = State.SELECT_UNIT;
 
     @Inject
-    public DemoScreen(TextureAtlas atlas, Random random) {
-        this.atlas = atlas;
-        this.random = random;
-        viewport = new FitViewport(128 * 16, 72 * 16);
-        stage = new Stage(viewport);
+    public DemoScreen(TextureAtlas atlas) {
+        viewport = new FitViewport(512, 288);
+        SpriteBatch batch = new SpriteBatch();
+        stage = new Stage(viewport, batch);
+        Gdx.input.setInputProcessor(stage);
+        TiledMap map = new TmxMapLoader().load("maps/demo.tmx");
+        int hexsidelength = map.getProperties().get("hexsidelength", Integer.class);
 
-        genWorld();
-    }
+        for (MapLayer mapLayer : map.getLayers()) {
 
-    private final IntMap<Image> images = new IntMap<>();
-
-    private void genWorld() {
-        for (Image image : images.values()) {
-            image.remove();
-        }
-        images.clear();
-        graph = new MapGraph();
-        List<Tile> tiles = new ArrayList<>();
-        for (int x = 0; x < worldSettings.width; x++) {
-            for (int y = 0; y < worldSettings.height; y++) {
-                if (random.nextFloat() >= worldSettings.density) {
-                    continue;
-                }
-                Tile tile = new Tile(new GridPoint2(x, y));
-                tiles.add(tile);
-                graph.addTile(tile);
+            if (!(mapLayer instanceof TiledMapTileLayer)) {
+                continue;
             }
-        }
-        for (Tile tile : tiles) {
-            for (int dX = -1; dX <= 1; dX++) {
-                for (int dY = -1; dY <= 1; dY++) {
-                    if (dX == 0 && dY == 0 || dX != 0 && dY != 0) continue;
-                    Tile other = graph.get(tile.position.x + dX, tile.position.y + dY);
-                    if (other != null) {
-                        graph.connect(tile, other);
+
+            TiledMapTileLayer tiles = (TiledMapTileLayer) mapLayer;
+
+            int tileWidth = tiles.getTileWidth();
+            float horizontalSpacing = (tileWidth - hexsidelength) / 2f + hexsidelength - 1;
+            float tileHeight = tiles.getTileHeight() - 1;
+            float staggerSpacing = tileHeight / 2f;
+            YSort tilesGroup = new YSort();
+
+            // NOTE: in the future there's the possibility of multiple
+            // tilesets per mapLayer, this won't work in that case.
+            AtlasRegion atlasRegion = atlas.findRegion(mapLayer.getName());
+
+            for (int x = 0; x < tiles.getWidth(); ++x) {
+                for (int y = 0; y < tiles.getHeight(); ++y) {
+
+                    Cell cell = tiles.getCell(x, y);
+                    if (cell == null) {
+                        continue;
                     }
+
+                    float drawX = x * horizontalSpacing;
+                    float stagger = x % 2 == 0 ? 0f : staggerSpacing;
+                    float drawY = stagger + y * tileHeight;
+
+                    TextureRegion tileRegion = cell.getTile().getTextureRegion();
+                    // Use the packed TextureRegion instead of the one loaded into the TiledMap.
+                    TextureRegion textureRegion = new TextureRegion(
+                            atlasRegion.getTexture(),
+                            atlasRegion.getRegionX() + tileRegion.getRegionX(),
+                            atlasRegion.getRegionY() + tileRegion.getRegionY(),
+                            tileRegion.getRegionWidth(),
+                            tileRegion.getRegionHeight());
+
+                    Image image = new Image(textureRegion) {
+                        @Null
+                        @Override
+                        public Actor hit(float x, float y, boolean touchable) {
+                            if (touchable && this.getTouchable() != Touchable.enabled) return null;
+                            if (!isVisible()) return null;
+                            return x >= 0 && x < getWidth() && y >= 0 && y < getHeight() - 15 ? this : null;
+                        }
+                    };
+                    image.setPosition(drawX, drawY);
+                    tilesGroup.addActor(image);
+                    setClickListener(image, mapLayer.getName());
                 }
             }
+            stage.addActor(tilesGroup);
         }
-
-        TextureRegion region = atlas.findRegion("tile-gray-tall-64");
-        for (Tile tile : tiles) {
-            Image image = new Image(region);
-            Vector2 position = Coordinate.toWorldAtOrigin(tile.position, LEFT, BOTTOM);
-            image.setPosition(position.x, position.y);
-            image.addAction(Actions.sequence(
-                    Actions.moveBy(0, 300f),
-                    Actions.delay(0.05f * (worldSettings.height - tile.position.y)),
-                    Actions.moveBy(0, -300f, 1f, Interpolation.exp5Out)));
-            images.put(tile.packedCoord(), image);
-        }
-        Array<Image> sorted = images.values().toArray();
-        sorted.sort((o1, o2) -> -Float.compare(o1.getY(), o2.getY()));
-        for (Image image : sorted) {
-            stage.addActor(image);
-        }
+        map.dispose();
     }
 
-    private void findPath() {
-        for (Image image : images.values()) {
-            image.setColor(Color.WHITE);
+    private void setClickListener(Actor actor, String actorType) {
+        // NOTE (SheerSt): imo the clickListener approach is hard to read and (probably) debug.
+        // Personal opinion - Ideally all of the stage's click/state logic would just be in one single place.
+        // (Remove this comment in the future).
+        // Monster onClick listener.
+        if (actorType.equals("monsters")) {
+            actor.addListener(new InputListener() {
+                @Override
+                public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+
+                    // TODO: move this property to have a stronger coupling with a Tile;
+                    Rectangle bounds = new Rectangle(actor.getX(), actor.getY(), 32, 32);
+                    currBounds.set(bounds);
+                    if (!bounds.contains(x, y)) {
+                        Gdx.app.log("Click", "Monster missed!");
+                        // return false;  // NOTE: not working as intended.
+                    }
+
+                    Gdx.app.log("Click", "Monster clicked!");
+                    if (state != State.SELECT_UNIT) {
+                        return false;
+                    }
+                    state = State.SELECT_MOVE;
+                    selectedUnit = actor;
+                    return true;
+                }
+            });
         }
-        Tile from = graph.get(pathSettings.start);
-        Tile to = graph.get(pathSettings.end);
-        if (from == null || to == null) {
-            Gdx.app.error("DemoScreen", "Invalid coordinates <" + pathSettings.start + ">, <" + pathSettings.end + ">");
-        }
-        GraphPath<Tile> tiles = graph.calculatePath(from, to);
-        for (Tile tile : tiles) {
-            images.get(tile.packedCoord()).setColor(Color.ORANGE);
+        // Tile onClick listener.
+        else if (actorType.equals("tileset")) {
+            actor.addListener(new InputListener() {
+                @Override
+                public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+
+                    // TODO: move this property to have a stronger coupling with a Monster;
+                    Rectangle bounds = new Rectangle(actor.getX(), actor.getY(), 61, 48);
+                    currBounds.set(bounds);
+                    if (!bounds.contains(x, y)) {
+                        Gdx.app.log("Click", "Tile missed!");
+                        // return false;  // NOTE: not working as intended.
+                    }
+
+                    Gdx.app.log("Click", "Tile clicked!");
+                    if (state != State.SELECT_MOVE) {
+                        return false;
+                    }
+                    SequenceAction sequence = new SequenceAction();
+                    sequence.addAction(Actions.moveTo(actor.getX(), actor.getY(), 0.25f, Interpolation.sine));
+                    sequence.addAction(Actions.run(() -> {
+                        state = State.SELECT_UNIT;
+                        selectedUnit = null;
+                    }));
+                    selectedUnit.addAction(sequence);
+                    return true;
+                }
+            });
         }
     }
 
@@ -133,7 +181,18 @@ public class DemoScreen extends ScreenAdapter {
     @Override
     public void render(float delta) {
         ScreenUtils.clear(Color.DARK_GRAY, true);
-        stage.act(delta);
+        viewport.apply();
+        stage.act();
         stage.draw();
+
+        // Debug - render shape of currently selected actor.
+        if (!GdxGame.debugMode) {
+            return;
+        }
+        shapeRenderer.setProjectionMatrix(stage.getViewport().getCamera().combined);
+        shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
+        shapeRenderer.setColor(1, 0, 0, 1); // Set color to red (RGBA)
+        shapeRenderer.rect(currBounds.x, currBounds.y, currBounds.width, currBounds.height);
+        shapeRenderer.end();
     }
 }
