@@ -26,12 +26,11 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import io.github.fourlastor.game.coordinates.HexCoordinates;
 import io.github.fourlastor.game.ui.TileOnMap;
 import io.github.fourlastor.game.ui.YSort;
-
-import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
+import javax.inject.Inject;
 
 public class DemoScreen extends ScreenAdapter {
 
@@ -91,7 +90,6 @@ public class DemoScreen extends ScreenAdapter {
                     if (mapLayerName.equals(TILES_LAYER_NAME)) {
                         tilesActors.add(image);
                     }
-
                 }
             }
             stage.addActor(tilesGroup);
@@ -134,8 +132,7 @@ public class DemoScreen extends ScreenAdapter {
                     cleanAll();
                     monster.addAction(Actions.sequence(
                             Actions.moveTo(tile.getX(), tile.getY(), 0.25f, Interpolation.sine),
-                            Actions.run(DemoScreen.this::selectUnitToMove)
-                    ));
+                            Actions.run(DemoScreen.this::selectUnitToMove)));
                 }
             };
             tile.addListener(listener);
