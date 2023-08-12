@@ -3,7 +3,7 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "/home/daniele/Documents/into-the-wip/assets/images/included/Tileset.tsx",
+    "activeFile": "demo.tmx",
     "expandedProjectPaths": [
         "."
     ],
@@ -56,11 +56,11 @@
         "/home/daniele/Documents/into-the-wip/assets/images/included/Tileset.tsx"
     ],
     "project": "hex-demo.tiled-project",
-    "property.type": "bool",
+    "property.type": "string",
     "recentFiles": [
-        "demo.tmx",
-        "/home/daniele/Documents/into-the-wip/assets/images/included/Monsters.tsx",
         "/home/daniele/Documents/into-the-wip/assets/images/included/Tileset.tsx",
+        "/home/daniele/Documents/into-the-wip/assets/images/included/Monsters.tsx",
+        "demo.tmx",
         "Tiles.tsx",
         "Monsters.tsx"
     ],

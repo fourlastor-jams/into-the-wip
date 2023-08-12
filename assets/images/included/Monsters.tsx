@@ -17,11 +17,13 @@
  <tile id="2">
   <properties>
    <property name="enemy" type="bool" value="false"/>
+   <property name="name" value="pink"/>
   </properties>
  </tile>
  <tile id="3">
   <properties>
    <property name="enemy" type="bool" value="true"/>
+   <property name="name" value="green"/>
   </properties>
  </tile>
 </tileset>
