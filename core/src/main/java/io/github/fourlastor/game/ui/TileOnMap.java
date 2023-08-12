@@ -17,6 +17,6 @@ public class TileOnMap extends Image {
     public Actor hit(float x, float y, boolean touchable) {
         if (touchable && this.getTouchable() != Touchable.enabled) return null;
         if (!isVisible()) return null;
-        return x >= 0 && x < getWidth() && y >= 0 && y < getHeight() - 15 ? this : null;
+        return x >= 0 && x < getWidth() && y >= 0 && y < getHeight() - 5 ? this : null;
     }
 }

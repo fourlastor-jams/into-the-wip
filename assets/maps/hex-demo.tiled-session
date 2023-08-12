@@ -19,7 +19,26 @@
             "scaleInDock": 1,
             "scaleInEditor": 1
         },
+        "/home/daniele/Documents/into-the-wip/assets/images/included/Terrain.tsx": {
+            "dynamicWrapping": true,
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
         "/home/daniele/Documents/into-the-wip/assets/images/included/Tileset.tsx": {
+            "dynamicWrapping": false,
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "/home/daniele/Documents/into-the-wip/assets/images/included/monsters.tsx": {
+            "dynamicWrapping": true,
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "/home/daniele/Documents/into-the-wip/assets/images/included/terrain.tsx": {
+            "scaleInDock": 1
+        },
+        "Monsters 2.tsx": {
+            "dynamicWrapping": true,
             "scaleInDock": 1,
             "scaleInEditor": 1
         },
@@ -37,12 +56,18 @@
             "scale": 1.9541,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 213.3974719819866,
-                "y": 93.6492502942531
+                "x": 173.73727035463895,
+                "y": 98.76669566552377
             }
+        },
+        "monsters_2.tsx": {
+            "dynamicWrapping": true,
+            "scaleInDock": 1,
+            "scaleInEditor": 1
         }
     },
-    "last.imagePath": "/home/daniele/Documents/into-the-wip/raw assets",
+    "last.externalTilesetPath": "/home/daniele/Documents/into-the-wip/assets/images/included",
+    "last.imagePath": "/home/daniele/Documents/into-the-wip/assets/images/included/tiles",
     "map.height": 8,
     "map.lastUsedFormat": "tmx",
     "map.layerDataFormat": null,
@@ -52,15 +77,18 @@
     "map.width": 8,
     "openFiles": [
         "demo.tmx",
-        "/home/daniele/Documents/into-the-wip/assets/images/included/Monsters.tsx",
-        "/home/daniele/Documents/into-the-wip/assets/images/included/Tileset.tsx"
+        "/home/daniele/Documents/into-the-wip/assets/images/included/monsters.tsx"
     ],
     "project": "hex-demo.tiled-project",
     "property.type": "string",
     "recentFiles": [
+        "/home/daniele/Documents/into-the-wip/assets/images/included/monsters.tsx",
+        "demo.tmx",
+        "/home/daniele/Documents/into-the-wip/assets/images/included/Terrain.tsx",
         "/home/daniele/Documents/into-the-wip/assets/images/included/Tileset.tsx",
         "/home/daniele/Documents/into-the-wip/assets/images/included/Monsters.tsx",
-        "demo.tmx",
+        "monsters_2.tsx",
+        "Monsters 2.tsx",
         "Tiles.tsx",
         "Monsters.tsx"
     ],
