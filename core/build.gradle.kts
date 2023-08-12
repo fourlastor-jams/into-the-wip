@@ -54,6 +54,7 @@ dependencies {
     implementation(libs.gdx.ai)
     implementation(libs.gdx.controllers.core)
     implementation(libs.ashley)
+    implementation(libs.jdkgdxds)
     implementation(libs.textratypist)
     implementation(libs.dagger.core)
     api(libs.dagger.gwt)
