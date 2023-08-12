@@ -11,7 +11,7 @@ public class Tile {
     }
 
     public int packedCoord() {
-        return Coordinate.pack(position);
+        return IsometricCoordinates.pack(position);
     }
 
     public static class Link implements Connection<Tile> {

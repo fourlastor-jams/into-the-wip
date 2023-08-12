@@ -3,7 +3,7 @@ package io.github.fourlastor.game.coordinates;
 import com.badlogic.gdx.math.GridPoint2;
 import com.badlogic.gdx.math.Vector2;
 
-public class Coordinate {
+public class IsometricCoordinates {
     private static final int TILE_WIDTH = 64;
     private static final float HALF_WIDTH = TILE_WIDTH / 2f;
     private static final int TILE_HEIGHT = 32;

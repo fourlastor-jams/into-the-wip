@@ -13,7 +13,7 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.math.Interpolation;
-import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -23,6 +23,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import io.github.fourlastor.game.coordinates.HexCoordinates;
 import io.github.fourlastor.game.ui.TileOnMap;
 import io.github.fourlastor.game.ui.YSort;
 
@@ -60,15 +61,15 @@ public class DemoScreen extends ScreenAdapter {
             TiledMapTileLayer tiles = (TiledMapTileLayer) mapLayer;
 
             int tileWidth = tiles.getTileWidth();
-            float horizontalSpacing = (tileWidth - hexsidelength) / 2f + hexsidelength - 1;
-            float tileHeight = tiles.getTileHeight() - 1;
-            float staggerSpacing = tileHeight / 2f;
+            int tileHeight = tiles.getTileHeight() - 1;
+            HexCoordinates coordinates = new HexCoordinates(tileWidth, tileHeight, hexsidelength);
             YSort tilesGroup = new YSort();
 
             // NOTE: in the future there's the possibility of multiple
             // tilesets per mapLayer, this won't work in that case.
             String mapLayerName = mapLayer.getName();
             AtlasRegion atlasRegion = Objects.requireNonNull(atlas.findRegion(mapLayerName));
+            Vector2 position = new Vector2();
 
             for (int x = 0; x < tiles.getWidth(); ++x) {
                 for (int y = 0; y < tiles.getHeight(); ++y) {
@@ -81,11 +82,8 @@ public class DemoScreen extends ScreenAdapter {
                     TextureRegion textureRegion = getRegionFromAtlas(cell, atlasRegion);
 
                     Image image = new TileOnMap(textureRegion);
-
-                    float drawX = x * horizontalSpacing;
-                    float stagger = x % 2 == 0 ? 0f : staggerSpacing;
-                    float drawY = stagger + y * tileHeight;
-                    image.setPosition(drawX, drawY);
+                    position = coordinates.toWorldAtOrigin(x, y, position);
+                    image.setPosition(position.x, position.y);
                     tilesGroup.addActor(image);
                     if (mapLayerName.equals(UNITS_LAYER_NAME)) {
                         unitActors.add(image);

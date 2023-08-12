@@ -30,12 +30,12 @@ public class MapGraph implements IndexedGraph<Tile> {
 
     @Null
     public Tile get(int x, int y) {
-        return tiles.get(Coordinate.pack(cached.set(x, y)));
+        return tiles.get(IsometricCoordinates.pack(cached.set(x, y)));
     }
 
     @Null
     public Tile get(GridPoint2 position) {
-        return tiles.get(Coordinate.pack(position));
+        return tiles.get(IsometricCoordinates.pack(position));
     }
 
     public void connect(Tile from, Tile to) {
