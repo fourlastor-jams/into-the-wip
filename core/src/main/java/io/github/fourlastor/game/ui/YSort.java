@@ -9,9 +9,7 @@ public class YSort extends WidgetGroup {
 
     private static final Comparator<Actor> COMPARATOR = Comparator.comparing((actor -> -actor.getY()), Float::compare);
 
-    @Override
-    public void addActor(Actor actor) {
-        super.addActor(actor);
+    public void sortChildren() {
         SnapshotArray<Actor> children = getChildren();
         children.sort(COMPARATOR);
     }

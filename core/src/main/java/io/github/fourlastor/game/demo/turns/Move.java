@@ -1,10 +1,12 @@
 package io.github.fourlastor.game.demo.turns;
 
 import com.badlogic.gdx.math.Interpolation;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.utils.Align;
 import dagger.assisted.Assisted;
 import dagger.assisted.AssistedFactory;
 import dagger.assisted.AssistedInject;
@@ -58,8 +60,9 @@ public class Move extends TurnState {
         @Override
         public void clicked(InputEvent event, float x, float y) {
             super.clicked(event, x, y);
+            Vector2 position = unit.coordinates.toWorldAtCenter(tile.position.x, tile.position.y, new Vector2());
             unit.actor.addAction(Actions.sequence(
-                    Actions.moveTo(tile.actor.getX(), tile.actor.getY(), 0.25f, Interpolation.sine),
+                    Actions.moveToAligned(position.x, position.y, Align.center, 0.25f, Interpolation.sine),
                     Actions.run(router::pickMonster)));
         }
     }

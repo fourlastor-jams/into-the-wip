@@ -70,7 +70,6 @@ public class DemoScreen extends ScreenAdapter {
             // tilesets per mapLayer, this won't work in that case.
             String mapLayerName = mapLayer.getName();
             AtlasRegion atlasRegion = Objects.requireNonNull(atlas.findRegion(mapLayerName));
-            Vector2 position = new Vector2();
 
             for (int x = 0; x < mapTiles.getWidth(); ++x) {
                 for (int y = 0; y < mapTiles.getHeight(); ++y) {
@@ -83,17 +82,19 @@ public class DemoScreen extends ScreenAdapter {
                     TextureRegion textureRegion = getRegionFromAtlas(cell, atlasRegion);
 
                     Image image = new TileOnMap(textureRegion);
-                    position = coordinates.toWorldAtOrigin(x, y, position);
-                    image.setPosition(position.x, position.y);
+                    Vector2 position = coordinates.toWorldAtOrigin(x, y, new Vector2());
                     tilesGroup.addActor(image);
                     if (mapLayerName.equals(UNITS_LAYER_NAME)) {
-                        units.add(new Unit(image, new GridPoint2(x, y)));
+                        units.add(new Unit(image, new GridPoint2(x, y), coordinates));
+                        image.setPosition(position.x, position.y);
                     }
                     if (mapLayerName.equals(TILES_LAYER_NAME)) {
                         tiles.add(new Tile(image, new GridPoint2(x, y)));
+                        image.setPosition(position.x, position.y - 15);
                     }
                 }
             }
+            tilesGroup.sortChildren();
             stage.addActor(tilesGroup);
         }
         map.dispose();
