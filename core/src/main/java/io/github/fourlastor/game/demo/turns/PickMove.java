@@ -31,6 +31,12 @@ public class PickMove extends TurnState {
             tile.actor.addListener(new MoveListener(tile));
             tile.actor.setColor(Color.CORAL);
         }
+        for (Unit unit : entity.units) {
+            if (this.unit == unit) {
+                continue;
+            }
+            unit.actor.addListener(new AttackListener(unit));
+        }
     }
 
     @Override
@@ -41,6 +47,14 @@ public class PickMove extends TurnState {
                     tile.actor.removeListener(listener);
                 }
                 tile.actor.setColor(Color.WHITE);
+            }
+        }
+        for (Unit unit : entity.units) {
+            for (EventListener listener : unit.actor.getListeners()) {
+                if (listener instanceof AttackListener) {
+                    unit.actor.removeListener(listener);
+                }
+                unit.actor.setColor(Color.WHITE);
             }
         }
     }
