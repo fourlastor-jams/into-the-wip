@@ -11,7 +11,7 @@ public class GameState {
 
     public final ObjectList<Unit> units;
     public final ObjectList<Tile> tiles;
-    private final MapGraph graph;
+    public final MapGraph graph;
 
     public GameState(ObjectList<Unit> units, ObjectList<Tile> tiles) {
         this.units = units;
@@ -21,12 +21,12 @@ public class GameState {
             graph.addTile(tile);
         }
         for (Tile tile : tiles) {
-            connectTiles(tile, adjacent(tile, -1, 0, 0));
-            connectTiles(tile, adjacent(tile, 1, 0, 0));
-            connectTiles(tile, adjacent(tile, 0, -1, 0));
-            connectTiles(tile, adjacent(tile, 0, 1, 0));
-            connectTiles(tile, adjacent(tile, 0, 0, -1));
-            connectTiles(tile, adjacent(tile, 0, 0, 1));
+            connectTiles(tile, adjacent(tile, 0, 1, -1));
+            connectTiles(tile, adjacent(tile, 0, -1, 1));
+            connectTiles(tile, adjacent(tile, 1, 0, -1));
+            connectTiles(tile, adjacent(tile, -1, 0, 1));
+            connectTiles(tile, adjacent(tile, 1, -1, 0));
+            connectTiles(tile, adjacent(tile, -1, 1, 0));
         }
     }
 
@@ -38,7 +38,7 @@ public class GameState {
     }
 
     private Tile adjacent(Tile tile, int x, int y, int z) {
-        GridPoint3 position = new GridPoint3(tile.coordinates.cube).add(x, y, z);
+        GridPoint3 position = tile.coordinates.cube.cpy().add(x, y, z);
         return graph.get(position);
     }
 }
