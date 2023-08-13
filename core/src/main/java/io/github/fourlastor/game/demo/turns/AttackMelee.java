@@ -1,23 +1,30 @@
-package io.github.fourlastor.game.demo.actions;
+package io.github.fourlastor.game.demo.turns;
 
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.scenes.scene2d.Action;
+import dagger.assisted.Assisted;
+import dagger.assisted.AssistedFactory;
+import dagger.assisted.AssistedInject;
+import io.github.fourlastor.game.demo.state.GameState;
 import io.github.fourlastor.game.demo.state.unit.Unit;
 
-public class AttackMelee extends Action {
+public class AttackMelee extends TurnState {
 
-    Unit source;
-    Unit target;
+    private final StateRouter router;
+
+    private final Unit source;
+    private final Unit target;
     Vector2 originalPosition = new Vector2();
     Vector2 targetPosition = new Vector2();
     Vector2 towardVector = new Vector2();
     boolean movingTowards = true;
     float speed = 500f;
 
-    public AttackMelee(Unit source, Unit target) {
+    @AssistedInject
+    public AttackMelee(@Assisted Attack attack, StateRouter router) {
+        this.router = router;
+        this.source = attack.source;
+        this.target = attack.target;
         this.originalPosition = source.getActorPosition();
-        this.source = source;
-        this.target = target;
 
         // sheerst - Action needs a setup() method.
         this.towardVector.set(target.getActorPosition().cpy().sub(source.getActorPosition()));
@@ -26,7 +33,6 @@ public class AttackMelee extends Action {
     }
 
     public boolean act(float delta) {
-
         if (this.movingTowards) {
 
             this.source.actor.setPosition(
@@ -51,5 +57,31 @@ public class AttackMelee extends Action {
         }
 
         return false;
+    }
+
+    @Override
+    public void enter(GameState entity) {
+        // TODO: add act logic here as action
+        //  at the end of the attack use `Actions.run(router::pickMonster)`
+    }
+
+    @Override
+    public void exit(GameState entity) {
+        // TODO optional cleanup
+    }
+
+    @AssistedFactory
+    public interface Factory {
+        AttackMelee create(Attack attack);
+    }
+
+    public static class Attack {
+        public final Unit source;
+        public final Unit target;
+
+        public Attack(Unit source, Unit target) {
+            this.source = source;
+            this.target = target;
+        }
     }
 }

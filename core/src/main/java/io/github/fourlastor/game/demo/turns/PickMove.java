@@ -69,4 +69,18 @@ public class PickMove extends TurnState {
             router.move(unit, tile);
         }
     }
+
+    private class AttackListener extends ClickListener {
+
+        private final Unit target;
+
+        private AttackListener(Unit target) {
+            this.target = target;
+        }
+
+        @Override
+        public void clicked(InputEvent event, float x, float y) {
+            router.attackMelee(unit, target);
+        }
+    }
 }
