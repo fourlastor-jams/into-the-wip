@@ -13,7 +13,6 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
 import com.badlogic.gdx.math.GridPoint2;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
@@ -25,7 +24,6 @@ import io.github.fourlastor.game.demo.state.map.Tile;
 import io.github.fourlastor.game.demo.state.unit.Unit;
 import io.github.fourlastor.game.demo.turns.PickMonster;
 import io.github.fourlastor.game.demo.turns.TurnStateMachine;
-import io.github.fourlastor.game.ui.TileOnMap;
 import io.github.fourlastor.game.ui.YSort;
 import javax.inject.Inject;
 import javax.inject.Provider;
@@ -75,17 +73,19 @@ public class DemoScreen extends ScreenAdapter {
 
                     TextureRegion textureRegion = cell.getTile().getTextureRegion();
 
-                    Image image = new TileOnMap(textureRegion);
-                    tilesGroup.addActor(image);
                     if (mapLayerName.equals(UNITS_LAYER_NAME)) {
-                        units.add(new Unit(image, new GridPoint2(x, y), coordinates));
+                        Unit unit = new Unit(textureRegion, new GridPoint2(x, y), coordinates, stage);
+                        units.add(unit);
+                        tilesGroup.addActor(unit);
                         Vector2 position = coordinates.toWorldAtCenter(x, y, new Vector2());
-                        image.setPosition(position.x, position.y, Align.bottom);
+                        unit.setPosition(position.x, position.y, Align.bottom);
                     }
                     if (mapLayerName.equals(TILES_LAYER_NAME)) {
-                        tiles.add(new Tile(image, new GridPoint2(x, y)));
+                        Tile tile = new Tile(textureRegion, new GridPoint2(x, y));
+                        tiles.add(tile);
+                        tilesGroup.addActor(tile);
                         Vector2 position = coordinates.toWorldAtOrigin(x, y, new Vector2());
-                        image.setPosition(position.x, position.y - 15);
+                        tile.setPosition(position.x, position.y - 15);
                     }
                 }
             }

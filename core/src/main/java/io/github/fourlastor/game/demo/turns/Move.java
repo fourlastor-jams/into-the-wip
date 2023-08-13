@@ -40,10 +40,15 @@ public class Move extends TurnState {
                     pathTile.coordinates.offset.x, pathTile.coordinates.offset.y, new Vector2());
             actions.add(Actions.moveToAligned(position.x, position.y, Align.bottom, 0.25f, Interpolation.sine));
         }
+        Tile finalTile = path.get(path.getCount() - 1);
+        Vector2 finalPosition = unit.coordinates.toWorldAtCenter(
+                finalTile.coordinates.offset.x, finalTile.coordinates.offset.y, new Vector2());
+        finalPosition.x -= unit.actor.getWidth() / 2f;
         SequenceAction steps = Actions.sequence(actions.toArray(new Action[0]));
         unit.actor.addAction(Actions.sequence(
                 steps,
                 Actions.run(() -> unit.position.set(tile.coordinates.offset)),
+                Actions.run(() -> unit.setActorPosition(finalPosition)),
                 Actions.run(router::pickMonster)));
     }
 

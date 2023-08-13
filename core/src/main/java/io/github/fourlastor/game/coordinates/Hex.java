@@ -10,6 +10,9 @@ import com.badlogic.gdx.math.GridPoint3;
  */
 public class Hex {
 
+    // sheerst - petition to make .x and .y of this object default to offset.x and offset.y.
+    // Maybe there could a switchMode() method that would alternate between offset and cube.
+
     public final GridPoint2 offset;
     public final GridPoint3 cube;
 

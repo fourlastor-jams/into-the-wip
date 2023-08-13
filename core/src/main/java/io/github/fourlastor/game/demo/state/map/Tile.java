@@ -1,16 +1,18 @@
 package io.github.fourlastor.game.demo.state.map;
 
 import com.badlogic.gdx.ai.pfa.Connection;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.GridPoint2;
-import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import io.github.fourlastor.game.coordinates.Hex;
 
-public class Tile {
-    public final Actor actor;
+public class Tile extends Image {
+    public final Image actor;
     public final Hex coordinates;
 
-    public Tile(Actor actor, GridPoint2 position) {
-        this.actor = actor;
+    public Tile(TextureRegion textureRegion, GridPoint2 position) {
+        super(textureRegion);
+        this.actor = this; // TODO: refactor once change confirmed.
         this.coordinates = new Hex(position);
     }
 
