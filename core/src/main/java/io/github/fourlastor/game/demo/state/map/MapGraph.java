@@ -12,9 +12,12 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.IntMap;
 import com.badlogic.gdx.utils.Null;
 import com.badlogic.gdx.utils.ObjectMap;
+import com.github.tommyettinger.ds.ObjectSet;
 import io.github.fourlastor.game.coordinates.Hex;
 import io.github.fourlastor.game.coordinates.Packer;
+import java.util.LinkedList;
 import java.util.Objects;
+import java.util.Set;
 
 public class MapGraph implements IndexedGraph<Tile> {
 
@@ -82,11 +85,42 @@ public class MapGraph implements IndexedGraph<Tile> {
         return new Array<>(0);
     }
 
+    public Set<Tile> tilesAtDistance(Tile origin, int distance) {
+        LinkedList<TileAtDepth> queue = new LinkedList<>();
+        ObjectSet<Tile> visited = new ObjectSet<>();
+        queue.add(new TileAtDepth(origin, 0));
+        while (!queue.isEmpty()) {
+            TileAtDepth atDepth = queue.pop();
+            visited.add(atDepth.tile);
+            if (atDepth.depth < distance) {
+                for (Connection<Tile> connection : getConnections(atDepth.tile)) {
+                    System.out.println("connection " + atDepth.depth);
+                    if (visited.contains(connection.getToNode())) {
+                        System.out.println("skip");
+                        continue;
+                    }
+                    queue.add(new TileAtDepth(connection.getToNode(), atDepth.depth + 1));
+                }
+            }
+        }
+        return visited;
+    }
+
     private static class TileHeuristic implements Heuristic<Tile> {
 
         @Override
         public float estimate(Tile node, Tile endNode) {
             return node.coordinates.offset.dst(endNode.coordinates.offset);
+        }
+    }
+
+    private static class TileAtDepth {
+        final Tile tile;
+        final int depth;
+
+        private TileAtDepth(Tile tile, int depth) {
+            this.tile = tile;
+            this.depth = depth;
         }
     }
 }
