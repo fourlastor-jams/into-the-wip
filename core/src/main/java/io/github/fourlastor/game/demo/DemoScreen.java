@@ -28,7 +28,6 @@ import io.github.fourlastor.game.demo.turns.PickMonster;
 import io.github.fourlastor.game.demo.turns.TurnStateMachine;
 import io.github.fourlastor.game.ui.TileOnMap;
 import io.github.fourlastor.game.ui.YSort;
-
 import javax.inject.Inject;
 import javax.inject.Provider;
 
