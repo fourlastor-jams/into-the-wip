@@ -80,7 +80,7 @@ public class DemoScreen extends ScreenAdapter {
 
                     if (mapLayerName.equals(UNITS_LAYER_NAME)) {
                         GridPoint2 coordinate = new GridPoint2(x, y);
-                        Unit unit = new Unit(image, coordinate, coordinates, stage);
+                        Unit unit = new Unit(image, coordinate, coordinates);
                         units.add(unit);
                         unit.image.setPosition(position.x, position.y, Align.bottom);
                         ySort.addActor(unit.image);
