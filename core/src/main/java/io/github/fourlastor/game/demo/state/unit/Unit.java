@@ -5,7 +5,6 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.math.GridPoint2;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.utils.Align;
 import io.github.fourlastor.game.coordinates.HexCoordinates;
@@ -21,7 +20,7 @@ public class Unit {
     public int maxHp = 20;
     public int currentHp;
 
-    public Unit(TileOnMap image, GridPoint2 position, HexCoordinates coordinates, Stage stage) {
+    public Unit(TileOnMap image, GridPoint2 position, HexCoordinates coordinates) {
         this.image = image;
         this.position = position;
         this.coordinates = coordinates;
@@ -35,9 +34,6 @@ public class Unit {
         hpLabel = new Label("", labelStyle);
         hpLabel.setAlignment(Align.center);
         setHp(maxHp);
-        hpLabel.debug();
-
-        // hpLabel.setPosition(getX() + getWidth() / 2, getY() + 36);
     }
 
     public void changeHp(int changeAmount, boolean updateLabel) {
