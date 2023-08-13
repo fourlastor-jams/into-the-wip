@@ -10,10 +10,12 @@ import com.badlogic.gdx.utils.Align;
 import dagger.assisted.Assisted;
 import dagger.assisted.AssistedFactory;
 import dagger.assisted.AssistedInject;
+import io.github.fourlastor.game.demo.actions.AttackMelee;
 import io.github.fourlastor.game.demo.state.GameState;
 import io.github.fourlastor.game.demo.state.tiles.Tile;
 import io.github.fourlastor.game.demo.state.unit.Unit;
 
+// sheerst: should this be named PickMove?
 public class Move extends TurnState {
 
     private final StateRouter router;
@@ -31,6 +33,11 @@ public class Move extends TurnState {
         for (Tile tile : entity.tiles) {
             tile.actor.addListener(new MoveListener(tile));
         }
+
+        //
+        for (Unit unit : entity.units) {
+            unit.actor.addListener(new AttackListener(unit));
+        }
     }
 
     @Override
@@ -39,6 +46,13 @@ public class Move extends TurnState {
             for (EventListener listener : tile.actor.getListeners()) {
                 if (listener instanceof MoveListener) {
                     tile.actor.removeListener(listener);
+                }
+            }
+        }
+        for (Unit unit : entity.units) {
+            for (EventListener listener : unit.actor.getListeners()) {
+                if (listener instanceof AttackListener) {
+                    unit.actor.removeListener(listener);
                 }
             }
         }
@@ -64,6 +78,21 @@ public class Move extends TurnState {
             unit.actor.addAction(Actions.sequence(
                     Actions.moveToAligned(position.x, position.y, Align.center, 0.25f, Interpolation.sine),
                     Actions.run(router::pickMonster)));
+        }
+    }
+
+    private class AttackListener extends ClickListener {
+
+        private final Unit target;
+
+        private AttackListener(Unit target) {
+            this.target = target;
+        }
+
+        @Override
+        public void clicked(InputEvent event, float x, float y) {
+            super.clicked(event, x, y);
+            unit.actor.addAction(Actions.sequence(new AttackMelee(unit, target), Actions.run(router::pickMonster)));
         }
     }
 }
