@@ -1,98 +1,57 @@
 package io.github.fourlastor.game.demo.turns;
 
+import com.badlogic.gdx.ai.pfa.GraphPath;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.scenes.scene2d.EventListener;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
 import com.badlogic.gdx.utils.Align;
 import dagger.assisted.Assisted;
 import dagger.assisted.AssistedFactory;
 import dagger.assisted.AssistedInject;
-import io.github.fourlastor.game.demo.actions.AttackMelee;
 import io.github.fourlastor.game.demo.state.GameState;
-import io.github.fourlastor.game.demo.state.tiles.Tile;
+import io.github.fourlastor.game.demo.state.map.Tile;
 import io.github.fourlastor.game.demo.state.unit.Unit;
+import java.util.ArrayList;
+import java.util.List;
 
-// sheerst: should this be named PickMove?
 public class Move extends TurnState {
 
+    private final Unit unit;
+    private final Tile tile;
     private final StateRouter router;
 
-    private final Unit unit;
-
     @AssistedInject
-    public Move(@Assisted Unit unit, StateRouter router) {
-        this.router = router;
+    public Move(@Assisted Unit unit, @Assisted Tile tile, StateRouter router) {
         this.unit = unit;
+        this.tile = tile;
+        this.router = router;
     }
 
     @Override
     public void enter(GameState entity) {
-        for (Tile tile : entity.tiles) {
-            tile.actor.addListener(new MoveListener(tile));
-        }
 
-        //
-        for (Unit unit : entity.units) {
-            unit.actor.addListener(new AttackListener(unit));
+        GraphPath<Tile> path = entity.graph.calculatePath(entity.graph.get(unit.position), tile);
+        List<Action> actions = new ArrayList<>();
+        for (int i = 1; i < path.getCount(); i++) {
+            Tile pathTile = path.get(i);
+            Vector2 position = unit.coordinates.toWorldAtCenter(
+                    pathTile.coordinates.offset.x, pathTile.coordinates.offset.y, new Vector2());
+            actions.add(Actions.moveToAligned(position.x, position.y, Align.bottom, 0.25f, Interpolation.sine));
         }
+        SequenceAction steps = Actions.sequence(actions.toArray(new Action[0]));
+        unit.actor.addAction(Actions.sequence(
+                steps,
+                Actions.run(() -> unit.position.set(tile.coordinates.offset)),
+                Actions.run(router::pickMonster)));
     }
 
     @Override
-    public void exit(GameState entity) {
-        for (Tile tile : entity.tiles) {
-            for (EventListener listener : tile.actor.getListeners()) {
-                if (listener instanceof MoveListener) {
-                    tile.actor.removeListener(listener);
-                }
-            }
-        }
-        for (Unit unit : entity.units) {
-            for (EventListener listener : unit.actor.getListeners()) {
-                if (listener instanceof AttackListener) {
-                    unit.actor.removeListener(listener);
-                }
-            }
-        }
-    }
+    public void exit(GameState entity) {}
 
     @AssistedFactory
     public interface Factory {
-        Move create(Unit unit);
-    }
-
-    private class MoveListener extends ClickListener {
-
-        private final Tile tile;
-
-        private MoveListener(Tile tile) {
-            this.tile = tile;
-        }
-
-        @Override
-        public void clicked(InputEvent event, float x, float y) {
-            super.clicked(event, x, y);
-            Vector2 position = unit.coordinates.toWorldAtCenter(tile.position.x, tile.position.y, new Vector2());
-            unit.actor.addAction(Actions.sequence(
-                    Actions.moveToAligned(position.x, position.y, Align.center, 0.25f, Interpolation.sine),
-                    Actions.run(router::pickMonster)));
-        }
-    }
-
-    private class AttackListener extends ClickListener {
-
-        private final Unit target;
-
-        private AttackListener(Unit target) {
-            this.target = target;
-        }
-
-        @Override
-        public void clicked(InputEvent event, float x, float y) {
-            super.clicked(event, x, y);
-            unit.actor.addAction(Actions.sequence(new AttackMelee(unit, target), Actions.run(router::pickMonster)));
-        }
+        Move create(Unit unit, Tile tile);
     }
 }
