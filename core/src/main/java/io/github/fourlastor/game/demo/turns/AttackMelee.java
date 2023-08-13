@@ -1,6 +1,12 @@
 package io.github.fourlastor.game.demo.turns;
 
+import com.badlogic.gdx.math.Interpolation;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
+import com.badlogic.gdx.utils.Align;
 import dagger.assisted.Assisted;
 import dagger.assisted.AssistedFactory;
 import dagger.assisted.AssistedInject;
@@ -14,60 +20,77 @@ public class AttackMelee extends TurnState {
     private final Unit source;
     private final Unit target;
     Vector2 originalPosition = new Vector2();
-    Vector2 targetPosition = new Vector2();
-    Vector2 towardVector = new Vector2();
-    boolean movingTowards = true;
-    float speed = 500f;
+    float moveDuration = 0.05f;
+    // Amount to scale the animation by.
+    Vector3 scale = new Vector3(1f / 16f, 1f, 1f);
+
+    // Base animation goes left-to-right.
+    Vector3[] positionsRelative = new Vector3[] {
+        new Vector3(-.25f, 0f, 0f),
+        new Vector3(-.125f, 0f, 0f),
+        new Vector3(0f, 0f, 0f),
+        new Vector3(2f, 0f, 0f),
+        new Vector3(8f, 0f, 0f),
+        new Vector3(8f, 0f, 0f),
+        new Vector3(0f, 0f, 0f),
+        new Vector3(0f, 0f, 0f),
+        new Vector3(0f, 0f, 0f),
+        new Vector3(0f, 0f, 0f),
+        new Vector3(-3f, 0f, 16f),
+        new Vector3(-3f, 0f, 8f),
+        new Vector3(-3f, 0f, 0f),
+        new Vector3(-3f, 0f, -8f),
+        new Vector3(-3f, 0f, -16f),
+    };
 
     @AssistedInject
     public AttackMelee(@Assisted Attack attack, StateRouter router) {
         this.router = router;
         this.source = attack.source;
         this.target = attack.target;
-        this.originalPosition = source.getActorPosition();
-
-        // sheerst - Action needs a setup() method.
-        this.towardVector.set(target.getActorPosition().cpy().sub(source.getActorPosition()));
-        this.towardVector = this.towardVector.nor();
-        this.targetPosition.set(target.getActorPosition());
+        this.originalPosition.set(source.getActorPosition());
     }
 
-    public boolean act(float delta) {
-        if (this.movingTowards) {
+    // TODO: this method can be used generically.
+    public static float calculateAngle(Vector2 source, Vector2 target) {
+        float deltaX = target.x - source.x;
+        float deltaY = target.y - source.y;
 
-            this.source.actor.setPosition(
-                    this.source.actor.getX() + (this.towardVector.x * delta * speed),
-                    this.source.actor.getY() + (this.towardVector.y * delta * speed));
+        float angleRad = MathUtils.atan2(deltaY, deltaX);
+        float angleDeg = MathUtils.radiansToDegrees * angleRad;
 
-            if (this.source.getActorPosition().dst2(this.targetPosition) <= 40f) {
-                this.source.setActorPosition(this.targetPosition);
-                this.movingTowards = false;
-            }
-            return false;
-        }
-
-        this.source.actor.setPosition(
-                this.source.actor.getX() + (this.towardVector.x * delta * speed * -1f),
-                this.source.actor.getY() + (this.towardVector.y * delta * speed * -1f));
-
-        System.out.println(this.source.getActorPosition().dst2(this.originalPosition));
-        if (this.source.getActorPosition().dst2(this.originalPosition) <= 200f) {
-            this.source.setActorPosition(this.originalPosition);
-            return true;
-        }
-
-        return false;
+        return angleDeg;
     }
 
+    // TODO: this method can be used generically.
     @Override
     public void enter(GameState entity) {
-        // TODO: add act logic here as action
-        //  at the end of the attack use `Actions.run(router::pickMonster)`
+
+        // TODO: this animation has an alignment issue.
+        Vector2 nextUnitPosition = source.getActorPosition();
+        SequenceAction sequence = Actions.sequence();
+        float rotationDegrees = calculateAngle(nextUnitPosition, target.getActorPosition());
+        float distance = nextUnitPosition.dst(target.getActorPosition());
+
+        for (Vector3 positionRelative : positionsRelative) {
+
+            Vector3 rotatedPositionRelative = positionRelative.cpy();
+            rotatedPositionRelative.scl(scale.x, scale.y, scale.z);
+            rotatedPositionRelative.scl(distance, 1f, 1f);
+            rotatedPositionRelative.rotate(new Vector3(0, 0, 1), rotationDegrees);
+            rotatedPositionRelative.rotate(new Vector3(1, 0, 0), 45f);
+            // Note: Using rotatedPositionRelative.z instead of .y here in order to apply the jump in the y-axis.
+            nextUnitPosition.add(rotatedPositionRelative.x, rotatedPositionRelative.z);
+            sequence.addAction(Actions.moveToAligned(
+                    nextUnitPosition.x, nextUnitPosition.y, Align.bottom, moveDuration, Interpolation.linear));
+        }
+        sequence.addAction(Actions.run(() -> source.setActorPosition(originalPosition)));
+        source.actor.addAction(sequence);
     }
 
     @Override
     public void exit(GameState entity) {
-        // TODO optional cleanup
+        // optional cleanup
     }
 
     @AssistedFactory

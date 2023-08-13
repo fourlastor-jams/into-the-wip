@@ -32,7 +32,7 @@ public class Hex {
         int q = offset.x;
         int r = offset.y - (offset.x - (Math.abs(offset.x % 2))) / 2;
         GridPoint3 gridPoint3 = new GridPoint3(q, r, -q - r);
-        System.out.println("Convert " + offset + " to " + gridPoint3);
+        // System.out.println("Convert " + offset + " to " + gridPoint3);
         return gridPoint3;
     }
 
