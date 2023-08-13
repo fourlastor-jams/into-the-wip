@@ -1,9 +1,11 @@
 package io.github.fourlastor.game.ui;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.WidgetGroup;
 import com.badlogic.gdx.utils.SnapshotArray;
+import io.github.fourlastor.game.demo.state.map.Tile;
 import java.util.Comparator;
 
 // (sheerst) TODO: layers.
@@ -14,22 +16,24 @@ public class YSort extends WidgetGroup {
     public void sortChildren() {
         SnapshotArray<Actor> children = getChildren();
 
-        SnapshotArray<Actor> labelChildren = new SnapshotArray<>();
-        SnapshotArray<Actor> otherChildren = new SnapshotArray<>();
+        SnapshotArray<Actor> unitChildren = new SnapshotArray<>();
+        SnapshotArray<Actor> tileChildren = new SnapshotArray<>();
 
         for (Actor child : children) {
-            if (child instanceof Label) {
-                labelChildren.add(child);
-            } else {
-                otherChildren.add(child);
+            if (child instanceof Image) {
+                unitChildren.add(child);
+            } else if (child instanceof Tile) {
+                tileChildren.add(child);
+            } else if (child instanceof Label) {
+                unitChildren.add(child);
             }
         }
 
-        labelChildren.sort(COMPARATOR);
-        otherChildren.sort(COMPARATOR);
+        unitChildren.sort(COMPARATOR);
+        tileChildren.sort(COMPARATOR);
 
         children.clear();
-        children.addAll(labelChildren);
-        children.addAll(otherChildren);
+        children.addAll(unitChildren);
+        children.addAll(tileChildren);
     }
 }

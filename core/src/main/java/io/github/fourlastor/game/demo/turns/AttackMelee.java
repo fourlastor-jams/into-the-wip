@@ -1,15 +1,13 @@
 package io.github.fourlastor.game.demo.turns;
 
-import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
-import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
-import com.badlogic.gdx.utils.Align;
 import dagger.assisted.Assisted;
 import dagger.assisted.AssistedFactory;
 import dagger.assisted.AssistedInject;
+import io.github.fourlastor.game.demo.KeyFrameAnimation;
 import io.github.fourlastor.game.demo.state.GameState;
 import io.github.fourlastor.game.demo.state.unit.Unit;
 
@@ -23,25 +21,7 @@ public class AttackMelee extends TurnState {
     float moveDuration = 0.05f;
     // Amount to scale the animation by.
     Vector3 scale = new Vector3(1f / 16f, 1f, 1f);
-
-    // Base animation goes left-to-right.
-    Vector3[] positionsRelative = new Vector3[] {
-        new Vector3(-.25f, 0f, 0f),
-        new Vector3(-.125f, 0f, 0f),
-        new Vector3(0f, 0f, 0f),
-        new Vector3(2f, 0f, 0f),
-        new Vector3(8f, 0f, 0f),
-        new Vector3(8f, 0f, 0f),
-        new Vector3(0f, 0f, 0f),
-        new Vector3(0f, 0f, 0f),
-        new Vector3(0f, 0f, 0f),
-        new Vector3(0f, 0f, 0f),
-        new Vector3(-3f, 0f, 16f),
-        new Vector3(-3f, 0f, 8f),
-        new Vector3(-3f, 0f, 0f),
-        new Vector3(-3f, 0f, -8f),
-        new Vector3(-3f, 0f, -16f),
-    };
+    int damage = 2;
 
     @AssistedInject
     public AttackMelee(@Assisted Attack attack, StateRouter router) {
@@ -52,7 +32,7 @@ public class AttackMelee extends TurnState {
     }
 
     /**
-     * TODO: this functionality can be used generically.
+     * TODO: This functionality can be used generically. Unsure where to move it to.
      *
      * Calculate the angle in degrees between two 2D vectors.
      *
@@ -70,38 +50,66 @@ public class AttackMelee extends TurnState {
         return angleDeg;
     }
 
+    public KeyFrameAnimation setupAttackAnimation(float distance, float rotationDegrees) {
+        // Base animation goes left-to-right.
+        KeyFrameAnimation attackAnimation = new KeyFrameAnimation(source.image);
+        attackAnimation.positionsRelative = new Vector3[] {
+            new Vector3(-.25f, 0f, 0f),
+            new Vector3(-.125f, 0f, 0f),
+            new Vector3(0f, 0f, 2f),
+            new Vector3(2f, 0f, 0f),
+            new Vector3(8f, 0f, 1f),
+            new Vector3(8f, 0f, 0f),
+            new Vector3(0f, 0f, 0f),
+            new Vector3(0f, 0f, -1f),
+            new Vector3(0f, 0f, 0f),
+            new Vector3(0f, 0f, -2f),
+            new Vector3(-3f, 0f, 16f),
+            new Vector3(-3f, 0f, 8f),
+            new Vector3(-3f, 0f, 0f),
+            new Vector3(-3f, 0f, -8f),
+            new Vector3(-3f, 0f, -16f),
+        };
+        attackAnimation.runnables = new Runnable[] {
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            () -> {
+                if (target != null) target.refreshHpLabel();
+            },
+            null,
+            null,
+            null,
+            null,
+            null,
+        };
+        attackAnimation.scale.set(scale.cpy().scl(distance, 1f, 1f));
+        attackAnimation.moveDuration = moveDuration;
+        attackAnimation.rotationDegrees = rotationDegrees;
+        attackAnimation.makeSequence();
+        return attackAnimation;
+    }
+
     @Override
     public void enter(GameState entity) {
 
-        // TODO: this functionality can be used generically.
-        // TODO: this animation has an alignment issue.
-        Vector2 nextUnitPosition = source.getActorPosition();
-        SequenceAction sequence = Actions.sequence();
+        // (sheerst) Note: this is model code, does it go here?
+        target.changeHp(-damage, false);
+
+        // Distance between source and target is used to scale the animation if needed.
+        float distance = source.getActorPosition().dst(target.getActorPosition());
         // Angle offset of target from source.
-        float rotationDegrees = calculateAngle(nextUnitPosition, target.getActorPosition());
-        float distance = nextUnitPosition.dst(target.getActorPosition());
-
-        for (Vector3 positionRelative : positionsRelative) {
-
-            Vector3 rotatedPositionRelative = positionRelative.cpy();
-            // Scale the animation by a given value.
-            rotatedPositionRelative.scl(scale.x, scale.y, scale.z);
-            // Move farther depending on the distance of the target.
-            rotatedPositionRelative.scl(distance, 1f, 1f);
-            // Rotate around the z axis so that animation points at target.
-            rotatedPositionRelative.rotate(new Vector3(0, 0, 1), rotationDegrees);
-            // Rotate around the x axis 45 degress so that the animation 'hop' effect is visible.
-            rotatedPositionRelative.rotate(new Vector3(1, 0, 0), 45f);
-            // Using rotatedPositionRelative.z instead of .y here in order to see the jump in the y-axis.
-            // (that data is currently in the z-axis).
-            nextUnitPosition.add(rotatedPositionRelative.x, rotatedPositionRelative.z);
-            sequence.addAction(Actions.moveToAligned(
-                    nextUnitPosition.x, nextUnitPosition.y, Align.bottom, moveDuration, Interpolation.linear));
-        }
-
+        float rotationDegrees = calculateAngle(source.getActorPosition(), target.getActorPosition());
+        KeyFrameAnimation attackAnimation = setupAttackAnimation(distance, rotationDegrees);
         // After movement, reset the sources's position to it's original position.
-        sequence.addAction(Actions.run(() -> source.setActorPosition(originalPosition)));
-        source.actor.addAction(sequence);
+        attackAnimation.addAction(Actions.run(() -> source.setActorPosition(originalPosition)));
+        source.image.addAction(attackAnimation);
     }
 
     @Override

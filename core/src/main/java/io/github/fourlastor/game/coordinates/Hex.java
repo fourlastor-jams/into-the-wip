@@ -44,4 +44,8 @@ public class Hex {
         int y = cube.y + (cube.x - (Math.abs(cube.x % 2))) / 2;
         return new GridPoint2(x, y);
     }
+
+    public boolean equals(Hex other) {
+        return offset.equals(other.offset) && cube.equals(other.cube);
+    }
 }

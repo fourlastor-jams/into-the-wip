@@ -43,9 +43,9 @@ public class Move extends TurnState {
         Tile finalTile = path.get(path.getCount() - 1);
         Vector2 finalPosition = unit.coordinates.toWorldAtCenter(
                 finalTile.coordinates.offset.x, finalTile.coordinates.offset.y, new Vector2());
-        finalPosition.x -= unit.actor.getWidth() / 2f;
+        finalPosition.x -= unit.image.getWidth() / 2f;
         SequenceAction steps = Actions.sequence(actions.toArray(new Action[0]));
-        unit.actor.addAction(Actions.sequence(
+        unit.image.addAction(Actions.sequence(
                 steps,
                 Actions.run(() -> unit.position.set(tile.coordinates.offset)),
                 Actions.run(() -> unit.setActorPosition(finalPosition)),

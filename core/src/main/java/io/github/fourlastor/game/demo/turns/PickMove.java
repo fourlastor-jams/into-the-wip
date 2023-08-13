@@ -30,12 +30,10 @@ public class PickMove extends TurnState {
         for (Tile tile : tilesFromUnit(entity)) {
             tile.actor.addListener(new MoveListener(tile));
             tile.actor.setColor(Color.CORAL);
-        }
-        for (Unit unit : entity.units) {
-            if (this.unit == unit) {
+            if (unit == tile.unit || tile.unit == null) {
                 continue;
             }
-            unit.actor.addListener(new AttackListener(unit));
+            tile.unit.image.addListener(new AttackListener(tile.unit));
         }
     }
 
@@ -50,11 +48,11 @@ public class PickMove extends TurnState {
             }
         }
         for (Unit unit : entity.units) {
-            for (EventListener listener : unit.actor.getListeners()) {
+            for (EventListener listener : unit.image.getListeners()) {
                 if (listener instanceof AttackListener) {
-                    unit.actor.removeListener(listener);
+                    unit.image.removeListener(listener);
                 }
-                unit.actor.setColor(Color.WHITE);
+                unit.image.setColor(Color.WHITE);
             }
         }
     }

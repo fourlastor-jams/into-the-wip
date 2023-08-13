@@ -19,7 +19,7 @@ public class PickMonster extends TurnState {
     @Override
     public void enter(GameState entity) {
         for (Unit unit : entity.units) {
-            unit.actor.addListener(new ClickListener() {
+            unit.image.addListener(new ClickListener() {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
                     super.clicked(event, x, y);
@@ -32,9 +32,9 @@ public class PickMonster extends TurnState {
     @Override
     public void exit(GameState entity) {
         for (Unit unit : entity.units) {
-            for (EventListener listener : unit.actor.getListeners()) {
+            for (EventListener listener : unit.image.getListeners()) {
                 if (listener instanceof PickMoveListener) {
-                    unit.actor.removeListener(listener);
+                    unit.image.removeListener(listener);
                 }
             }
         }

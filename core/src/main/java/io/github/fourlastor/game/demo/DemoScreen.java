@@ -18,12 +18,14 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.github.tommyettinger.ds.ObjectList;
+import io.github.fourlastor.game.coordinates.Hex;
 import io.github.fourlastor.game.coordinates.HexCoordinates;
 import io.github.fourlastor.game.demo.state.GameState;
 import io.github.fourlastor.game.demo.state.map.Tile;
 import io.github.fourlastor.game.demo.state.unit.Unit;
 import io.github.fourlastor.game.demo.turns.PickMonster;
 import io.github.fourlastor.game.demo.turns.TurnStateMachine;
+import io.github.fourlastor.game.ui.TileOnMap;
 import io.github.fourlastor.game.ui.YSort;
 import javax.inject.Inject;
 import javax.inject.Provider;
@@ -35,6 +37,7 @@ public class DemoScreen extends ScreenAdapter {
     private final Stage stage;
     private final Viewport viewport;
     private final TurnStateMachine stateMachine;
+    private final GameState state;
 
     @Inject
     public DemoScreen(TurnStateMachine.Factory stateMachineFactory, Provider<PickMonster> pickMonsterProvider) {
@@ -57,7 +60,7 @@ public class DemoScreen extends ScreenAdapter {
             int tileWidth = mapTiles.getTileWidth();
             int tileHeight = mapTiles.getTileHeight() - 1;
             HexCoordinates coordinates = new HexCoordinates(tileWidth, tileHeight, hexSideLength);
-            YSort tilesGroup = new YSort();
+            YSort ySort = new YSort();
 
             // NOTE: in the future there's the possibility of multiple
             // tilesets per mapLayer, this won't work in that case.
@@ -72,27 +75,36 @@ public class DemoScreen extends ScreenAdapter {
                     }
 
                     TextureRegion textureRegion = cell.getTile().getTextureRegion();
+                    TileOnMap image = new TileOnMap(textureRegion);
+                    Vector2 position = coordinates.toWorldAtOrigin(x, y, new Vector2());
 
                     if (mapLayerName.equals(UNITS_LAYER_NAME)) {
-                        Unit unit = new Unit(textureRegion, new GridPoint2(x, y), coordinates, stage);
+                        GridPoint2 coordinate = new GridPoint2(x, y);
+                        Unit unit = new Unit(image, coordinate, coordinates, stage);
                         units.add(unit);
-                        tilesGroup.addActor(unit);
-                        Vector2 position = coordinates.toWorldAtCenter(x, y, new Vector2());
-                        unit.setPosition(position.x, position.y, Align.bottom);
+                        unit.image.setPosition(position.x, position.y, Align.bottom);
+                        ySort.addActor(unit.image);
+                        ySort.addActor(unit.hpLabel);
+                        // (sheerst) Note: I wasn't sure how to do this, this is temporary.
+                        Tile onTile = tiles.stream()
+                                .filter(tile -> tile.coordinates.equals(new Hex(coordinate)))
+                                .findFirst()
+                                .orElse(null);
+                        System.out.println(onTile);
+                        if (onTile != null) onTile.unit = unit;
                     }
                     if (mapLayerName.equals(TILES_LAYER_NAME)) {
-                        Tile tile = new Tile(textureRegion, new GridPoint2(x, y));
+                        Tile tile = new Tile(image, new GridPoint2(x, y));
                         tiles.add(tile);
-                        tilesGroup.addActor(tile);
-                        Vector2 position = coordinates.toWorldAtOrigin(x, y, new Vector2());
                         tile.setPosition(position.x, position.y - 15);
+                        ySort.addActor(tile);
                     }
                 }
             }
-            tilesGroup.sortChildren();
-            stage.addActor(tilesGroup);
+            ySort.sortChildren();
+            stage.addActor(ySort);
         }
-        GameState state = new GameState(units, tiles);
+        state = new GameState(units, tiles);
         stateMachine = stateMachineFactory.create(state, pickMonsterProvider.get());
     }
 
@@ -107,6 +119,7 @@ public class DemoScreen extends ScreenAdapter {
         stateMachine.update();
         viewport.apply();
         stage.act();
+        state.alignAllHpBars();
         stage.draw();
     }
 }

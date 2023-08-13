@@ -30,6 +30,12 @@ public class GameState {
         }
     }
 
+    public void alignAllHpBars() {
+        for (Unit unit : units) {
+            unit.alignHpBars();
+        }
+    }
+
     private void connectTiles(Tile tile, @Null Tile adjacent) {
         if (adjacent == null) {
             return;
