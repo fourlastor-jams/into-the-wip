@@ -1,5 +1,6 @@
 package io.github.fourlastor.game.demo.turns;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.EventListener;
@@ -11,8 +12,10 @@ import dagger.assisted.Assisted;
 import dagger.assisted.AssistedFactory;
 import dagger.assisted.AssistedInject;
 import io.github.fourlastor.game.demo.state.GameState;
+import io.github.fourlastor.game.demo.state.map.MapGraph;
 import io.github.fourlastor.game.demo.state.map.Tile;
 import io.github.fourlastor.game.demo.state.unit.Unit;
+import java.util.Set;
 
 public class Move extends TurnState {
 
@@ -28,8 +31,9 @@ public class Move extends TurnState {
 
     @Override
     public void enter(GameState entity) {
-        for (Tile tile : entity.tiles) {
+        for (Tile tile : tilesFromUnit(entity)) {
             tile.actor.addListener(new MoveListener(tile));
+            tile.actor.setColor(Color.CORAL);
         }
     }
 
@@ -40,8 +44,15 @@ public class Move extends TurnState {
                 if (listener instanceof MoveListener) {
                     tile.actor.removeListener(listener);
                 }
+                tile.actor.setColor(Color.WHITE);
             }
         }
+    }
+
+    private Set<Tile> tilesFromUnit(GameState entity) {
+        MapGraph graph = entity.graph;
+        Tile unitTile = graph.get(unit.position);
+        return graph.tilesAtDistance(unitTile, 2);
     }
 
     @AssistedFactory
@@ -64,6 +75,7 @@ public class Move extends TurnState {
                     tile.coordinates.offset.x, tile.coordinates.offset.y, new Vector2());
             unit.actor.addAction(Actions.sequence(
                     Actions.moveToAligned(position.x, position.y, Align.bottom, 0.25f, Interpolation.sine),
+                    Actions.run(() -> unit.position.set(tile.coordinates.offset)),
                     Actions.run(router::pickMonster)));
         }
     }
