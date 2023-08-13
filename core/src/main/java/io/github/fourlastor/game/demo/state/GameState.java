@@ -37,10 +37,8 @@ public class GameState {
         graph.connect(tile, adjacent);
     }
 
-    private final GridPoint3 adjacentTmp = new GridPoint3();
-
     private Tile adjacent(Tile tile, int x, int y, int z) {
-        GridPoint3 position = adjacentTmp.set(tile.coordinates.cube).add(x, y, z);
+        GridPoint3 position = new GridPoint3(tile.coordinates.cube).add(x, y, z);
         return graph.get(position);
     }
 }
