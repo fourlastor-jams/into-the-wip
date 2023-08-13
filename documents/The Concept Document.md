@@ -104,10 +104,11 @@ The visual, audio, narrative, and psychological aspects of the game
 
 The projects [Reference art](https://www.pinterest.com/Sandra_776/into-the-wip).
 * #### Describe the style and feel of the game
-    Cyberpunk mechanimals. Gritty like 'Into the Breach', and still cutsy.
-    Based on animals, instead mechs.
-
-    Cute, animal, mechanical.
+        The world is Post-apocalyptic and marked by nuclear waste and ruined cities and such. Though dystopian the game feels cutsy and cheerful.
+        Cyberpunk mechanimals. Gritty like 'Into the Breach', and still cutsy.
+        Based on animals, instead mechs.
+      
+        Cute, animal, mechanical.
 
 * #### Does the game use pixel art, line art, or realistic graphics?    
     Pixel art, isometric.
