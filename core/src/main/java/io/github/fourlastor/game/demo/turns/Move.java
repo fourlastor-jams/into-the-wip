@@ -11,7 +11,7 @@ import dagger.assisted.Assisted;
 import dagger.assisted.AssistedFactory;
 import dagger.assisted.AssistedInject;
 import io.github.fourlastor.game.demo.state.GameState;
-import io.github.fourlastor.game.demo.state.tiles.Tile;
+import io.github.fourlastor.game.demo.state.map.Tile;
 import io.github.fourlastor.game.demo.state.unit.Unit;
 
 public class Move extends TurnState {
@@ -60,9 +60,10 @@ public class Move extends TurnState {
         @Override
         public void clicked(InputEvent event, float x, float y) {
             super.clicked(event, x, y);
-            Vector2 position = unit.coordinates.toWorldAtCenter(tile.position.x, tile.position.y, new Vector2());
+            Vector2 position = unit.coordinates.toWorldAtCenter(
+                    tile.coordinates.offset.x, tile.coordinates.offset.y, new Vector2());
             unit.actor.addAction(Actions.sequence(
-                    Actions.moveToAligned(position.x, position.y, Align.center, 0.25f, Interpolation.sine),
+                    Actions.moveToAligned(position.x, position.y, Align.bottom, 0.25f, Interpolation.sine),
                     Actions.run(router::pickMonster)));
         }
     }
