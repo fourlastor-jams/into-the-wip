@@ -1,0 +1,34 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+      {
+        "name": "Desktop",
+        "type": "java",
+        "request": "launch",
+        "mainClass": "com.pkmngen.game.desktop.DesktopLauncher",
+        "projectName": "pokewilds-desktop",
+        "args": ["dangerous"],
+        "cwd": "desktop",
+        "console": "internalConsole",
+        "vmArgs": "-Dfile.encoding=UTF-8",
+        // "sourcePaths": [
+        //   "core/src/main/java",
+        //   "desktop/src/main/java"
+        // ],
+        // compileReleaseSources
+        // "classPaths": [
+        //   "${localEnv:HOME}/.gradle/caches/modules-2/files-2.1/**/*.jar",
+        // ],
+        // "modulePaths": [
+        //   "core/build/resources/main",
+        //   "desktop/build/resources/main"
+        // ],
+        // "env": {
+        //   "LWJGL_NATIVE_DIR": "desktop/build/libs",
+        //   "LWJGL_DEBUG": "true"
+        // },
+        // "preLaunchTask": "build:core-desktop"
+      }
+    ],
+  }
+  

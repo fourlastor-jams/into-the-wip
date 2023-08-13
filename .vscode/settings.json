@@ -1,0 +1,13 @@
+{
+    "java.configuration.updateBuildConfiguration": "automatic",
+    "java.dependency.packagePresentation": "hierarchical",
+    "files.encoding": "utf8",
+    "[java]": {
+            "spotlessGradle.format.enable": true,
+            "editor.codeActionsOnSave": {
+            "source.fixAll.spotlessGradle": true
+        }
+    },
+    "java.jdt.ls.vmargs": "-XX:+UseParallelGC -XX:GCTimeRatio=4 -XX:AdaptiveSizePolicyWeight=90 -Dsun.zip.disableMemoryMapping=true -Xmx8G -Xms100m -Xlog:disable",
+    "files.insertFinalNewline": true
+}

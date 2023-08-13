@@ -111,3 +111,12 @@ packaging/out
 
 ### Android Studio
 /local.properties
+
+### */bin folders
+core/bin/**
+desktop/bin/**
+html/bin/**
+android/bin/**
+
+### 
+core/bin/**
