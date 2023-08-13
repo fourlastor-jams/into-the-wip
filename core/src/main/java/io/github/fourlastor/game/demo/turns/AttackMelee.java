@@ -51,7 +51,15 @@ public class AttackMelee extends TurnState {
         this.originalPosition.set(source.getActorPosition());
     }
 
-    // TODO: this method can be used generically.
+    /**
+     * TODO: this functionality can be used generically.
+     *
+     * Calculate the angle in degrees between two 2D vectors.
+     *
+     * @param source The source vector.
+     * @param target The target vector.
+     * @return The angle in degrees between the vectors.
+     */
     public static float calculateAngle(Vector2 source, Vector2 target) {
         float deltaX = target.x - source.x;
         float deltaY = target.y - source.y;
@@ -62,28 +70,36 @@ public class AttackMelee extends TurnState {
         return angleDeg;
     }
 
-    // TODO: this method can be used generically.
     @Override
     public void enter(GameState entity) {
 
+        // TODO: this functionality can be used generically.
         // TODO: this animation has an alignment issue.
         Vector2 nextUnitPosition = source.getActorPosition();
         SequenceAction sequence = Actions.sequence();
+        // Angle offset of target from source.
         float rotationDegrees = calculateAngle(nextUnitPosition, target.getActorPosition());
         float distance = nextUnitPosition.dst(target.getActorPosition());
 
         for (Vector3 positionRelative : positionsRelative) {
 
             Vector3 rotatedPositionRelative = positionRelative.cpy();
+            // Scale the animation by a given value.
             rotatedPositionRelative.scl(scale.x, scale.y, scale.z);
+            // Move farther depending on the distance of the target.
             rotatedPositionRelative.scl(distance, 1f, 1f);
+            // Rotate around the z axis so that animation points at target.
             rotatedPositionRelative.rotate(new Vector3(0, 0, 1), rotationDegrees);
+            // Rotate around the x axis 45 degress so that the animation 'hop' effect is visible.
             rotatedPositionRelative.rotate(new Vector3(1, 0, 0), 45f);
-            // Note: Using rotatedPositionRelative.z instead of .y here in order to apply the jump in the y-axis.
+            // Using rotatedPositionRelative.z instead of .y here in order to see the jump in the y-axis.
+            // (that data is currently in the z-axis).
             nextUnitPosition.add(rotatedPositionRelative.x, rotatedPositionRelative.z);
             sequence.addAction(Actions.moveToAligned(
                     nextUnitPosition.x, nextUnitPosition.y, Align.bottom, moveDuration, Interpolation.linear));
         }
+
+        // After movement, reset the sources's position to it's original position.
         sequence.addAction(Actions.run(() -> source.setActorPosition(originalPosition)));
         source.actor.addAction(sequence);
     }
@@ -93,11 +109,17 @@ public class AttackMelee extends TurnState {
         // optional cleanup
     }
 
+    /**
+     * Factory interface for creating instances of the AttackMelee class.
+     */
     @AssistedFactory
     public interface Factory {
         AttackMelee create(Attack attack);
     }
 
+    /**
+     * Represents an attack event with source and target units.
+     */
     public static class Attack {
         public final Unit source;
         public final Unit target;
