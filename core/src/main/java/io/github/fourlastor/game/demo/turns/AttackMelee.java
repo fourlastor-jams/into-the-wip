@@ -47,6 +47,8 @@ public class AttackMelee extends TurnState {
         float angleRad = MathUtils.atan2(deltaY, deltaX);
         float angleDeg = MathUtils.radiansToDegrees * angleRad;
 
+        source.angleDeg(target);
+
         return angleDeg;
     }
 

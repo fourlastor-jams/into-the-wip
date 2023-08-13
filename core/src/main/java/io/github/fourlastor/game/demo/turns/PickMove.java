@@ -68,7 +68,6 @@ public class PickMove extends TurnState {
         PickMove create(Unit unit);
     }
 
-    // sheerst - could these types of classes somehow be removed?
     private class MoveListener extends ClickListener {
 
         private final Tile tile;

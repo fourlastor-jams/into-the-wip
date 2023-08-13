@@ -8,7 +8,6 @@ import com.badlogic.gdx.utils.SnapshotArray;
 import io.github.fourlastor.game.demo.state.map.Tile;
 import java.util.Comparator;
 
-// (sheerst) TODO: layers.
 public class YSort extends WidgetGroup {
 
     private static final Comparator<Actor> COMPARATOR = Comparator.comparing((actor -> -actor.getY()), Float::compare);
