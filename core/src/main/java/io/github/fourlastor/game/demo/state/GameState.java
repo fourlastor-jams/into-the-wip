@@ -1,6 +1,7 @@
 package io.github.fourlastor.game.demo.state;
 
 import com.badlogic.gdx.math.GridPoint3;
+import com.badlogic.gdx.utils.Null;
 import com.github.tommyettinger.ds.ObjectList;
 import io.github.fourlastor.game.demo.state.map.MapGraph;
 import io.github.fourlastor.game.demo.state.map.Tile;
@@ -20,13 +21,20 @@ public class GameState {
             graph.addTile(tile);
         }
         for (Tile tile : tiles) {
-            graph.connect(tile, adjacent(tile, -1, 0, 0));
-            graph.connect(tile, adjacent(tile, 1, 0, 0));
-            graph.connect(tile, adjacent(tile, 0, -1, 0));
-            graph.connect(tile, adjacent(tile, 0, 1, 0));
-            graph.connect(tile, adjacent(tile, 0, 0, -1));
-            graph.connect(tile, adjacent(tile, 0, 0, 1));
+            connectTiles(tile, adjacent(tile, -1, 0, 0));
+            connectTiles(tile, adjacent(tile, 1, 0, 0));
+            connectTiles(tile, adjacent(tile, 0, -1, 0));
+            connectTiles(tile, adjacent(tile, 0, 1, 0));
+            connectTiles(tile, adjacent(tile, 0, 0, -1));
+            connectTiles(tile, adjacent(tile, 0, 0, 1));
         }
+    }
+
+    private void connectTiles(Tile tile, @Null Tile adjacent) {
+        if (adjacent == null) {
+            return;
+        }
+        graph.connect(tile, adjacent);
     }
 
     private final GridPoint3 adjacentTmp = new GridPoint3();
