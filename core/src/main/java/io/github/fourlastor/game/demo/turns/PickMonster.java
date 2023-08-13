@@ -23,7 +23,7 @@ public class PickMonster extends TurnState {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
                     super.clicked(event, x, y);
-                    router.move(unit);
+                    router.pickMove(unit);
                 }
             });
         }
@@ -50,7 +50,7 @@ public class PickMonster extends TurnState {
 
         @Override
         public void clicked(InputEvent event, float x, float y) {
-            router.move(unit);
+            router.pickMove(unit);
         }
     }
 }

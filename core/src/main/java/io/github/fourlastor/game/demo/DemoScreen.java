@@ -4,7 +4,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.tiled.AtlasTmxMapLoader;
@@ -22,7 +21,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.github.tommyettinger.ds.ObjectList;
 import io.github.fourlastor.game.coordinates.HexCoordinates;
 import io.github.fourlastor.game.demo.state.GameState;
-import io.github.fourlastor.game.demo.state.tiles.Tile;
+import io.github.fourlastor.game.demo.state.map.Tile;
 import io.github.fourlastor.game.demo.state.unit.Unit;
 import io.github.fourlastor.game.demo.turns.PickMonster;
 import io.github.fourlastor.game.demo.turns.TurnStateMachine;
@@ -40,10 +39,7 @@ public class DemoScreen extends ScreenAdapter {
     private final TurnStateMachine stateMachine;
 
     @Inject
-    public DemoScreen(
-            TextureAtlas atlas,
-            TurnStateMachine.Factory stateMachineFactory,
-            Provider<PickMonster> pickMonsterProvider) {
+    public DemoScreen(TurnStateMachine.Factory stateMachineFactory, Provider<PickMonster> pickMonsterProvider) {
         viewport = new FitViewport(512, 288);
         SpriteBatch batch = new SpriteBatch();
         stage = new Stage(viewport, batch);
@@ -84,7 +80,7 @@ public class DemoScreen extends ScreenAdapter {
                     if (mapLayerName.equals(UNITS_LAYER_NAME)) {
                         units.add(new Unit(image, new GridPoint2(x, y), coordinates));
                         Vector2 position = coordinates.toWorldAtCenter(x, y, new Vector2());
-                        image.setPosition(position.x, position.y, Align.center);
+                        image.setPosition(position.x, position.y, Align.bottom);
                     }
                     if (mapLayerName.equals(TILES_LAYER_NAME)) {
                         tiles.add(new Tile(image, new GridPoint2(x, y)));

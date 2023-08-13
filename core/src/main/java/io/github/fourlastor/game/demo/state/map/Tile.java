@@ -1,17 +1,17 @@
-package io.github.fourlastor.game.coordinates;
+package io.github.fourlastor.game.demo.state.map;
 
 import com.badlogic.gdx.ai.pfa.Connection;
 import com.badlogic.gdx.math.GridPoint2;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import io.github.fourlastor.game.coordinates.Hex;
 
 public class Tile {
-    public final GridPoint2 position;
+    public final Actor actor;
+    public final Hex coordinates;
 
-    public Tile(GridPoint2 position) {
-        this.position = position;
-    }
-
-    public int packedCoord() {
-        return IsometricCoordinates.pack(position);
+    public Tile(Actor actor, GridPoint2 position) {
+        this.actor = actor;
+        this.coordinates = new Hex(position);
     }
 
     public static class Link implements Connection<Tile> {
