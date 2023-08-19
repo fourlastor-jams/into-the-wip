@@ -23,6 +23,10 @@ public class HexCoordinates {
         return out.set(x * horizontalSpacing, stagger + y * height);
     }
 
+    public Vector2 toWorldAtCenter(Hex hex, Vector2 out) {
+        return toWorldAtCenter(hex.offset.x, hex.offset.y, out);
+    }
+
     public Vector2 toWorldAtCenter(int x, int y, Vector2 out) {
         return toWorldAtOrigin(x, y, out).add(width / 2f, height / 2f);
     }

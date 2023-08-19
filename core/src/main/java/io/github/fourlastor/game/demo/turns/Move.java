@@ -36,13 +36,11 @@ public class Move extends TurnState {
         List<Action> actions = new ArrayList<>();
         for (int i = 1; i < path.getCount(); i++) {
             Tile pathTile = path.get(i);
-            Vector2 position =
-                    unit.coordinates.toWorldAtCenter(pathTile.hex.offset.x, pathTile.hex.offset.y, new Vector2());
+            Vector2 position = unit.coordinates.toWorldAtCenter(pathTile.hex, new Vector2());
             actions.add(Actions.moveToAligned(position.x, position.y, Align.bottom, 0.25f, Interpolation.sine));
         }
         Tile finalTile = path.get(path.getCount() - 1);
-        Vector2 finalPosition =
-                unit.coordinates.toWorldAtCenter(finalTile.hex.offset.x, finalTile.hex.offset.y, new Vector2());
+        Vector2 finalPosition = unit.coordinates.toWorldAtCenter(finalTile.hex, new Vector2());
         finalPosition.x -= unit.actor.getWidth() / 2f;
         SequenceAction steps = Actions.sequence(actions.toArray(new Action[0]));
         unit.actor.addAction(Actions.sequence(
