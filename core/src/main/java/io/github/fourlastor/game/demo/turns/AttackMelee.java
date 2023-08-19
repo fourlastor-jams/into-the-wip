@@ -17,7 +17,6 @@ public class AttackMelee extends TurnState {
 
     private final Unit source;
     private final Unit target;
-    Vector2 originalPosition = new Vector2();
     float moveDuration = 0.05f;
     // Amount to scale the animation by.
     Vector3 scale = new Vector3(1f / 16f, 1f, 1f);
@@ -28,7 +27,6 @@ public class AttackMelee extends TurnState {
         this.router = router;
         this.source = attack.source;
         this.target = attack.target;
-        this.originalPosition.set(source.getActorPosition());
     }
 
     /**
@@ -92,6 +90,7 @@ public class AttackMelee extends TurnState {
 
     @Override
     public void enter(GameState entity) {
+        Vector2 originalPosition = new Vector2(source.getActorPosition());
         target.changeHp(-damage);
         // Distance between source and target is used to scale the animation if needed.
         float distance = source.getActorPosition().dst(target.getActorPosition());
