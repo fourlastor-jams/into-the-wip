@@ -1,6 +1,7 @@
 package io.github.fourlastor.game.di.modules;
 
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.JsonReader;
@@ -17,11 +18,7 @@ import javax.inject.Singleton;
 public class AssetsModule {
 
     private static final String PATH_TEXTURE_ATLAS = "images/packed/images.pack.atlas";
-    private static final String PATH_LEVELS = "maps/levels.ldtk";
-    private static final String PATH_WAVE_SHADER = "shaders/wave.vs";
     public static final String WHITE_PIXEL = "white-pixel";
-    private static final String PATH_SPINE_JSON = "animations/animation_spine.json";
-    private static final String PATH_DRAGON_BONES_JSON = "images/included/animations/dancer/dancer.json";
 
     @Provides
     public DragonBonesLoader dragonBonesLoader(JsonReader json) {
@@ -40,6 +37,7 @@ public class AssetsModule {
         assetManager.setLoader(SpineEntity.class, spineLoader);
         assetManager.setLoader(AnimationNode.Group.class, dragonBonesLoader);
         assetManager.load(PATH_TEXTURE_ATLAS, TextureAtlas.class);
+        assetManager.load("fonts/quan-pixel-16.fnt", BitmapFont.class);
         assetManager.finishLoading();
         return assetManager;
     }

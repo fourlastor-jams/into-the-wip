@@ -2,8 +2,8 @@ package io.github.fourlastor.game.demo;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
+import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.MapLayer;
@@ -45,11 +45,14 @@ public class DemoScreen extends ScreenAdapter {
     private final GameState state;
 
     @Inject
-    public DemoScreen(TurnStateMachine.Factory stateMachineFactory, Provider<PickMonster> pickMonsterProvider) {
+    public DemoScreen(
+            TurnStateMachine.Factory stateMachineFactory,
+            Provider<PickMonster> pickMonsterProvider,
+            AssetManager assetManager) {
         viewport = new FitViewport(512, 288);
         SpriteBatch batch = new SpriteBatch();
         stage = new Stage(viewport, batch);
-        BitmapFont font = new BitmapFont(Gdx.files.internal("fonts/quan-pixel-16.fnt"));
+        Label.LabelStyle hpLabelStyle = new Label.LabelStyle(assetManager.get("fonts/quan-pixel-16.fnt"), Color.RED);
 
         Gdx.input.setInputProcessor(stage);
         TiledMap map = new AtlasTmxMapLoader().load("maps/demo.tmx");
@@ -90,8 +93,7 @@ public class DemoScreen extends ScreenAdapter {
                         String mapUnitType = cellTile.getProperties().get("unit", String.class);
                         unitOnMap.setPosition(position.x, position.y, Align.bottom);
                         // Set up the Hp bar Label.
-                        Label.LabelStyle labelStyle = new Label.LabelStyle(font, Color.RED);
-                        Label hpLabel = new Label("", labelStyle);
+                        Label hpLabel = new Label("", hpLabelStyle);
                         hpLabel.setAlignment(Align.center);
                         Unit unit = new Unit(
                                 unitOnMap, hpLabel, new GridPoint2(x, y), coordinates, UnitType.fromMap(mapUnitType));
