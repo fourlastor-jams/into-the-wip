@@ -12,10 +12,10 @@ import io.github.fourlastor.game.demo.state.GameState;
 import io.github.fourlastor.game.demo.state.map.MapGraph;
 import io.github.fourlastor.game.demo.state.map.Tile;
 import io.github.fourlastor.game.demo.state.unit.Unit;
-import java.util.Set;
 
 public class PickMove extends TurnState {
 
+    private static final int WALK_DISTANCE = 2;
     private final StateRouter router;
 
     private final Unit unit;
@@ -29,12 +29,12 @@ public class PickMove extends TurnState {
     @Override
     public void enter(GameState state) {
         MapGraph localGraph = state.graph.forUnit(unit);
-        for (Tile tile : tilesFromUnit(state)) {
+        for (Tile tile : state.tiles) {
             if (localGraph.getIndex(tile) == -1) {
                 continue;
             }
             GraphPath<Tile> path = localGraph.calculatePath(unit, tile);
-            if (path.getCount() == 0) {
+            if (path.getCount() == 0 || path.getCount() > WALK_DISTANCE + 1) {
                 continue;
             }
             tile.actor.addListener(new MoveListener(tile, path));
@@ -52,12 +52,6 @@ public class PickMove extends TurnState {
                 tile.actor.setColor(Color.WHITE);
             }
         }
-    }
-
-    private Set<Tile> tilesFromUnit(GameState entity) {
-        MapGraph graph = entity.graph;
-        Tile unitTile = graph.get(unit.position);
-        return graph.tilesAtDistance(unitTile, 2);
     }
 
     @AssistedFactory
