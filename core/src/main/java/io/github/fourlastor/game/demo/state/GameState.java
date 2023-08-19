@@ -33,15 +33,12 @@ public class GameState {
 
     public void alignAllHpBars() {
         for (Unit unit : units) {
-            unit.alignHpBars();
+            unit.alignHpBar();
         }
     }
 
     public Unit unitAt(Hex hex) {
-        return units.stream()
-                .filter(it -> it.position.equals(hex.offset))
-                .findFirst()
-                .orElse(null);
+        return units.stream().filter(it -> it.hex.equals(hex)).findFirst().orElse(null);
     }
 
     private void connectTiles(Tile tile, @Null Tile adjacent) {
@@ -52,7 +49,7 @@ public class GameState {
     }
 
     private Tile adjacent(Tile tile, int x, int y, int z) {
-        GridPoint3 position = tile.coordinates.cube.cpy().add(x, y, z);
+        GridPoint3 position = tile.hex.cube.cpy().add(x, y, z);
         return graph.get(position);
     }
 }

@@ -46,7 +46,7 @@ public class AttackMelee extends TurnState {
 
     public KeyFrameAnimation setupAttackAnimation(float distance, float rotationDegrees) {
         // Base animation goes left-to-right.
-        KeyFrameAnimation attackAnimation = new KeyFrameAnimation(source.image);
+        KeyFrameAnimation attackAnimation = new KeyFrameAnimation(source.actor);
         attackAnimation.positionsRelative = new Vector3[] {
             new Vector3(-.25f, 0f, 0f),
             new Vector3(-.125f, 0f, 0f),
@@ -92,10 +92,7 @@ public class AttackMelee extends TurnState {
 
     @Override
     public void enter(GameState entity) {
-
-        // (sheerst) Note: this is model code, does it go here?
-        target.changeHp(-damage, false);
-
+        target.changeHp(-damage);
         // Distance between source and target is used to scale the animation if needed.
         float distance = source.getActorPosition().dst(target.getActorPosition());
         // Angle offset of target from source.
@@ -104,8 +101,7 @@ public class AttackMelee extends TurnState {
                 setupAttackAnimation(distance, rotationDegrees),
                 Actions.run(() -> source.setActorPosition(originalPosition)),
                 Actions.run(router::pickMonster));
-        // After movement, reset the sources's position to it's original position.
-        source.image.addAction(attackAnimation);
+        source.actor.addAction(attackAnimation);
     }
 
     @Override

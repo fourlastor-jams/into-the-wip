@@ -7,12 +7,12 @@ import io.github.fourlastor.game.coordinates.Hex;
 
 public class Tile {
     public final Image actor;
-    public final Hex coordinates;
+    public final Hex hex;
     public final TileType type;
 
     public Tile(Image image, GridPoint2 position, TileType type) {
         this.actor = image;
-        this.coordinates = new Hex(position);
+        this.hex = new Hex(position);
         this.type = type;
     }
 

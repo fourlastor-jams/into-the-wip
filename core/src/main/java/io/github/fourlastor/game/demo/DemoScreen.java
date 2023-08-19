@@ -86,7 +86,7 @@ public class DemoScreen extends ScreenAdapter {
                         String mapUnitType = cellTile.getProperties().get("unit", String.class);
                         image.setPosition(position.x, position.y, Align.bottom);
                         Unit unit = new Unit(image, new GridPoint2(x, y), coordinates, UnitType.fromMap(mapUnitType));
-                        ySort.addActor(unit.image);
+                        ySort.addActor(unit.actor);
                         ySort.addActor(unit.hpLabel);
                         units.add(unit);
                     }

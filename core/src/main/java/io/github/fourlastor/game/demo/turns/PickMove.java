@@ -32,18 +32,18 @@ public class PickMove extends TurnState {
             if (localGraph.getIndex(tile) == -1) {
                 continue;
             }
-            GraphPath<Tile> path = localGraph.calculatePath(unit.position, tile);
+            GraphPath<Tile> path = localGraph.calculatePath(unit.hex, tile);
             // path includes the tile at the unit's location, so it's 1 longer than expected
             if (path.getCount() <= 1 || path.getCount() > unit.type.speed + 1) {
                 continue;
             }
-            Unit tileUnit = state.unitAt(tile.coordinates);
+            Unit tileUnit = state.unitAt(tile.hex);
             if (unit == tileUnit || tileUnit == null) {
                 tile.actor.addListener(new MoveListener(tile, path));
                 tile.actor.setColor(Color.CORAL);
             } else {
-                tileUnit.image.addListener(new AttackListener(tileUnit));
-                tileUnit.image.setColor(Color.CORAL);
+                tileUnit.actor.addListener(new AttackListener(tileUnit));
+                tileUnit.actor.setColor(Color.CORAL);
             }
         }
     }
@@ -59,11 +59,11 @@ public class PickMove extends TurnState {
             }
         }
         for (Unit unit : entity.units) {
-            for (EventListener listener : unit.image.getListeners()) {
+            for (EventListener listener : unit.actor.getListeners()) {
                 if (listener instanceof AttackListener) {
-                    unit.image.removeListener(listener);
+                    unit.actor.removeListener(listener);
                 }
-                unit.image.setColor(Color.WHITE);
+                unit.actor.setColor(Color.WHITE);
             }
         }
     }

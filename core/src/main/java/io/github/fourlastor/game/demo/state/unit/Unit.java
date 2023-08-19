@@ -7,24 +7,24 @@ import com.badlogic.gdx.math.GridPoint2;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.utils.Align;
+import io.github.fourlastor.game.coordinates.Hex;
 import io.github.fourlastor.game.coordinates.HexCoordinates;
 import io.github.fourlastor.game.demo.state.map.Tile;
 import io.github.fourlastor.game.ui.UnitOnMap;
 
 public class Unit {
 
-    public final UnitOnMap image;
+    public final UnitOnMap actor;
     public final Label hpLabel;
-
-    public final GridPoint2 position;
+    public final Hex hex;
     public final HexCoordinates coordinates;
     public final UnitType type;
     public int maxHp = 20;
     public int currentHp;
 
-    public Unit(UnitOnMap image, GridPoint2 position, HexCoordinates coordinates, UnitType type) {
-        this.image = image;
-        this.position = position;
+    public Unit(UnitOnMap actor, GridPoint2 position, HexCoordinates coordinates, UnitType type) {
+        this.actor = actor;
+        this.hex = new Hex(position);
         this.coordinates = coordinates;
         this.type = type;
 
@@ -44,40 +44,28 @@ public class Unit {
         }
     }
 
-    public void changeHp(int changeAmount, boolean updateLabel) {
-        setHp(currentHp + changeAmount, updateLabel);
+    public void changeHp(int changeAmount) {
+        setHp(currentHp + changeAmount);
     }
 
     public void refreshHpLabel() {
-        hpLabel.setText("HP " + String.valueOf(currentHp));
+        hpLabel.setText("HP " + currentHp);
     }
 
     public void setHp(int hpAmount) {
-        setHp(hpAmount, true);
-    }
-
-    public void setHp(int hpAmount, boolean updateLabel) {
         currentHp = hpAmount;
         refreshHpLabel();
     }
 
     public Vector2 getActorPosition() {
-        return new Vector2(image.getX(), image.getY());
+        return new Vector2(actor.getX(), actor.getY());
     }
 
     public void setActorPosition(Vector2 targetPosition) {
-        setActorPosition(targetPosition.x, targetPosition.y);
+        actor.setPosition(targetPosition.x, targetPosition.y);
     }
 
-    public void setActorPosition(GridPoint2 targetPosition) {
-        setActorPosition(targetPosition.x, targetPosition.y);
-    }
-
-    public void setActorPosition(float x, float y) {
-        image.setPosition(x, y);
-    }
-
-    public void alignHpBars() {
-        hpLabel.setPosition(image.getX() + image.getWidth() / 2, image.getY() + 36);
+    public void alignHpBar() {
+        hpLabel.setPosition(actor.getX() + actor.getWidth() / 2, actor.getY() + 36);
     }
 }

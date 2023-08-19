@@ -59,7 +59,7 @@ public class MapGraph implements IndexedGraph<Tile> {
     }
 
     private int offsetId(Tile tile) {
-        return Packer.pack(tile.coordinates.offset);
+        return Packer.pack(tile.hex.offset);
     }
 
     private final GridPoint2 cached = new GridPoint2();
@@ -111,8 +111,8 @@ public class MapGraph implements IndexedGraph<Tile> {
         return path;
     }
 
-    public GraphPath<Tile> calculatePath(GridPoint2 position, Tile to) {
-        return calculatePath(get(position), to);
+    public GraphPath<Tile> calculatePath(Hex hex, Tile to) {
+        return calculatePath(get(hex.offset), to);
     }
 
     private void populateConnections(Tile a) {
@@ -164,7 +164,7 @@ public class MapGraph implements IndexedGraph<Tile> {
 
         @Override
         public float estimate(Tile node, Tile endNode) {
-            return node.coordinates.offset.dst(endNode.coordinates.offset);
+            return node.hex.offset.dst(endNode.hex.offset);
         }
     }
 
