@@ -3,6 +3,7 @@ package io.github.fourlastor.game.demo.state;
 import com.badlogic.gdx.math.GridPoint3;
 import com.badlogic.gdx.utils.Null;
 import com.github.tommyettinger.ds.ObjectList;
+import io.github.fourlastor.game.coordinates.Hex;
 import io.github.fourlastor.game.demo.state.map.MapGraph;
 import io.github.fourlastor.game.demo.state.map.Tile;
 import io.github.fourlastor.game.demo.state.unit.Unit;
@@ -34,6 +35,13 @@ public class GameState {
         for (Unit unit : units) {
             unit.alignHpBars();
         }
+    }
+
+    public Unit unitAt(Hex hex) {
+        return units.stream()
+                .filter(it -> it.position.equals(hex.offset))
+                .findFirst()
+                .orElse(null);
     }
 
     private void connectTiles(Tile tile, @Null Tile adjacent) {

@@ -30,10 +30,11 @@ public class PickMove extends TurnState {
         for (Tile tile : tilesFromUnit(entity)) {
             tile.actor.addListener(new MoveListener(tile));
             tile.actor.setColor(Color.CORAL);
-            if (unit == tile.unit || tile.unit == null) {
+            Unit tileUnit = entity.unitAt(tile.coordinates);
+            if (unit == tileUnit || tileUnit == null) {
                 continue;
             }
-            tile.unit.image.addListener(new AttackListener(tile.unit));
+            tileUnit.image.addListener(new AttackListener(tileUnit));
         }
     }
 

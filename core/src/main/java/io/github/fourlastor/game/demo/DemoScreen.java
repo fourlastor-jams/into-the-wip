@@ -18,7 +18,6 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.github.tommyettinger.ds.ObjectList;
-import io.github.fourlastor.game.coordinates.Hex;
 import io.github.fourlastor.game.coordinates.HexCoordinates;
 import io.github.fourlastor.game.demo.state.GameState;
 import io.github.fourlastor.game.demo.state.map.Tile;
@@ -85,13 +84,6 @@ public class DemoScreen extends ScreenAdapter {
                         unit.image.setPosition(position.x, position.y, Align.bottom);
                         ySort.addActor(unit.image);
                         ySort.addActor(unit.hpLabel);
-                        // (sheerst) Note: I wasn't sure how to do this, this is temporary.
-                        Tile onTile = tiles.stream()
-                                .filter(tile -> tile.coordinates.equals(new Hex(coordinate)))
-                                .findFirst()
-                                .orElse(null);
-                        System.out.println(onTile);
-                        if (onTile != null) onTile.unit = unit;
                     }
                     if (mapLayerName.equals(TILES_LAYER_NAME)) {
                         Tile tile = new Tile(image, new GridPoint2(x, y));

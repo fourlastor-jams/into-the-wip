@@ -5,14 +5,10 @@ import com.badlogic.gdx.math.GridPoint2;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import io.github.fourlastor.game.coordinates.Hex;
-import io.github.fourlastor.game.demo.state.unit.Unit;
 
 public class Tile extends Group {
     public final Image actor;
     public final Hex coordinates;
-
-    // (sheerst) Note: I wasn't sure how to do this, this is temporary.
-    public Unit unit = null;
 
     public Tile(Image image, GridPoint2 position) {
         addActor(image);
