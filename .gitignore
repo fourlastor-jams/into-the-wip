@@ -112,11 +112,20 @@ packaging/out
 ### Android Studio
 /local.properties
 
-### */bin folders
-core/bin/**
-desktop/bin/**
-html/bin/**
-android/bin/**
+### Eclipse code generation */bin folders
+**/bin/**
 
-### 
-core/bin/**
+# Visual studio code
+
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+!.vscode/*.code-snippets
+
+# Local History for Visual Studio Code
+.history/
+
+# Built Visual Studio Code Extensions
+*.vsix
