@@ -3,15 +3,18 @@ package io.github.fourlastor.game.demo.state.unit;
 import java.util.Arrays;
 
 public enum UnitType {
-    CEREBRY("cerebry", true),
-    BLOBHOT("blobhot", false);
+    CEREBRY("cerebry", true, 2),
+    BLOBHOT("blobhot", false, 3);
 
     public final String mapName;
     public final boolean canFly;
 
-    UnitType(String mapName, boolean canFly) {
+    public final int speed;
+
+    UnitType(String mapName, boolean canFly, int speed) {
         this.mapName = mapName;
         this.canFly = canFly;
+        this.speed = speed;
     }
 
     public static UnitType fromMap(String mapName) {

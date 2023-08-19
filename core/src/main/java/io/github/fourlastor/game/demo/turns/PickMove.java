@@ -15,7 +15,6 @@ import io.github.fourlastor.game.demo.state.unit.Unit;
 
 public class PickMove extends TurnState {
 
-    private static final int WALK_DISTANCE = 2;
     private final StateRouter router;
 
     private final Unit unit;
@@ -34,7 +33,8 @@ public class PickMove extends TurnState {
                 continue;
             }
             GraphPath<Tile> path = localGraph.calculatePath(unit, tile);
-            if (path.getCount() == 0 || path.getCount() > WALK_DISTANCE + 1) {
+            // path includes the tile at the unit's location, so it's 1 longer than expected
+            if (path.getCount() <= 1 || path.getCount() > unit.type.speed + 1) {
                 continue;
             }
             tile.actor.addListener(new MoveListener(tile, path));
