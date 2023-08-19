@@ -2,12 +2,13 @@ package io.github.fourlastor.game.demo.turns;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
 import dagger.assisted.Assisted;
 import dagger.assisted.AssistedFactory;
 import dagger.assisted.AssistedInject;
-import io.github.fourlastor.game.demo.KeyFrameAnimation;
+import io.github.fourlastor.game.demo.AttackAnimation;
 import io.github.fourlastor.game.demo.state.GameState;
 import io.github.fourlastor.game.demo.state.unit.Unit;
 
@@ -42,10 +43,9 @@ public class AttackMelee extends TurnState {
         return target.cpy().sub(source).angleDeg();
     }
 
-    public KeyFrameAnimation setupAttackAnimation(float distance, float rotationDegrees) {
+    public Action setupAttackAnimation(float distance, float rotationDegrees) {
         // Base animation goes left-to-right.
-        KeyFrameAnimation attackAnimation = new KeyFrameAnimation(source.actor);
-        attackAnimation.positionsRelative = new Vector3[] {
+        Vector3[] positions = {
             new Vector3(-.25f, 0f, 0f),
             new Vector3(-.125f, 0f, 0f),
             new Vector3(0f, 0f, 2f),
@@ -62,7 +62,7 @@ public class AttackMelee extends TurnState {
             new Vector3(-3f, 0f, -8f),
             new Vector3(-3f, 0f, -16f),
         };
-        attackAnimation.runnables = new Runnable[] {
+        Runnable[] runnables = new Runnable[] {
             null,
             null,
             null,
@@ -81,11 +81,8 @@ public class AttackMelee extends TurnState {
             null,
             null,
         };
-        attackAnimation.scale.set(scale.cpy().scl(distance, 1f, 1f));
-        attackAnimation.moveDuration = moveDuration;
-        attackAnimation.rotationDegrees = rotationDegrees;
-        attackAnimation.makeSequence();
-        return attackAnimation;
+        Vector3 scale = this.scale.cpy().scl(distance, 1f, 1f);
+        return AttackAnimation.makeSequence(source.actor, runnables, positions, moveDuration, rotationDegrees, scale);
     }
 
     @Override
