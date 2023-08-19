@@ -28,23 +28,23 @@ public class PickMove extends TurnState {
     @Override
     public void enter(GameState state) {
         MapGraph localGraph = state.graph.forUnit(unit);
-        for (Unit other : state.units) {
-            if (other == unit) {
-                continue;
-            }
-            localGraph.removeTile(other.position);
-        }
         for (Tile tile : state.tiles) {
             if (localGraph.getIndex(tile) == -1) {
                 continue;
             }
-            GraphPath<Tile> path = localGraph.calculatePath(unit.position, tile);
+            GraphPath<Tile> path = localGraph.calculatePath(unit.hex, tile);
             // path includes the tile at the unit's location, so it's 1 longer than expected
             if (path.getCount() <= 1 || path.getCount() > unit.type.speed + 1) {
                 continue;
             }
-            tile.actor.addListener(new MoveListener(tile, path));
-            tile.actor.setColor(Color.CORAL);
+            Unit tileUnit = state.unitAt(tile.hex);
+            if (unit == tileUnit || tileUnit == null) {
+                tile.actor.addListener(new MoveListener(tile, path));
+                tile.actor.setColor(Color.CORAL);
+            } else {
+                tileUnit.actor.addListener(new AttackListener(tileUnit));
+                tileUnit.actor.setColor(Color.CORAL);
+            }
         }
     }
 
@@ -56,6 +56,14 @@ public class PickMove extends TurnState {
                     tile.actor.removeListener(listener);
                 }
                 tile.actor.setColor(Color.WHITE);
+            }
+        }
+        for (Unit unit : entity.units) {
+            for (EventListener listener : unit.actor.getListeners()) {
+                if (listener instanceof AttackListener) {
+                    unit.actor.removeListener(listener);
+                }
+                unit.actor.setColor(Color.WHITE);
             }
         }
     }
@@ -78,6 +86,20 @@ public class PickMove extends TurnState {
         @Override
         public void clicked(InputEvent event, float x, float y) {
             router.move(unit, tile, path);
+        }
+    }
+
+    private class AttackListener extends ClickListener {
+
+        private final Unit target;
+
+        private AttackListener(Unit target) {
+            this.target = target;
+        }
+
+        @Override
+        public void clicked(InputEvent event, float x, float y) {
+            router.attackMelee(unit, target);
         }
     }
 }

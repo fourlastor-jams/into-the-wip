@@ -1,0 +1,16 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+      {
+        "name": "Desktop",
+        "type": "java",
+        "request": "launch",
+        "mainClass": "io.github.fourlastor.game.DesktopLauncher",
+        "projectName": "into-the-wilds",
+        "args": [""],
+        "cwd": "desktop",
+        "console": "internalConsole",
+        "vmArgs": "-Dfile.encoding=UTF-8"
+      }
+    ]
+  }

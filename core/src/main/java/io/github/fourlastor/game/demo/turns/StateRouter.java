@@ -13,17 +13,20 @@ public class StateRouter {
     private final Provider<PickMonster> pickMonsterProvider;
     private final PickMove.Factory pickMoveFactory;
     private final Move.Factory moveFactory;
+    private final AttackMelee.Factory attackMeleeFactory;
 
     @Inject
     public StateRouter(
             MessageDispatcher dispatcher,
             Provider<PickMonster> pickMonsterProvider,
             PickMove.Factory pickMoveFactory,
-            Move.Factory moveFactory) {
+            Move.Factory moveFactory,
+            AttackMelee.Factory attackMeleeFactory) {
         this.dispatcher = dispatcher;
         this.pickMonsterProvider = pickMonsterProvider;
         this.pickMoveFactory = pickMoveFactory;
         this.moveFactory = moveFactory;
+        this.attackMeleeFactory = attackMeleeFactory;
     }
 
     public void pickMonster() {
@@ -36,6 +39,10 @@ public class StateRouter {
 
     public void move(Unit unit, Tile tile, GraphPath<Tile> path) {
         goTo(moveFactory.create(unit, tile, path));
+    }
+
+    public void attackMelee(Unit unit, Unit target) {
+        goTo(attackMeleeFactory.create(new AttackMelee.Attack(unit, target)));
     }
 
     private void goTo(TurnState state) {
