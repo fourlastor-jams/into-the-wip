@@ -3,6 +3,7 @@ package io.github.fourlastor.game.demo.state.unit;
 import com.badlogic.gdx.math.GridPoint2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import io.github.fourlastor.game.coordinates.HexCoordinates;
+import io.github.fourlastor.game.demo.state.map.Tile;
 
 public class Unit {
 
@@ -16,5 +17,13 @@ public class Unit {
         this.position = position;
         this.coordinates = coordinates;
         this.type = type;
+    }
+
+    public boolean canTravel(Tile tile) {
+        if (type.canFly) {
+            return true;
+        } else {
+            return tile.type.allowWalking;
+        }
     }
 }

@@ -1,5 +1,6 @@
 package io.github.fourlastor.game.demo.turns;
 
+import com.badlogic.gdx.ai.pfa.GraphPath;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -26,9 +27,17 @@ public class PickMove extends TurnState {
     }
 
     @Override
-    public void enter(GameState entity) {
-        for (Tile tile : tilesFromUnit(entity)) {
-            tile.actor.addListener(new MoveListener(tile));
+    public void enter(GameState state) {
+        MapGraph localGraph = state.graph.forUnit(unit);
+        for (Tile tile : tilesFromUnit(state)) {
+            if (localGraph.getIndex(tile) == -1) {
+                continue;
+            }
+            GraphPath<Tile> path = localGraph.calculatePath(unit, tile);
+            if (path.getCount() == 0) {
+                continue;
+            }
+            tile.actor.addListener(new MoveListener(tile, path));
             tile.actor.setColor(Color.CORAL);
         }
     }
@@ -59,14 +68,16 @@ public class PickMove extends TurnState {
     private class MoveListener extends ClickListener {
 
         private final Tile tile;
+        private final GraphPath<Tile> path;
 
-        private MoveListener(Tile tile) {
+        private MoveListener(Tile tile, GraphPath<Tile> path) {
             this.tile = tile;
+            this.path = path;
         }
 
         @Override
         public void clicked(InputEvent event, float x, float y) {
-            router.move(unit, tile);
+            router.move(unit, tile, path);
         }
     }
 }
