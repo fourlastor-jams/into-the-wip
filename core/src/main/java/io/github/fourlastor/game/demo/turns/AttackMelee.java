@@ -1,6 +1,5 @@
 package io.github.fourlastor.game.demo.turns;
 
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
@@ -42,15 +41,7 @@ public class AttackMelee extends TurnState {
      * @return The angle in degrees between the vectors.
      */
     public static float calculateAngle(Vector2 source, Vector2 target) {
-        float deltaX = target.x - source.x;
-        float deltaY = target.y - source.y;
-
-        float angleRad = MathUtils.atan2(deltaY, deltaX);
-        float angleDeg = MathUtils.radiansToDegrees * angleRad;
-
-        source.angleDeg(target);
-
-        return angleDeg;
+        return target.cpy().sub(source).angleDeg();
     }
 
     public KeyFrameAnimation setupAttackAnimation(float distance, float rotationDegrees) {
