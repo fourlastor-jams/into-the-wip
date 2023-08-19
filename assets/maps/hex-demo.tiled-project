@@ -7,6 +7,19 @@
     "folders": [
         "."
     ],
+    "properties": [
+    ],
     "propertyTypes": [
+        {
+            "id": 1,
+            "name": "Unit",
+            "storageType": "string",
+            "type": "enum",
+            "values": [
+                "Cerebry",
+                "Blobhot"
+            ],
+            "valuesAsFlags": false
+        }
     ]
 }
