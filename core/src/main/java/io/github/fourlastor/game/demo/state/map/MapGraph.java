@@ -43,8 +43,23 @@ public class MapGraph implements IndexedGraph<Tile> {
     }
 
     public void addTile(Tile tile) {
-        tiles.put(Packer.pack(tile.coordinates.offset), tile);
+        tiles.put(offsetId(tile), tile);
         indexed.add(tile);
+    }
+
+    public void removeTile(GridPoint2 position) {
+        Tile tile = get(position);
+        if (tile == null) {
+            return;
+        }
+        tiles.remove(offsetId(tile));
+        indexed.remove(tile);
+        connections.remove(tile);
+        connections.values().forEach(connection -> connection.removeIf((it) -> it.getToNode() == tile));
+    }
+
+    private int offsetId(Tile tile) {
+        return Packer.pack(tile.coordinates.offset);
     }
 
     private final GridPoint2 cached = new GridPoint2();
@@ -96,8 +111,8 @@ public class MapGraph implements IndexedGraph<Tile> {
         return path;
     }
 
-    public GraphPath<Tile> calculatePath(Unit from, Tile to) {
-        return calculatePath(get(from.position), to);
+    public GraphPath<Tile> calculatePath(GridPoint2 position, Tile to) {
+        return calculatePath(get(position), to);
     }
 
     private void populateConnections(Tile a) {

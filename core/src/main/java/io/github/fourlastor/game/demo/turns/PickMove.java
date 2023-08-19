@@ -28,11 +28,17 @@ public class PickMove extends TurnState {
     @Override
     public void enter(GameState state) {
         MapGraph localGraph = state.graph.forUnit(unit);
+        for (Unit other : state.units) {
+            if (other == unit) {
+                continue;
+            }
+            localGraph.removeTile(other.position);
+        }
         for (Tile tile : state.tiles) {
             if (localGraph.getIndex(tile) == -1) {
                 continue;
             }
-            GraphPath<Tile> path = localGraph.calculatePath(unit, tile);
+            GraphPath<Tile> path = localGraph.calculatePath(unit.position, tile);
             // path includes the tile at the unit's location, so it's 1 longer than expected
             if (path.getCount() <= 1 || path.getCount() > unit.type.speed + 1) {
                 continue;
