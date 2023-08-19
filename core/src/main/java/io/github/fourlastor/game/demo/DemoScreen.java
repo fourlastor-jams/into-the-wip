@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.tiled.AtlasTmxMapLoader;
 import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.TiledMapTile;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
 import com.badlogic.gdx.math.GridPoint2;
@@ -22,7 +23,9 @@ import com.github.tommyettinger.ds.ObjectList;
 import io.github.fourlastor.game.coordinates.HexCoordinates;
 import io.github.fourlastor.game.demo.state.GameState;
 import io.github.fourlastor.game.demo.state.map.Tile;
+import io.github.fourlastor.game.demo.state.map.TileType;
 import io.github.fourlastor.game.demo.state.unit.Unit;
+import io.github.fourlastor.game.demo.state.unit.UnitType;
 import io.github.fourlastor.game.demo.turns.PickMonster;
 import io.github.fourlastor.game.demo.turns.TurnStateMachine;
 import io.github.fourlastor.game.ui.TileOnMap;
@@ -73,17 +76,20 @@ public class DemoScreen extends ScreenAdapter {
                         continue;
                     }
 
-                    TextureRegion textureRegion = cell.getTile().getTextureRegion();
+                    TiledMapTile tile = cell.getTile();
+                    TextureRegion textureRegion = tile.getTextureRegion();
 
                     Image image = new TileOnMap(textureRegion);
                     tilesGroup.addActor(image);
                     if (mapLayerName.equals(UNITS_LAYER_NAME)) {
-                        units.add(new Unit(image, new GridPoint2(x, y), coordinates));
+                        String mapUnitType = tile.getProperties().get("unit", String.class);
+                        units.add(new Unit(image, new GridPoint2(x, y), coordinates, UnitType.fromMap(mapUnitType)));
                         Vector2 position = coordinates.toWorldAtCenter(x, y, new Vector2());
                         image.setPosition(position.x, position.y, Align.bottom);
                     }
                     if (mapLayerName.equals(TILES_LAYER_NAME)) {
-                        tiles.add(new Tile(image, new GridPoint2(x, y)));
+                        String mapTileType = tile.getProperties().get("tile", String.class);
+                        tiles.add(new Tile(image, new GridPoint2(x, y), TileType.fromMap(mapTileType)));
                         Vector2 position = coordinates.toWorldAtOrigin(x, y, new Vector2());
                         image.setPosition(position.x, position.y - 15);
                     }

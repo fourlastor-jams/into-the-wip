@@ -8,10 +8,12 @@ import io.github.fourlastor.game.coordinates.Hex;
 public class Tile {
     public final Actor actor;
     public final Hex coordinates;
+    public final TileType type;
 
-    public Tile(Actor actor, GridPoint2 position) {
+    public Tile(Actor actor, GridPoint2 position, TileType type) {
         this.actor = actor;
         this.coordinates = new Hex(position);
+        this.type = type;
     }
 
     public static class Link implements Connection<Tile> {

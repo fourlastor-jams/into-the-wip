@@ -9,10 +9,12 @@ public class Unit {
     public final Actor actor;
     public final GridPoint2 position;
     public final HexCoordinates coordinates;
+    public final UnitType type;
 
-    public Unit(Actor actor, GridPoint2 position, HexCoordinates coordinates) {
+    public Unit(Actor actor, GridPoint2 position, HexCoordinates coordinates, UnitType type) {
         this.actor = actor;
         this.position = position;
         this.coordinates = coordinates;
+        this.type = type;
     }
 }
