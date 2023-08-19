@@ -3,6 +3,7 @@ package io.github.fourlastor.game.demo;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.MapLayer;
@@ -14,6 +15,7 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
 import com.badlogic.gdx.math.GridPoint2;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
@@ -47,6 +49,8 @@ public class DemoScreen extends ScreenAdapter {
         viewport = new FitViewport(512, 288);
         SpriteBatch batch = new SpriteBatch();
         stage = new Stage(viewport, batch);
+        BitmapFont font = new BitmapFont(Gdx.files.internal("fonts/quan-pixel-16.fnt"));
+
         Gdx.input.setInputProcessor(stage);
         TiledMap map = new AtlasTmxMapLoader().load("maps/demo.tmx");
         int hexSideLength = map.getProperties().get("hexsidelength", Integer.class);
@@ -82,12 +86,17 @@ public class DemoScreen extends ScreenAdapter {
 
                     if (mapLayerName.equals(UNITS_LAYER_NAME)) {
                         Vector2 position = coordinates.toWorldAtCenter(x, y, new Vector2());
-                        UnitOnMap image = new UnitOnMap(textureRegion);
+                        UnitOnMap unitOnMap = new UnitOnMap(textureRegion);
                         String mapUnitType = cellTile.getProperties().get("unit", String.class);
-                        image.setPosition(position.x, position.y, Align.bottom);
-                        Unit unit = new Unit(image, new GridPoint2(x, y), coordinates, UnitType.fromMap(mapUnitType));
-                        ySort.addActor(unit.actor);
-                        ySort.addActor(unit.hpLabel);
+                        unitOnMap.setPosition(position.x, position.y, Align.bottom);
+                        // Set up the Hp bar Label.
+                        Label.LabelStyle labelStyle = new Label.LabelStyle(font, Color.RED);
+                        Label hpLabel = new Label("", labelStyle);
+                        hpLabel.setAlignment(Align.center);
+                        Unit unit = new Unit(
+                                unitOnMap, hpLabel, new GridPoint2(x, y), coordinates, UnitType.fromMap(mapUnitType));
+                        ySort.addActor(unitOnMap);
+                        ySort.addActor(hpLabel);
                         units.add(unit);
                     }
                     if (mapLayerName.equals(TILES_LAYER_NAME)) {

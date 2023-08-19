@@ -1,12 +1,8 @@
 package io.github.fourlastor.game.demo.state.unit;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.math.GridPoint2;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.utils.Align;
 import io.github.fourlastor.game.coordinates.Hex;
 import io.github.fourlastor.game.coordinates.HexCoordinates;
 import io.github.fourlastor.game.demo.state.map.Tile;
@@ -15,24 +11,19 @@ import io.github.fourlastor.game.ui.UnitOnMap;
 public class Unit {
 
     public final UnitOnMap actor;
-    public final Label hpLabel;
+    private final Label hpLabel;
     public final Hex hex;
     public final HexCoordinates coordinates;
     public final UnitType type;
-    public int maxHp = 20;
-    public int currentHp;
+    private final int maxHp = 20;
+    private int currentHp;
 
-    public Unit(UnitOnMap actor, GridPoint2 position, HexCoordinates coordinates, UnitType type) {
+    public Unit(UnitOnMap actor, Label hpLabel, GridPoint2 position, HexCoordinates coordinates, UnitType type) {
         this.actor = actor;
         this.hex = new Hex(position);
         this.coordinates = coordinates;
         this.type = type;
-
-        // Set up the Hp bar Label.
-        BitmapFont font = new BitmapFont(Gdx.files.internal("fonts/quan-pixel-16.fnt"));
-        Label.LabelStyle labelStyle = new Label.LabelStyle(font, Color.RED);
-        hpLabel = new Label("", labelStyle);
-        hpLabel.setAlignment(Align.center);
+        this.hpLabel = hpLabel;
         setHp(maxHp);
     }
 
