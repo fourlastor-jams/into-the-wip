@@ -4,6 +4,7 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
 import dagger.assisted.Assisted;
 import dagger.assisted.AssistedFactory;
 import dagger.assisted.AssistedInject;
@@ -108,9 +109,11 @@ public class AttackMelee extends TurnState {
         float distance = source.getActorPosition().dst(target.getActorPosition());
         // Angle offset of target from source.
         float rotationDegrees = calculateAngle(source.getActorPosition(), target.getActorPosition());
-        KeyFrameAnimation attackAnimation = setupAttackAnimation(distance, rotationDegrees);
+        SequenceAction attackAnimation = Actions.sequence(
+                setupAttackAnimation(distance, rotationDegrees),
+                Actions.run(() -> source.setActorPosition(originalPosition)),
+                Actions.run(router::pickMonster));
         // After movement, reset the sources's position to it's original position.
-        attackAnimation.addAction(Actions.run(() -> source.setActorPosition(originalPosition)));
         source.image.addAction(attackAnimation);
     }
 
