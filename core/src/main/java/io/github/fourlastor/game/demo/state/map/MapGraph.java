@@ -25,7 +25,6 @@ public class MapGraph implements IndexedGraph<Tile> {
     private final IntMap<Tile> tiles = new IntMap<>();
     private final Array<Tile> indexed = new Array<>();
     private final ObjectMap<Tile, Array<Connection<Tile>>> connections = new ObjectMap<>();
-    private IndexedAStarPathFinder<Tile> finder = new IndexedAStarPathFinder<>(this);
 
     public void addTile(Tile tile) {
         tiles.put(Packer.pack(tile.coordinates.offset), tile);
