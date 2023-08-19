@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.tiled.AtlasTmxMapLoader;
 import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.TiledMapTile;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
 import com.badlogic.gdx.math.GridPoint2;
@@ -21,7 +22,9 @@ import com.github.tommyettinger.ds.ObjectList;
 import io.github.fourlastor.game.coordinates.HexCoordinates;
 import io.github.fourlastor.game.demo.state.GameState;
 import io.github.fourlastor.game.demo.state.map.Tile;
+import io.github.fourlastor.game.demo.state.map.TileType;
 import io.github.fourlastor.game.demo.state.unit.Unit;
+import io.github.fourlastor.game.demo.state.unit.UnitType;
 import io.github.fourlastor.game.demo.turns.PickMonster;
 import io.github.fourlastor.game.demo.turns.TurnStateMachine;
 import io.github.fourlastor.game.ui.TileOnMap;
@@ -74,23 +77,26 @@ public class DemoScreen extends ScreenAdapter {
                         continue;
                     }
 
-                    TextureRegion textureRegion = cell.getTile().getTextureRegion();
-                    Vector2 position = coordinates.toWorldAtOrigin(x, y, new Vector2());
+                    TiledMapTile cellTile = cell.getTile();
+                    TextureRegion textureRegion = cellTile.getTextureRegion();
 
                     if (mapLayerName.equals(UNITS_LAYER_NAME)) {
+                        Vector2 position = coordinates.toWorldAtCenter(x, y, new Vector2());
                         UnitOnMap image = new UnitOnMap(textureRegion);
-                        GridPoint2 coordinate = new GridPoint2(x, y);
-                        Unit unit = new Unit(image, coordinate, coordinates);
-                        units.add(unit);
-                        unit.image.setPosition(position.x, position.y, Align.bottom);
+                        String mapUnitType = cellTile.getProperties().get("unit", String.class);
+                        image.setPosition(position.x, position.y, Align.bottom);
+                        Unit unit = new Unit(image, new GridPoint2(x, y), coordinates, UnitType.fromMap(mapUnitType));
                         ySort.addActor(unit.image);
                         ySort.addActor(unit.hpLabel);
+                        units.add(unit);
                     }
                     if (mapLayerName.equals(TILES_LAYER_NAME)) {
+                        Vector2 position = coordinates.toWorldAtOrigin(x, y, new Vector2());
                         TileOnMap tileOnMap = new TileOnMap(textureRegion);
                         tileOnMap.setPosition(position.x, position.y - 15);
                         ySort.addActor(tileOnMap);
-                        Tile tile = new Tile(tileOnMap, new GridPoint2(x, y));
+                        String mapTileType = cellTile.getProperties().get("tile", String.class);
+                        Tile tile = new Tile(tileOnMap, new GridPoint2(x, y), TileType.fromMap(mapTileType));
                         tiles.add(tile);
                     }
                 }

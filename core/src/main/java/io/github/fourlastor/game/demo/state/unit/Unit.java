@@ -8,6 +8,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.utils.Align;
 import io.github.fourlastor.game.coordinates.HexCoordinates;
+import io.github.fourlastor.game.demo.state.map.Tile;
 import io.github.fourlastor.game.ui.UnitOnMap;
 
 public class Unit {
@@ -17,16 +18,15 @@ public class Unit {
 
     public final GridPoint2 position;
     public final HexCoordinates coordinates;
+    public final UnitType type;
     public int maxHp = 20;
     public int currentHp;
 
-    public Unit(UnitOnMap image, GridPoint2 position, HexCoordinates coordinates) {
+    public Unit(UnitOnMap image, GridPoint2 position, HexCoordinates coordinates, UnitType type) {
         this.image = image;
         this.position = position;
         this.coordinates = coordinates;
-
-        image.setAlign(Align.center);
-        image.setPosition(0, 0);
+        this.type = type;
 
         // Set up the Hp bar Label.
         BitmapFont font = new BitmapFont(Gdx.files.internal("fonts/wilds.fnt"));
@@ -34,6 +34,14 @@ public class Unit {
         hpLabel = new Label("", labelStyle);
         hpLabel.setAlignment(Align.center);
         setHp(maxHp);
+    }
+
+    public boolean canTravel(Tile tile) {
+        if (type.canFly) {
+            return true;
+        } else {
+            return tile.type.allowWalking;
+        }
     }
 
     public void changeHp(int changeAmount, boolean updateLabel) {

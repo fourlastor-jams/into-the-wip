@@ -20,19 +20,19 @@ public class Move extends TurnState {
 
     private final Unit unit;
     private final Tile tile;
+    private final GraphPath<Tile> path;
     private final StateRouter router;
 
     @AssistedInject
-    public Move(@Assisted Unit unit, @Assisted Tile tile, StateRouter router) {
+    public Move(@Assisted Unit unit, @Assisted Tile tile, @Assisted GraphPath<Tile> path, StateRouter router) {
         this.unit = unit;
         this.tile = tile;
+        this.path = path;
         this.router = router;
     }
 
     @Override
     public void enter(GameState entity) {
-
-        GraphPath<Tile> path = entity.graph.calculatePath(entity.graph.get(unit.position), tile);
         List<Action> actions = new ArrayList<>();
         for (int i = 1; i < path.getCount(); i++) {
             Tile pathTile = path.get(i);
@@ -57,6 +57,6 @@ public class Move extends TurnState {
 
     @AssistedFactory
     public interface Factory {
-        Move create(Unit unit, Tile tile);
+        Move create(Unit unit, Tile tile, GraphPath<Tile> path);
     }
 }

@@ -1,6 +1,7 @@
 package io.github.fourlastor.game.demo.turns;
 
 import com.badlogic.gdx.ai.msg.MessageDispatcher;
+import com.badlogic.gdx.ai.pfa.GraphPath;
 import io.github.fourlastor.game.demo.state.map.Tile;
 import io.github.fourlastor.game.demo.state.unit.Unit;
 import javax.inject.Inject;
@@ -36,8 +37,8 @@ public class StateRouter {
         goTo(pickMoveFactory.create(unit));
     }
 
-    public void move(Unit unit, Tile tile) {
-        goTo(moveFactory.create(unit, tile));
+    public void move(Unit unit, Tile tile, GraphPath<Tile> path) {
+        goTo(moveFactory.create(unit, tile, path));
     }
 
     public void attackMelee(Unit unit, Unit target) {
