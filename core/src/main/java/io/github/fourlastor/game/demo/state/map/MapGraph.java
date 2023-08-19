@@ -93,9 +93,7 @@ public class MapGraph implements IndexedGraph<Tile> {
             visited.add(atDepth.tile);
             if (atDepth.depth < distance) {
                 for (Connection<Tile> connection : getConnections(atDepth.tile)) {
-                    System.out.println("connection " + atDepth.depth);
                     if (visited.contains(connection.getToNode())) {
-                        System.out.println("skip");
                         continue;
                     }
                     queue.add(new TileAtDepth(connection.getToNode(), atDepth.depth + 1));
