@@ -29,7 +29,7 @@ public class Unit {
         this.type = type;
 
         // Set up the Hp bar Label.
-        BitmapFont font = new BitmapFont(Gdx.files.internal("fonts/wilds.fnt"));
+        BitmapFont font = new BitmapFont(Gdx.files.internal("fonts/quan-pixel-16.fnt"));
         Label.LabelStyle labelStyle = new Label.LabelStyle(font, Color.RED);
         hpLabel = new Label("", labelStyle);
         hpLabel.setAlignment(Align.center);
@@ -66,6 +66,6 @@ public class Unit {
     }
 
     public void alignHpBar() {
-        hpLabel.setPosition(actor.getX() + actor.getWidth() / 2, actor.getY() + 36);
+        hpLabel.setPosition(actor.getX() + actor.getWidth() / 2, actor.getY() + 40);
     }
 }
