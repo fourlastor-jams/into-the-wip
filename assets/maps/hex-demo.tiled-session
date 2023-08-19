@@ -3,7 +3,7 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "/home/daniele/Documents/into-the-wip/assets/images/included/monsters.tsx",
+    "activeFile": "demo.tmx",
     "expandedProjectPaths": [
         "."
     ],
@@ -36,7 +36,8 @@
         },
         "/home/daniele/Documents/into-the-wip/assets/images/included/terrain.tsx": {
             "dynamicWrapping": false,
-            "scaleInDock": 1
+            "scaleInDock": 1,
+            "scaleInEditor": 1
         },
         "Monsters 2.tsx": {
             "dynamicWrapping": true,
@@ -57,8 +58,8 @@
             "scale": 1.9541,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 173.22552581751188,
-                "y": 98.2549511283967
+                "x": 172.71378128038484,
+                "y": 97.23146205414257
             }
         },
         "monsters_2.tsx": {
@@ -78,13 +79,15 @@
     "map.width": 8,
     "openFiles": [
         "demo.tmx",
-        "/home/daniele/Documents/into-the-wip/assets/images/included/monsters.tsx"
+        "/home/daniele/Documents/into-the-wip/assets/images/included/monsters.tsx",
+        "/home/daniele/Documents/into-the-wip/assets/images/included/terrain.tsx"
     ],
     "project": "hex-demo.tiled-project",
-    "property.type": "Unit",
+    "property.type": "Tile",
     "recentFiles": [
-        "demo.tmx",
+        "/home/daniele/Documents/into-the-wip/assets/images/included/terrain.tsx",
         "/home/daniele/Documents/into-the-wip/assets/images/included/monsters.tsx",
+        "demo.tmx",
         "/home/daniele/Documents/into-the-wip/assets/images/included/Terrain.tsx",
         "/home/daniele/Documents/into-the-wip/assets/images/included/Tileset.tsx",
         "/home/daniele/Documents/into-the-wip/assets/images/included/Monsters.tsx",

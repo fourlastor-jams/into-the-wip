@@ -20,6 +20,17 @@
                 "Blobhot"
             ],
             "valuesAsFlags": false
+        },
+        {
+            "id": 2,
+            "name": "Tile",
+            "storageType": "string",
+            "type": "enum",
+            "values": [
+                "Water",
+                "Terrain"
+            ],
+            "valuesAsFlags": false
         }
     ]
 }
