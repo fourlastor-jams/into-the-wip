@@ -2,15 +2,15 @@ package io.github.fourlastor.game.demo.state.map;
 
 import com.badlogic.gdx.ai.pfa.Connection;
 import com.badlogic.gdx.math.GridPoint2;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import io.github.fourlastor.game.coordinates.Hex;
+import io.github.fourlastor.game.ui.TileOnMap;
 
 public class Tile {
-    public final Image actor;
+    public final TileOnMap actor;
     public final Hex hex;
     public final TileType type;
 
-    public Tile(Image image, GridPoint2 position, TileType type) {
+    public Tile(TileOnMap image, GridPoint2 position, TileType type) {
         this.actor = image;
         this.hex = new Hex(position);
         this.type = type;
