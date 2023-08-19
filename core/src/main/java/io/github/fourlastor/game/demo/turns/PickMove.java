@@ -37,12 +37,13 @@ public class PickMove extends TurnState {
             if (path.getCount() <= 1 || path.getCount() > unit.type.speed + 1) {
                 continue;
             }
-            tile.actor.setColor(Color.CORAL);
             Unit tileUnit = state.unitAt(tile.coordinates);
             if (unit == tileUnit || tileUnit == null) {
                 tile.actor.addListener(new MoveListener(tile, path));
+                tile.actor.setColor(Color.CORAL);
             } else {
                 tileUnit.image.addListener(new AttackListener(tileUnit));
+                tileUnit.image.setColor(Color.CORAL);
             }
         }
     }
