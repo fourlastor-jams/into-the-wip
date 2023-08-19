@@ -2,16 +2,14 @@ package io.github.fourlastor.game.demo.state.map;
 
 import com.badlogic.gdx.ai.pfa.Connection;
 import com.badlogic.gdx.math.GridPoint2;
-import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import io.github.fourlastor.game.coordinates.Hex;
 
-public class Tile extends Group {
+public class Tile {
     public final Image actor;
     public final Hex coordinates;
 
     public Tile(Image image, GridPoint2 position) {
-        addActor(image);
         this.actor = image;
         this.coordinates = new Hex(position);
     }

@@ -25,6 +25,7 @@ import io.github.fourlastor.game.demo.state.unit.Unit;
 import io.github.fourlastor.game.demo.turns.PickMonster;
 import io.github.fourlastor.game.demo.turns.TurnStateMachine;
 import io.github.fourlastor.game.ui.TileOnMap;
+import io.github.fourlastor.game.ui.UnitOnMap;
 import io.github.fourlastor.game.ui.YSort;
 import javax.inject.Inject;
 import javax.inject.Provider;
@@ -74,10 +75,10 @@ public class DemoScreen extends ScreenAdapter {
                     }
 
                     TextureRegion textureRegion = cell.getTile().getTextureRegion();
-                    TileOnMap image = new TileOnMap(textureRegion);
                     Vector2 position = coordinates.toWorldAtOrigin(x, y, new Vector2());
 
                     if (mapLayerName.equals(UNITS_LAYER_NAME)) {
+                        UnitOnMap image = new UnitOnMap(textureRegion);
                         GridPoint2 coordinate = new GridPoint2(x, y);
                         Unit unit = new Unit(image, coordinate, coordinates);
                         units.add(unit);
@@ -86,10 +87,11 @@ public class DemoScreen extends ScreenAdapter {
                         ySort.addActor(unit.hpLabel);
                     }
                     if (mapLayerName.equals(TILES_LAYER_NAME)) {
-                        Tile tile = new Tile(image, new GridPoint2(x, y));
+                        TileOnMap tileOnMap = new TileOnMap(textureRegion);
+                        tileOnMap.setPosition(position.x, position.y - 15);
+                        ySort.addActor(tileOnMap);
+                        Tile tile = new Tile(tileOnMap, new GridPoint2(x, y));
                         tiles.add(tile);
-                        tile.setPosition(position.x, position.y - 15);
-                        ySort.addActor(tile);
                     }
                 }
             }

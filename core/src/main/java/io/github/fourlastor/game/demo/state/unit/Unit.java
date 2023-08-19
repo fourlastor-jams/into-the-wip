@@ -8,11 +8,11 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.utils.Align;
 import io.github.fourlastor.game.coordinates.HexCoordinates;
-import io.github.fourlastor.game.ui.TileOnMap;
+import io.github.fourlastor.game.ui.UnitOnMap;
 
 public class Unit {
 
-    public final TileOnMap image;
+    public final UnitOnMap image;
     public final Label hpLabel;
 
     public final GridPoint2 position;
@@ -20,7 +20,7 @@ public class Unit {
     public int maxHp = 20;
     public int currentHp;
 
-    public Unit(TileOnMap image, GridPoint2 position, HexCoordinates coordinates) {
+    public Unit(UnitOnMap image, GridPoint2 position, HexCoordinates coordinates) {
         this.image = image;
         this.position = position;
         this.coordinates = coordinates;
