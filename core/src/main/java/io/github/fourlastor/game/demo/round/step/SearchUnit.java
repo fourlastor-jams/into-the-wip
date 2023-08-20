@@ -35,8 +35,8 @@ public class SearchUnit extends Step<Hex> {
             }
             Unit unit = state.unitAt(tile.hex);
             if (unit != null) {
-                unit.actor.addListener(new SearchListener(unit, continuation));
-                unit.actor.setColor(Color.CORAL);
+                unit.group.addListener(new SearchListener(unit, continuation));
+                unit.group.setColor(Color.CORAL);
             }
         }
     }
@@ -44,11 +44,11 @@ public class SearchUnit extends Step<Hex> {
     @Override
     public void exit(GameState state) {
         for (Unit unit : state.units) {
-            for (EventListener listener : unit.actor.getListeners()) {
+            for (EventListener listener : unit.group.getListeners()) {
                 if (listener instanceof SearchListener) {
-                    unit.actor.removeListener(listener);
+                    unit.group.removeListener(listener);
                 }
-                unit.actor.setColor(Color.WHITE);
+                unit.group.setColor(Color.WHITE);
             }
         }
     }

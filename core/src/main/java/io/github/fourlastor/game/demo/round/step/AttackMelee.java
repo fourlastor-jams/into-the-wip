@@ -77,7 +77,7 @@ public class AttackMelee extends SimpleStep {
             null,
         };
         Vector3 scale = this.scale.cpy().scl(distance, 1f, 1f);
-        return AttackAnimation.makeSequence(source.actor, runnables, positions, moveDuration, rotationDegrees, scale);
+        return AttackAnimation.makeSequence(source.group, runnables, positions, moveDuration, rotationDegrees, scale);
     }
 
     @Override
@@ -92,7 +92,7 @@ public class AttackMelee extends SimpleStep {
                 setupAttackAnimation(distance, rotationDegrees),
                 Actions.run(() -> source.setActorPosition(originalPosition)),
                 Actions.run(continuation));
-        source.actor.addAction(attackAnimation);
+        source.group.addAction(attackAnimation);
     }
 
     @AssistedFactory
