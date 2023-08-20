@@ -1,4 +1,4 @@
-package io.github.fourlastor.game.demo.turns;
+package io.github.fourlastor.game.demo.state.machine;
 
 import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -7,7 +7,7 @@ import io.github.fourlastor.game.demo.state.GameState;
 import io.github.fourlastor.game.demo.state.unit.Unit;
 import javax.inject.Inject;
 
-public class PickMonster extends TurnState {
+public class PickMonster extends BaseState {
 
     private final StateRouter router;
 
@@ -17,15 +17,15 @@ public class PickMonster extends TurnState {
     }
 
     @Override
-    public void enter(GameState entity) {
-        for (Unit unit : entity.units) {
+    public void enter(GameState state) {
+        for (Unit unit : state.units) {
             unit.actor.addListener(new PickMoveListener(unit));
         }
     }
 
     @Override
-    public void exit(GameState entity) {
-        for (Unit unit : entity.units) {
+    public void exit(GameState state) {
+        for (Unit unit : state.units) {
             for (EventListener listener : unit.actor.getListeners()) {
                 if (listener instanceof PickMoveListener) {
                     unit.actor.removeListener(listener);
