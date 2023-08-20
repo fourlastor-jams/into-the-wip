@@ -42,18 +42,25 @@ public class KeyFrameAnimation extends SequenceAction {
         for (KeyFrameAnimation.Frame frame : frames()) {
 
             Vector3 rotatedPositionRelative = frame.positionRelative.cpy();
+
             // Scale the animation by a given value.
             rotatedPositionRelative.scl(scale.x, scale.y, scale.z);
+
             // Rotate around the z axis so that animation points at target.
             rotatedPositionRelative.rotate(new Vector3(0, 0, 1), rotationDegrees);
+
             // Rotate around the x axis 45 degress so that the animation 'hop' effect is visible.
             rotatedPositionRelative.rotate(new Vector3(1, 0, 0), 45f);
+
             // Using rotatedPositionRelative.z instead of .y here in order to see the jump in the y-axis.
             // (that data is currently in the z-axis).
             nextUnitPosition.add(rotatedPositionRelative.x, rotatedPositionRelative.z);
+
             ParallelAction parallelActions = Actions.parallel();
+            // Do translation for this frame.
             parallelActions.addAction(Actions.moveToAligned(
                     nextUnitPosition.x, nextUnitPosition.y, Align.bottom, moveDuration, Interpolation.linear));
+
             // Run runnable for this Frame.
             parallelActions.addAction(Actions.run(frame.runnable));
             addAction(parallelActions);

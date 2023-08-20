@@ -53,6 +53,11 @@ public class Unit {
         refreshHpLabel();
     }
 
+    /**
+     * (sheerst) Note: I would like this to just be Unit.image.getPosition() etc.
+     * Even more ideal would be something like the auto getters/setters in C#.
+     * ie Unit.image.position = something  <- calls setter
+     */
     public Vector2 getActorPosition() {
         return new Vector2(image.getX(), image.getY());
     }
