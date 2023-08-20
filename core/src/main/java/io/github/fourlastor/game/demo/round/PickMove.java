@@ -2,8 +2,10 @@ package io.github.fourlastor.game.demo.round;
 
 import com.badlogic.gdx.ai.pfa.GraphPath;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import dagger.assisted.Assisted;
 import dagger.assisted.AssistedFactory;
@@ -18,11 +20,14 @@ public class PickMove extends AbilityState {
     private final StateRouter router;
 
     private final Unit unit;
+    private TextureAtlas textureAtlas;
+    Image arrow;
 
     @AssistedInject
-    public PickMove(@Assisted Unit unit, StateRouter router) {
-        this.router = router;
+    public PickMove(@Assisted Unit unit, TextureAtlas textureAtlas, StateRouter router) {
         this.unit = unit;
+        this.textureAtlas = textureAtlas;
+        this.router = router;
     }
 
     // TODO: need @fourlastor's help to move this code.
@@ -36,6 +41,10 @@ public class PickMove extends AbilityState {
 
     @Override
     public void enter(GameState state) {
+
+        arrow = new Image(textureAtlas.findRegion("arrow-down1"));
+        unit.actor.addActor(arrow);
+
         MapGraph localGraph = state.graph.forUnit(unit);
         for (Tile tile : state.tiles) {
             if (localGraph.getIndex(tile) == -1) {
@@ -69,6 +78,7 @@ public class PickMove extends AbilityState {
 
     @Override
     public void exit(GameState state) {
+        arrow.remove();
         for (Tile tile : state.tiles) {
             for (EventListener listener : tile.actor.getListeners()) {
                 if (listener instanceof MoveListener) {
