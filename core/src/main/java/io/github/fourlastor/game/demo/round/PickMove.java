@@ -1,4 +1,4 @@
-package io.github.fourlastor.game.demo.state.machine;
+package io.github.fourlastor.game.demo.round;
 
 import com.badlogic.gdx.ai.pfa.GraphPath;
 import com.badlogic.gdx.graphics.Color;
@@ -13,7 +13,7 @@ import io.github.fourlastor.game.demo.state.map.MapGraph;
 import io.github.fourlastor.game.demo.state.map.Tile;
 import io.github.fourlastor.game.demo.state.unit.Unit;
 
-public class PickMove extends BaseState {
+public class PickMove extends AbilityState {
 
     private final StateRouter router;
 
