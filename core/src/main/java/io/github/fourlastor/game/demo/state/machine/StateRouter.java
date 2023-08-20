@@ -1,4 +1,4 @@
-package io.github.fourlastor.game.demo.turns;
+package io.github.fourlastor.game.demo.state.machine;
 
 import com.badlogic.gdx.ai.msg.MessageDispatcher;
 import com.badlogic.gdx.ai.pfa.GraphPath;
@@ -56,7 +56,7 @@ public class StateRouter {
         goTo(attackRangedFactory.create(new AttackRanged.Attack(unit, target), textureAtlas));
     }
 
-    private void goTo(TurnState state) {
-        dispatcher.dispatchMessage(TurnMessage.SET_STATE.ordinal(), state);
+    private void goTo(BaseState state) {
+        dispatcher.dispatchMessage(GameMessage.SET_STATE.ordinal(), state);
     }
 }

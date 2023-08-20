@@ -1,4 +1,4 @@
-package io.github.fourlastor.game.demo.turns;
+package io.github.fourlastor.game.demo.state.machine;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
@@ -12,7 +12,7 @@ import io.github.fourlastor.game.demo.AttackAnimation;
 import io.github.fourlastor.game.demo.state.GameState;
 import io.github.fourlastor.game.demo.state.unit.Unit;
 
-public class AttackMelee extends TurnState {
+public class AttackMelee extends BaseState {
 
     private final StateRouter router;
 
@@ -86,7 +86,7 @@ public class AttackMelee extends TurnState {
     }
 
     @Override
-    public void enter(GameState entity) {
+    public void enter(GameState state) {
         Vector2 originalPosition = new Vector2(source.getActorPosition());
         target.changeHp(-damage);
         // Distance between source and target is used to scale the animation if needed.
@@ -102,7 +102,9 @@ public class AttackMelee extends TurnState {
     }
 
     @Override
-    public void exit(GameState entity) {}
+    public void exit(GameState state) {
+        // optional cleanup
+    }
 
     /**
      * Factory interface for creating instances of the AttackMelee class.

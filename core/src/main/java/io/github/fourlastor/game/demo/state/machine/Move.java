@@ -1,4 +1,4 @@
-package io.github.fourlastor.game.demo.turns;
+package io.github.fourlastor.game.demo.state.machine;
 
 import com.badlogic.gdx.ai.pfa.GraphPath;
 import com.badlogic.gdx.math.Interpolation;
@@ -16,7 +16,7 @@ import io.github.fourlastor.game.demo.state.unit.Unit;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Move extends TurnState {
+public class Move extends BaseState {
 
     private final Unit unit;
     private final Tile tile;
@@ -32,7 +32,7 @@ public class Move extends TurnState {
     }
 
     @Override
-    public void enter(GameState entity) {
+    public void enter(GameState state) {
         List<Action> actions = new ArrayList<>();
         for (int i = 1; i < path.getCount(); i++) {
             Tile pathTile = path.get(i);
@@ -51,7 +51,7 @@ public class Move extends TurnState {
     }
 
     @Override
-    public void exit(GameState entity) {}
+    public void exit(GameState state) {}
 
     @AssistedFactory
     public interface Factory {
