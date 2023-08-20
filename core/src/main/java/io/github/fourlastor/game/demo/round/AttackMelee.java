@@ -1,4 +1,4 @@
-package io.github.fourlastor.game.demo.state.machine;
+package io.github.fourlastor.game.demo.round;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
@@ -12,7 +12,7 @@ import io.github.fourlastor.game.demo.AttackAnimation;
 import io.github.fourlastor.game.demo.state.GameState;
 import io.github.fourlastor.game.demo.state.unit.Unit;
 
-public class AttackMelee extends BaseState {
+public class AttackMelee extends AbilityState {
 
     private final StateRouter router;
 
@@ -97,13 +97,8 @@ public class AttackMelee extends BaseState {
         SequenceAction attackAnimation = Actions.sequence(
                 setupAttackAnimation(distance, rotationDegrees),
                 Actions.run(() -> source.setActorPosition(originalPosition)),
-                Actions.run(router::pickMonster));
+                Actions.run(router::endOfAction));
         source.actor.addAction(attackAnimation);
-    }
-
-    @Override
-    public void exit(GameState state) {
-        // optional cleanup
     }
 
     /**

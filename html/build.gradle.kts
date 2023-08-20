@@ -120,6 +120,7 @@ dependencies {
     sources(libs.funderby)
     sources(libs.jdkgdxds)
     sources(libs.textratypist)
+    sources(libs.squidLib.core)
     sources(libs.regexodus)
     sources(libs.harlequin.core)
     sources(libs.harlequin.ashley)

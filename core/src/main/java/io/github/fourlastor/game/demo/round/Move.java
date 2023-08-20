@@ -1,4 +1,4 @@
-package io.github.fourlastor.game.demo.state.machine;
+package io.github.fourlastor.game.demo.round;
 
 import com.badlogic.gdx.ai.pfa.GraphPath;
 import com.badlogic.gdx.math.Interpolation;
@@ -16,7 +16,7 @@ import io.github.fourlastor.game.demo.state.unit.Unit;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Move extends BaseState {
+public class Move extends AbilityState {
 
     private final Unit unit;
     private final Tile tile;
@@ -47,7 +47,7 @@ public class Move extends BaseState {
                 steps,
                 Actions.run(() -> unit.hex.set(tile.hex)),
                 Actions.run(() -> unit.setActorPosition(finalPosition)),
-                Actions.run(router::pickMonster)));
+                Actions.run(router::endOfAction)));
     }
 
     @Override
