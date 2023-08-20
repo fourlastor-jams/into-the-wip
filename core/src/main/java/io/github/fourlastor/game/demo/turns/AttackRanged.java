@@ -11,15 +11,10 @@ import dagger.assisted.AssistedFactory;
 import dagger.assisted.AssistedInject;
 import io.github.fourlastor.game.demo.state.GameState;
 import io.github.fourlastor.game.demo.state.unit.Unit;
-import io.github.fourlastor.game.di.modules.AssetsModule;
-import javax.inject.Inject;
 
 public class AttackRanged extends TurnState {
 
     private final StateRouter router;
-
-    @Inject
-    Projectile.Factory projectileFactory;
 
     private final Unit source;
     private final Unit target;
@@ -61,40 +56,44 @@ public class AttackRanged extends TurnState {
     @Override
     public void enter(GameState entity) {
 
-        Projectile projectile = projectileFactory.create(textureAtlas);
-
         // (sheerst) Note: this is model code, does it go here?
-        target.changeHp(-damage, false);
+        target.changeHp(-damage);
 
         // Distance between source and target is used to scale the animation if needed.
         float distance = source.getActorPosition().dst(target.getActorPosition());
-
-        // Angle offset of target from source.
-        // float rotationDegrees = calculateAngle(source.getActorPosition(), target.getActorPosition());
         // KeyFrameAnimation attackAnimation = setupAttackAnimation(distance, rotationDegrees);
 
         // Create a projectile. Add an action that will animate it to the target.
         // Once animation done, set hp.
         // This will exercise our assumptions a bit, projectile needs to move same speed always.
-        SequenceAction attackAnimation = Actions.sequence();
-        Vector2 targetPos = target.getActorPosition();
-        attackAnimation.addAction(Actions.moveTo(targetPos.x, targetPos.y, distance));
 
-        // Change enemy HP visually.
-        attackAnimation.addAction(Actions.run(() -> {
+        Vector2 sourcePos = source.getActorPosition().add(source.actor.getWidth() / 2, source.actor.getHeight() / 2);
+        Vector2 targetPos = target.getActorPosition().add(target.actor.getWidth() / 2, target.actor.getHeight() / 2);
+        Projectile projectile = new Projectile(textureAtlas);
+        projectile.setPosition(sourcePos.x, sourcePos.y);
+        SequenceAction moveAnimation = Actions.sequence();
+        moveAnimation.addAction(Actions.moveTo(targetPos.x, targetPos.y, distance / 400));
+        moveAnimation.addAction(Actions.run(() -> {
             if (target != null) target.refreshHpLabel();
         }));
+        moveAnimation.addAction(Actions.run(router::pickMonster));
+        moveAnimation.addAction(Actions.run(projectile::remove));
+        projectile.addAction(moveAnimation);
+        source.actor.getStage().addActor(projectile);
 
-        // After movement, reset the sources's position to it's original position.
-        attackAnimation.addAction(Actions.run(() -> source.setActorPosition(originalPosition)));
-        source.image.addAction(attackAnimation);
+        // TODO
+        // Angle offset of target from source.
+        // float rotationDegrees = calculateAngle(source.getActorPosition(), target.getActorPosition());
+        // SequenceAction unitAnimation = Actions.sequence();
+        // moveAnimation.addAction(Actions.moveTo(targetPos.x, targetPos.y, distance));
+        // attackAnimation.addAction(Actions.run(() -> source.setActorPosition(originalPosition)));
     }
 
     @Override
     public void exit(GameState entity) {}
 
     /**
-     * Factory interface for creating instances of the AttackMelee class.
+     * Factory interface for creating instances of the AttackRanged class.
      */
     @AssistedFactory
     public interface Factory {
@@ -120,16 +119,7 @@ public class AttackRanged extends TurnState {
  */
 class Projectile extends Image {
 
-    @AssistedInject
-    public Projectile(@Assisted AssetsModule assets) {
-        super(assets.assetManager().findRegion("images/include/ball1.png"));
-    }
-
-    /**
-     * Factory interface for creating instances of the AttackMelee class.
-     */
-    @AssistedFactory
-    public interface Factory {
-        Projectile create(TextureAtlas textureAtlas);
+    public Projectile(TextureAtlas textureAtlas) {
+        super(textureAtlas.findRegion("ball1"));
     }
 }

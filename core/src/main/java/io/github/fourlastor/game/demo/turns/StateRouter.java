@@ -2,6 +2,7 @@ package io.github.fourlastor.game.demo.turns;
 
 import com.badlogic.gdx.ai.msg.MessageDispatcher;
 import com.badlogic.gdx.ai.pfa.GraphPath;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import io.github.fourlastor.game.demo.state.map.Tile;
 import io.github.fourlastor.game.demo.state.unit.Unit;
 import javax.inject.Inject;
@@ -15,6 +16,7 @@ public class StateRouter {
     private final Move.Factory moveFactory;
     private final AttackMelee.Factory attackMeleeFactory;
     private final AttackRanged.Factory attackRangedFactory;
+    private final TextureAtlas textureAtlas;
 
     @Inject
     public StateRouter(
@@ -23,13 +25,15 @@ public class StateRouter {
             PickMove.Factory pickMoveFactory,
             Move.Factory moveFactory,
             AttackMelee.Factory attackMeleeFactory,
-            AttackRanged.Factory attackRangedFactory) {
+            AttackRanged.Factory attackRangedFactory,
+            TextureAtlas textureAtlas) {
         this.dispatcher = dispatcher;
         this.pickMonsterProvider = pickMonsterProvider;
         this.pickMoveFactory = pickMoveFactory;
         this.moveFactory = moveFactory;
         this.attackMeleeFactory = attackMeleeFactory;
         this.attackRangedFactory = attackRangedFactory;
+        this.textureAtlas = textureAtlas;
     }
 
     public void pickMonster() {
@@ -49,7 +53,7 @@ public class StateRouter {
     }
 
     public void attackRanged(Unit unit, Unit target) {
-        goTo(attackRangedFactory.create(new AttackRanged.Attack(unit, target)));
+        goTo(attackRangedFactory.create(new AttackRanged.Attack(unit, target), textureAtlas));
     }
 
     private void goTo(TurnState state) {
