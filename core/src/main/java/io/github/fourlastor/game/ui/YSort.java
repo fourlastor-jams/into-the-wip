@@ -1,11 +1,9 @@
 package io.github.fourlastor.game.ui;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.WidgetGroup;
 import com.badlogic.gdx.utils.SnapshotArray;
-import io.github.fourlastor.game.demo.state.map.Tile;
 import java.util.Comparator;
 
 public class YSort extends WidgetGroup {
@@ -19,9 +17,9 @@ public class YSort extends WidgetGroup {
         SnapshotArray<Actor> tileChildren = new SnapshotArray<>();
 
         for (Actor child : children) {
-            if (child instanceof Image) {
+            if (child instanceof UnitOnMap) {
                 unitChildren.add(child);
-            } else if (child instanceof Tile) {
+            } else if (child instanceof TileOnMap) {
                 tileChildren.add(child);
             } else if (child instanceof Label) {
                 unitChildren.add(child);

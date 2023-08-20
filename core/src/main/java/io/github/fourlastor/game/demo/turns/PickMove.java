@@ -1,5 +1,6 @@
 package io.github.fourlastor.game.demo.turns;
 
+import com.badlogic.gdx.ai.pfa.GraphPath;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -11,7 +12,6 @@ import io.github.fourlastor.game.demo.state.GameState;
 import io.github.fourlastor.game.demo.state.map.MapGraph;
 import io.github.fourlastor.game.demo.state.map.Tile;
 import io.github.fourlastor.game.demo.state.unit.Unit;
-import java.util.Set;
 
 public class PickMove extends TurnState {
 
@@ -26,14 +26,25 @@ public class PickMove extends TurnState {
     }
 
     @Override
-    public void enter(GameState entity) {
-        for (Tile tile : tilesFromUnit(entity)) {
-            tile.actor.addListener(new MoveListener(tile));
-            tile.actor.setColor(Color.CORAL);
-            if (unit == tile.unit || tile.unit == null) {
+    public void enter(GameState state) {
+        MapGraph localGraph = state.graph.forUnit(unit);
+        for (Tile tile : state.tiles) {
+            if (localGraph.getIndex(tile) == -1) {
                 continue;
             }
-            tile.unit.image.addListener(new AttackListener(tile.unit));
+            GraphPath<Tile> path = localGraph.calculatePath(unit.hex, tile);
+            // path includes the tile at the unit's location, so it's 1 longer than expected
+            if (path.getCount() <= 1 || path.getCount() > unit.type.speed + 1) {
+                continue;
+            }
+            Unit tileUnit = state.unitAt(tile.hex);
+            if (unit == tileUnit || tileUnit == null) {
+                tile.actor.addListener(new MoveListener(tile, path));
+                tile.actor.setColor(Color.CORAL);
+            } else {
+                tileUnit.actor.addListener(new AttackListener(tileUnit));
+                tileUnit.actor.setColor(Color.CORAL);
+            }
         }
     }
 
@@ -48,19 +59,13 @@ public class PickMove extends TurnState {
             }
         }
         for (Unit unit : entity.units) {
-            for (EventListener listener : unit.image.getListeners()) {
+            for (EventListener listener : unit.actor.getListeners()) {
                 if (listener instanceof AttackListener) {
-                    unit.image.removeListener(listener);
+                    unit.actor.removeListener(listener);
                 }
-                unit.image.setColor(Color.WHITE);
+                unit.actor.setColor(Color.WHITE);
             }
         }
-    }
-
-    private Set<Tile> tilesFromUnit(GameState entity) {
-        MapGraph graph = entity.graph;
-        Tile unitTile = graph.get(unit.position);
-        return graph.tilesAtDistance(unitTile, 2);
     }
 
     @AssistedFactory
@@ -71,14 +76,16 @@ public class PickMove extends TurnState {
     private class MoveListener extends ClickListener {
 
         private final Tile tile;
+        private final GraphPath<Tile> path;
 
-        private MoveListener(Tile tile) {
+        private MoveListener(Tile tile, GraphPath<Tile> path) {
             this.tile = tile;
+            this.path = path;
         }
 
         @Override
         public void clicked(InputEvent event, float x, float y) {
-            router.move(unit, tile);
+            router.move(unit, tile, path);
         }
     }
 

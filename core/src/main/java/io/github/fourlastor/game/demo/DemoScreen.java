@@ -2,30 +2,35 @@ package io.github.fourlastor.game.demo;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
+import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.tiled.AtlasTmxMapLoader;
 import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.TiledMapTile;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
 import com.badlogic.gdx.math.GridPoint2;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.github.tommyettinger.ds.ObjectList;
-import io.github.fourlastor.game.coordinates.Hex;
 import io.github.fourlastor.game.coordinates.HexCoordinates;
 import io.github.fourlastor.game.demo.state.GameState;
 import io.github.fourlastor.game.demo.state.map.Tile;
+import io.github.fourlastor.game.demo.state.map.TileType;
 import io.github.fourlastor.game.demo.state.unit.Unit;
+import io.github.fourlastor.game.demo.state.unit.UnitType;
 import io.github.fourlastor.game.demo.turns.PickMonster;
 import io.github.fourlastor.game.demo.turns.TurnStateMachine;
 import io.github.fourlastor.game.ui.TileOnMap;
+import io.github.fourlastor.game.ui.UnitOnMap;
 import io.github.fourlastor.game.ui.YSort;
 import javax.inject.Inject;
 import javax.inject.Provider;
@@ -40,10 +45,15 @@ public class DemoScreen extends ScreenAdapter {
     private final GameState state;
 
     @Inject
-    public DemoScreen(TurnStateMachine.Factory stateMachineFactory, Provider<PickMonster> pickMonsterProvider) {
+    public DemoScreen(
+            TurnStateMachine.Factory stateMachineFactory,
+            Provider<PickMonster> pickMonsterProvider,
+            AssetManager assetManager) {
         viewport = new FitViewport(512, 288);
         SpriteBatch batch = new SpriteBatch();
         stage = new Stage(viewport, batch);
+        Label.LabelStyle hpLabelStyle = new Label.LabelStyle(assetManager.get("fonts/quan-pixel-16.fnt"), Color.RED);
+
         Gdx.input.setInputProcessor(stage);
         TiledMap map = new AtlasTmxMapLoader().load("maps/demo.tmx");
         int hexSideLength = map.getProperties().get("hexsidelength", Integer.class);
@@ -74,30 +84,31 @@ public class DemoScreen extends ScreenAdapter {
                         continue;
                     }
 
-                    TextureRegion textureRegion = cell.getTile().getTextureRegion();
-                    TileOnMap image = new TileOnMap(textureRegion);
-                    Vector2 position = coordinates.toWorldAtOrigin(x, y, new Vector2());
+                    TiledMapTile cellTile = cell.getTile();
+                    TextureRegion textureRegion = cellTile.getTextureRegion();
 
                     if (mapLayerName.equals(UNITS_LAYER_NAME)) {
-                        GridPoint2 coordinate = new GridPoint2(x, y);
-                        Unit unit = new Unit(image, coordinate, coordinates);
+                        Vector2 position = coordinates.toWorldAtCenter(x, y, new Vector2());
+                        UnitOnMap unitOnMap = new UnitOnMap(textureRegion);
+                        String mapUnitType = cellTile.getProperties().get("unit", String.class);
+                        unitOnMap.setPosition(position.x, position.y, Align.bottom);
+                        // Set up the Hp bar Label.
+                        Label hpLabel = new Label("", hpLabelStyle);
+                        hpLabel.setAlignment(Align.center);
+                        Unit unit = new Unit(
+                                unitOnMap, hpLabel, new GridPoint2(x, y), coordinates, UnitType.fromMap(mapUnitType));
+                        ySort.addActor(unitOnMap);
+                        ySort.addActor(hpLabel);
                         units.add(unit);
-                        unit.image.setPosition(position.x, position.y, Align.bottom);
-                        ySort.addActor(unit.image);
-                        ySort.addActor(unit.hpLabel);
-                        // (sheerst) Note: I wasn't sure how to do this, this is temporary.
-                        Tile onTile = tiles.stream()
-                                .filter(tile -> tile.coordinates.equals(new Hex(coordinate)))
-                                .findFirst()
-                                .orElse(null);
-                        System.out.println(onTile);
-                        if (onTile != null) onTile.unit = unit;
                     }
                     if (mapLayerName.equals(TILES_LAYER_NAME)) {
-                        Tile tile = new Tile(image, new GridPoint2(x, y));
+                        Vector2 position = coordinates.toWorldAtOrigin(x, y, new Vector2());
+                        TileOnMap tileOnMap = new TileOnMap(textureRegion);
+                        tileOnMap.setPosition(position.x, position.y - 15);
+                        ySort.addActor(tileOnMap);
+                        String mapTileType = cellTile.getProperties().get("tile", String.class);
+                        Tile tile = new Tile(tileOnMap, new GridPoint2(x, y), TileType.fromMap(mapTileType));
                         tiles.add(tile);
-                        tile.setPosition(position.x, position.y - 15);
-                        ySort.addActor(tile);
                     }
                 }
             }

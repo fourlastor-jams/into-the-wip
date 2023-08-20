@@ -20,34 +20,32 @@ public class Move extends TurnState {
 
     private final Unit unit;
     private final Tile tile;
+    private final GraphPath<Tile> path;
     private final StateRouter router;
 
     @AssistedInject
-    public Move(@Assisted Unit unit, @Assisted Tile tile, StateRouter router) {
+    public Move(@Assisted Unit unit, @Assisted Tile tile, @Assisted GraphPath<Tile> path, StateRouter router) {
         this.unit = unit;
         this.tile = tile;
+        this.path = path;
         this.router = router;
     }
 
     @Override
     public void enter(GameState entity) {
-
-        GraphPath<Tile> path = entity.graph.calculatePath(entity.graph.get(unit.position), tile);
         List<Action> actions = new ArrayList<>();
         for (int i = 1; i < path.getCount(); i++) {
             Tile pathTile = path.get(i);
-            Vector2 position = unit.coordinates.toWorldAtCenter(
-                    pathTile.coordinates.offset.x, pathTile.coordinates.offset.y, new Vector2());
+            Vector2 position = unit.coordinates.toWorldAtCenter(pathTile.hex, new Vector2());
             actions.add(Actions.moveToAligned(position.x, position.y, Align.bottom, 0.25f, Interpolation.sine));
         }
         Tile finalTile = path.get(path.getCount() - 1);
-        Vector2 finalPosition = unit.coordinates.toWorldAtCenter(
-                finalTile.coordinates.offset.x, finalTile.coordinates.offset.y, new Vector2());
-        finalPosition.x -= unit.image.getWidth() / 2f;
+        Vector2 finalPosition = unit.coordinates.toWorldAtCenter(finalTile.hex, new Vector2());
+        finalPosition.x -= unit.actor.getWidth() / 2f;
         SequenceAction steps = Actions.sequence(actions.toArray(new Action[0]));
-        unit.image.addAction(Actions.sequence(
+        unit.actor.addAction(Actions.sequence(
                 steps,
-                Actions.run(() -> unit.position.set(tile.coordinates.offset)),
+                Actions.run(() -> unit.hex.set(tile.hex)),
                 Actions.run(() -> unit.setActorPosition(finalPosition)),
                 Actions.run(router::pickMonster)));
     }
@@ -57,6 +55,6 @@ public class Move extends TurnState {
 
     @AssistedFactory
     public interface Factory {
-        Move create(Unit unit, Tile tile);
+        Move create(Unit unit, Tile tile, GraphPath<Tile> path);
     }
 }

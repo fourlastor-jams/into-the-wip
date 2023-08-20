@@ -19,22 +19,16 @@ public class PickMonster extends TurnState {
     @Override
     public void enter(GameState entity) {
         for (Unit unit : entity.units) {
-            unit.image.addListener(new ClickListener() {
-                @Override
-                public void clicked(InputEvent event, float x, float y) {
-                    super.clicked(event, x, y);
-                    router.pickMove(unit);
-                }
-            });
+            unit.actor.addListener(new PickMoveListener(unit));
         }
     }
 
     @Override
     public void exit(GameState entity) {
         for (Unit unit : entity.units) {
-            for (EventListener listener : unit.image.getListeners()) {
+            for (EventListener listener : unit.actor.getListeners()) {
                 if (listener instanceof PickMoveListener) {
-                    unit.image.removeListener(listener);
+                    unit.actor.removeListener(listener);
                 }
             }
         }

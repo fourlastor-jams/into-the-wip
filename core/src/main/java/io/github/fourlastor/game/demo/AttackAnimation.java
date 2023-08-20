@@ -3,43 +3,35 @@ package io.github.fourlastor.game.demo;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.actions.ParallelAction;
-import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
 import com.badlogic.gdx.utils.Align;
 import java.util.ArrayList;
 
-public class KeyFrameAnimation extends SequenceAction {
-    public Vector3[] positionsRelative;
-    public Runnable[] runnables;
-    public float moveDuration = 1f;
-    public float rotationDegrees = 0f;
-    public Vector3 scale = new Vector3(1f, 1f, 1f);
-    private Actor actor;
+public class AttackAnimation {
 
-    public KeyFrameAnimation(Actor actor) {
-        this.actor = actor;
-    }
-
-    public KeyFrameAnimation(Actor actor, float moveDuration, float rotationDegrees, Vector3 scale) {
-        this(actor);
-        this.moveDuration = moveDuration;
-        this.rotationDegrees = rotationDegrees;
-        this.scale = scale;
-    }
+    private AttackAnimation() {}
 
     /**
-     * (sheerst) Note: I'd prefer this to be in an Action.setup() (doesn't exist currently afaict).
-     *
-     * Adds Actions to this sequence in order to run the KeyFrame-based animation.
+     * @return  Actions to this sequence in order to run the KeyFrame-based animation.
      */
-    public void makeSequence() {
+    public static Action makeSequence(
+            Actor actor,
+            Runnable[] runnables,
+            Vector3[] positionsRelative,
+            float moveDuration,
+            float rotationDegrees,
+            Vector3 scale) {
 
-        // (sheerst) TODO: this animation has an alignment issue.
+        // TODO: this animation has an alignment issue.
         Vector2 nextUnitPosition = new Vector2(actor.getX(), actor.getY());
 
-        for (KeyFrameAnimation.Frame frame : frames()) {
+        ArrayList<Frame> frames = frames(runnables, positionsRelative);
+        ArrayList<Action> actions = new ArrayList<>(frames.size());
+
+        for (AttackAnimation.Frame frame : frames) {
 
             Vector3 rotatedPositionRelative = frame.positionRelative.cpy();
 
@@ -63,11 +55,13 @@ public class KeyFrameAnimation extends SequenceAction {
 
             // Run runnable for this Frame.
             parallelActions.addAction(Actions.run(frame.runnable));
-            addAction(parallelActions);
+            actions.add(parallelActions);
         }
+
+        return Actions.sequence(actions.toArray(new Action[0]));
     }
 
-    public static class Frame {
+    private static class Frame {
         public Vector3 positionRelative = new Vector3(0, 0, 0);
         public Runnable runnable = () -> {};
     }
@@ -75,7 +69,7 @@ public class KeyFrameAnimation extends SequenceAction {
     /**
      * @return List of animation frames.
      */
-    public ArrayList<Frame> frames() {
+    private static ArrayList<Frame> frames(Runnable[] runnables, Vector3[] positionsRelative) {
         ArrayList<Frame> frames = new ArrayList<>();
 
         int numFrames = Math.max(positionsRelative.length, runnables.length);

@@ -3,6 +3,7 @@ package io.github.fourlastor.game.demo.state;
 import com.badlogic.gdx.math.GridPoint3;
 import com.badlogic.gdx.utils.Null;
 import com.github.tommyettinger.ds.ObjectList;
+import io.github.fourlastor.game.coordinates.Hex;
 import io.github.fourlastor.game.demo.state.map.MapGraph;
 import io.github.fourlastor.game.demo.state.map.Tile;
 import io.github.fourlastor.game.demo.state.unit.Unit;
@@ -32,8 +33,12 @@ public class GameState {
 
     public void alignAllHpBars() {
         for (Unit unit : units) {
-            unit.alignHpBars();
+            unit.alignHpBar();
         }
+    }
+
+    public Unit unitAt(Hex hex) {
+        return units.stream().filter(it -> it.hex.equals(hex)).findFirst().orElse(null);
     }
 
     private void connectTiles(Tile tile, @Null Tile adjacent) {
@@ -44,7 +49,7 @@ public class GameState {
     }
 
     private Tile adjacent(Tile tile, int x, int y, int z) {
-        GridPoint3 position = tile.coordinates.cube.cpy().add(x, y, z);
+        GridPoint3 position = tile.hex.cube.cpy().add(x, y, z);
         return graph.get(position);
     }
 }

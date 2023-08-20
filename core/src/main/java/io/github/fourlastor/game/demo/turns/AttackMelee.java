@@ -1,13 +1,14 @@
 package io.github.fourlastor.game.demo.turns;
 
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
 import dagger.assisted.Assisted;
 import dagger.assisted.AssistedFactory;
 import dagger.assisted.AssistedInject;
-import io.github.fourlastor.game.demo.KeyFrameAnimation;
+import io.github.fourlastor.game.demo.AttackAnimation;
 import io.github.fourlastor.game.demo.state.GameState;
 import io.github.fourlastor.game.demo.state.unit.Unit;
 
@@ -17,7 +18,6 @@ public class AttackMelee extends TurnState {
 
     private final Unit source;
     private final Unit target;
-    Vector2 originalPosition = new Vector2();
     float moveDuration = 0.05f;
     // Amount to scale the animation by.
     Vector3 scale = new Vector3(1f / 16f, 1f, 1f);
@@ -28,7 +28,6 @@ public class AttackMelee extends TurnState {
         this.router = router;
         this.source = attack.source;
         this.target = attack.target;
-        this.originalPosition.set(source.getActorPosition());
     }
 
     /**
@@ -41,21 +40,12 @@ public class AttackMelee extends TurnState {
      * @return The angle in degrees between the vectors.
      */
     public static float calculateAngle(Vector2 source, Vector2 target) {
-        float deltaX = target.x - source.x;
-        float deltaY = target.y - source.y;
-
-        float angleRad = MathUtils.atan2(deltaY, deltaX);
-        float angleDeg = MathUtils.radiansToDegrees * angleRad;
-
-        source.angleDeg(target);
-
-        return angleDeg;
+        return target.cpy().sub(source).angleDeg();
     }
 
-    public KeyFrameAnimation setupAttackAnimation(float distance, float rotationDegrees) {
+    public Action setupAttackAnimation(float distance, float rotationDegrees) {
         // Base animation goes left-to-right.
-        KeyFrameAnimation attackAnimation = new KeyFrameAnimation(source.image);
-        attackAnimation.positionsRelative = new Vector3[] {
+        Vector3[] positions = {
             new Vector3(-.25f, 0f, 0f),
             new Vector3(-.125f, 0f, 0f),
             new Vector3(0f, 0f, 2f),
@@ -72,7 +62,7 @@ public class AttackMelee extends TurnState {
             new Vector3(-3f, 0f, -8f),
             new Vector3(-3f, 0f, -16f),
         };
-        attackAnimation.runnables = new Runnable[] {
+        Runnable[] runnables = new Runnable[] {
             null,
             null,
             null,
@@ -91,29 +81,24 @@ public class AttackMelee extends TurnState {
             null,
             null,
         };
-        attackAnimation.scale.set(scale.cpy().scl(distance, 1f, 1f));
-        attackAnimation.moveDuration = moveDuration;
-        attackAnimation.rotationDegrees = rotationDegrees;
-        attackAnimation.makeSequence();
-        return attackAnimation;
+        Vector3 scale = this.scale.cpy().scl(distance, 1f, 1f);
+        return AttackAnimation.makeSequence(source.actor, runnables, positions, moveDuration, rotationDegrees, scale);
     }
 
     @Override
     public void enter(GameState entity) {
-
-        // (sheerst) Note: this is model code, does it go here?
-        target.changeHp(-damage, false);
-
+        Vector2 originalPosition = new Vector2(source.getActorPosition());
+        target.changeHp(-damage);
         // Distance between source and target is used to scale the animation if needed.
         float distance = source.getActorPosition().dst(target.getActorPosition());
 
         // Angle offset of target from source.
         float rotationDegrees = calculateAngle(source.getActorPosition(), target.getActorPosition());
-        KeyFrameAnimation attackAnimation = setupAttackAnimation(distance, rotationDegrees);
-
-        // After movement, reset the sources's position to it's original position.
-        attackAnimation.addAction(Actions.run(() -> source.setActorPosition(originalPosition)));
-        source.image.addAction(attackAnimation);
+        SequenceAction attackAnimation = Actions.sequence(
+                setupAttackAnimation(distance, rotationDegrees),
+                Actions.run(() -> source.setActorPosition(originalPosition)),
+                Actions.run(router::pickMonster));
+        source.actor.addAction(attackAnimation);
     }
 
     @Override

@@ -10,9 +10,6 @@ import com.badlogic.gdx.math.GridPoint3;
  */
 public class Hex {
 
-    // sheerst - petition to make .x and .y of this object default to offset.x and offset.y.
-    // Maybe there could a switchMode() method that would alternate between offset and cube.
-
     public final GridPoint2 offset;
     public final GridPoint3 cube;
 
@@ -26,17 +23,10 @@ public class Hex {
         this.offset = toOffset(cube);
     }
 
-    @Override
-    public String toString() {
-        return "Hex{" + "offset=" + offset + ", cube=" + cube + '}';
-    }
-
     public static GridPoint3 toCube(GridPoint2 offset) {
         int q = offset.x;
         int r = offset.y - (offset.x - (Math.abs(offset.x % 2))) / 2;
-        GridPoint3 gridPoint3 = new GridPoint3(q, r, -q - r);
-        // System.out.println("Convert " + offset + " to " + gridPoint3);
-        return gridPoint3;
+        return new GridPoint3(q, r, -q - r);
     }
 
     public static GridPoint2 toOffset(GridPoint3 cube) {
@@ -45,7 +35,26 @@ public class Hex {
         return new GridPoint2(x, y);
     }
 
-    public boolean equals(Hex other) {
-        return offset.equals(other.offset) && cube.equals(other.cube);
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Hex hex = (Hex) o;
+
+        if (!offset.equals(hex.offset)) return false;
+        return cube.equals(hex.cube);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = offset.hashCode();
+        result = 31 * result + cube.hashCode();
+        return result;
+    }
+
+    public void set(Hex other) {
+        offset.set(other.offset);
+        cube.set(other.cube);
     }
 }

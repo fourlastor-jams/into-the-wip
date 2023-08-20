@@ -1,54 +1,49 @@
 package io.github.fourlastor.game.demo.state.unit;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.math.GridPoint2;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.utils.Align;
+import io.github.fourlastor.game.coordinates.Hex;
 import io.github.fourlastor.game.coordinates.HexCoordinates;
-import io.github.fourlastor.game.ui.TileOnMap;
+import io.github.fourlastor.game.demo.state.map.Tile;
+import io.github.fourlastor.game.ui.UnitOnMap;
 
 public class Unit {
 
-    public final TileOnMap image;
-    public final Label hpLabel;
-
-    public final GridPoint2 position;
+    public final UnitOnMap actor;
+    private final Label hpLabel;
+    public final Hex hex;
     public final HexCoordinates coordinates;
-    public int maxHp = 20;
-    public int currentHp;
+    public final UnitType type;
+    private final int maxHp = 20;
+    private int currentHp;
 
-    public Unit(TileOnMap image, GridPoint2 position, HexCoordinates coordinates) {
-        this.image = image;
-        this.position = position;
+    public Unit(UnitOnMap actor, Label hpLabel, GridPoint2 position, HexCoordinates coordinates, UnitType type) {
+        this.actor = actor;
+        this.hex = new Hex(position);
         this.coordinates = coordinates;
-
-        image.setAlign(Align.center);
-        image.setPosition(0, 0);
-
-        // Set up the Hp bar Label.
-        BitmapFont font = new BitmapFont(Gdx.files.internal("fonts/wilds.fnt"));
-        Label.LabelStyle labelStyle = new Label.LabelStyle(font, Color.RED);
-        hpLabel = new Label("", labelStyle);
-        hpLabel.setAlignment(Align.center);
+        this.type = type;
+        this.hpLabel = hpLabel;
         setHp(maxHp);
     }
 
-    public void changeHp(int changeAmount, boolean updateLabel) {
-        setHp(currentHp + changeAmount, updateLabel);
+    public boolean canTravel(Tile tile) {
+        if (type.canFly) {
+            return true;
+        } else {
+            return tile.type.allowWalking;
+        }
+    }
+
+    public void changeHp(int changeAmount) {
+        setHp(currentHp + changeAmount);
     }
 
     public void refreshHpLabel() {
-        hpLabel.setText("HP " + String.valueOf(currentHp));
+        hpLabel.setText("HP " + currentHp);
     }
 
     public void setHp(int hpAmount) {
-        setHp(hpAmount, true);
-    }
-
-    public void setHp(int hpAmount, boolean updateLabel) {
         currentHp = hpAmount;
         refreshHpLabel();
     }
@@ -59,22 +54,14 @@ public class Unit {
      * ie Unit.image.position = something  <- calls setter
      */
     public Vector2 getActorPosition() {
-        return new Vector2(image.getX(), image.getY());
+        return new Vector2(actor.getX(), actor.getY());
     }
 
     public void setActorPosition(Vector2 targetPosition) {
-        setActorPosition(targetPosition.x, targetPosition.y);
+        actor.setPosition(targetPosition.x, targetPosition.y);
     }
 
-    public void setActorPosition(GridPoint2 targetPosition) {
-        setActorPosition(targetPosition.x, targetPosition.y);
-    }
-
-    public void setActorPosition(float x, float y) {
-        image.setPosition(x, y);
-    }
-
-    public void alignHpBars() {
-        hpLabel.setPosition(image.getX() + image.getWidth() / 2, image.getY() + 36);
+    public void alignHpBar() {
+        hpLabel.setPosition(actor.getX() + actor.getWidth() / 2, actor.getY() + 40);
     }
 }
