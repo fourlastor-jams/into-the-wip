@@ -23,7 +23,6 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.github.tommyettinger.ds.ObjectList;
 import io.github.fourlastor.game.coordinates.HexCoordinates;
 import io.github.fourlastor.game.demo.round.GameStateMachine;
-import io.github.fourlastor.game.demo.round.Round;
 import io.github.fourlastor.game.demo.state.GameState;
 import io.github.fourlastor.game.demo.state.map.Tile;
 import io.github.fourlastor.game.demo.state.map.TileType;
@@ -33,7 +32,6 @@ import io.github.fourlastor.game.ui.TileOnMap;
 import io.github.fourlastor.game.ui.UnitOnMap;
 import io.github.fourlastor.game.ui.YSort;
 import javax.inject.Inject;
-import javax.inject.Provider;
 
 public class DemoScreen extends ScreenAdapter {
 
@@ -45,8 +43,7 @@ public class DemoScreen extends ScreenAdapter {
     private final GameState state;
 
     @Inject
-    public DemoScreen(
-            GameStateMachine.Factory stateMachineFactory, Provider<Round> roundProvider, AssetManager assetManager) {
+    public DemoScreen(GameStateMachine.Factory stateMachineFactory, AssetManager assetManager) {
         viewport = new FitViewport(512, 288);
         SpriteBatch batch = new SpriteBatch();
         stage = new Stage(viewport, batch);
