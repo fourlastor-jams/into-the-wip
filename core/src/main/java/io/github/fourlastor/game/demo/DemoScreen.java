@@ -14,6 +14,7 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
 import com.badlogic.gdx.math.GridPoint2;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.WidgetGroup;
 import com.badlogic.gdx.utils.Align;
@@ -115,6 +116,7 @@ public class DemoScreen extends ScreenAdapter {
         }
         WidgetGroup ui = new WidgetGroup();
         ui.setFillParent(true);
+        ui.setTouchable(Touchable.childrenOnly);
         stage.addActor(ui);
         state = new GameState(units, tiles, ui);
         stateMachine = stateMachineFactory.create(state);
