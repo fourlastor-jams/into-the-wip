@@ -1,10 +1,9 @@
 package io.github.fourlastor.game.demo;
 
-import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.tiled.AtlasTmxMapLoader;
@@ -18,7 +17,6 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.ScreenUtils;
-import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.github.tommyettinger.ds.ObjectList;
 import io.github.fourlastor.game.coordinates.HexCoordinates;
@@ -38,18 +36,22 @@ public class DemoScreen extends ScreenAdapter {
     private static final String UNITS_LAYER_NAME = "monsters";
     private static final String TILES_LAYER_NAME = "terrain";
     private final Stage stage;
+    private final InputMultiplexer multiplexer;
     private final Viewport viewport;
     private final GameStateMachine stateMachine;
     private final GameState state;
 
     @Inject
-    public DemoScreen(GameStateMachine.Factory stateMachineFactory, AssetManager assetManager) {
-        viewport = new FitViewport(512, 288);
-        SpriteBatch batch = new SpriteBatch();
-        stage = new Stage(viewport, batch);
+    public DemoScreen(
+            GameStateMachine.Factory stateMachineFactory,
+            AssetManager assetManager,
+            Viewport viewport,
+            Stage stage,
+            InputMultiplexer multiplexer) {
+        this.viewport = viewport;
+        this.stage = stage;
+        this.multiplexer = multiplexer;
         Label.LabelStyle hpLabelStyle = new Label.LabelStyle(assetManager.get("fonts/quan-pixel-16.fnt"), Color.RED);
-
-        Gdx.input.setInputProcessor(stage);
         TiledMap map = new AtlasTmxMapLoader().load("maps/demo.tmx");
         int hexSideLength = map.getProperties().get("hexsidelength", Integer.class);
         ObjectList<Unit> units = new ObjectList<>();
@@ -108,10 +110,20 @@ public class DemoScreen extends ScreenAdapter {
                 }
             }
             ySort.sortChildren();
-            stage.addActor(ySort);
+            this.stage.addActor(ySort);
         }
         state = new GameState(units, tiles);
         stateMachine = stateMachineFactory.create(state);
+    }
+
+    @Override
+    public void show() {
+        multiplexer.addProcessor(stage);
+    }
+
+    @Override
+    public void hide() {
+        multiplexer.removeProcessor(stage);
     }
 
     @Override
