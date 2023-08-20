@@ -1,4 +1,4 @@
-package io.github.fourlastor.game.demo.turns;
+package io.github.fourlastor.game.demo.state.machine;
 
 import com.badlogic.gdx.ai.pfa.GraphPath;
 import com.badlogic.gdx.graphics.Color;
@@ -13,7 +13,7 @@ import io.github.fourlastor.game.demo.state.map.MapGraph;
 import io.github.fourlastor.game.demo.state.map.Tile;
 import io.github.fourlastor.game.demo.state.unit.Unit;
 
-public class PickMove extends TurnState {
+public class PickMove extends BaseState {
 
     private final StateRouter router;
 
@@ -49,8 +49,8 @@ public class PickMove extends TurnState {
     }
 
     @Override
-    public void exit(GameState entity) {
-        for (Tile tile : entity.tiles) {
+    public void exit(GameState state) {
+        for (Tile tile : state.tiles) {
             for (EventListener listener : tile.actor.getListeners()) {
                 if (listener instanceof MoveListener) {
                     tile.actor.removeListener(listener);
@@ -58,7 +58,7 @@ public class PickMove extends TurnState {
                 tile.actor.setColor(Color.WHITE);
             }
         }
-        for (Unit unit : entity.units) {
+        for (Unit unit : state.units) {
             for (EventListener listener : unit.actor.getListeners()) {
                 if (listener instanceof AttackListener) {
                     unit.actor.removeListener(listener);

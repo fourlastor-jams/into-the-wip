@@ -1,6 +1,6 @@
-package io.github.fourlastor.game.demo.turns;
+package io.github.fourlastor.game.demo.state.machine;
 
-public enum TurnMessage {
+public enum GameMessage {
     SET_STATE;
 
     public boolean handles(int code) {
