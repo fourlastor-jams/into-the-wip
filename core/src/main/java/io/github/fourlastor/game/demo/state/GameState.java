@@ -1,6 +1,7 @@
 package io.github.fourlastor.game.demo.state;
 
 import com.badlogic.gdx.math.GridPoint3;
+import com.badlogic.gdx.scenes.scene2d.ui.WidgetGroup;
 import com.badlogic.gdx.utils.Null;
 import com.github.tommyettinger.ds.ObjectList;
 import io.github.fourlastor.game.coordinates.Hex;
@@ -12,11 +13,13 @@ public class GameState {
 
     public final ObjectList<Unit> units;
     public final ObjectList<Tile> tiles;
+    public final WidgetGroup ui;
     public final MapGraph graph;
 
-    public GameState(ObjectList<Unit> units, ObjectList<Tile> tiles) {
+    public GameState(ObjectList<Unit> units, ObjectList<Tile> tiles, WidgetGroup ui) {
         this.units = units;
         this.tiles = tiles;
+        this.ui = ui;
         graph = new MapGraph();
         for (Tile tile : tiles) {
             graph.addTile(tile);
