@@ -23,12 +23,12 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.github.tommyettinger.ds.ObjectList;
 import io.github.fourlastor.game.coordinates.HexCoordinates;
 import io.github.fourlastor.game.demo.state.GameState;
+import io.github.fourlastor.game.demo.state.machine.GameStateMachine;
+import io.github.fourlastor.game.demo.state.machine.PickMonster;
 import io.github.fourlastor.game.demo.state.map.Tile;
 import io.github.fourlastor.game.demo.state.map.TileType;
 import io.github.fourlastor.game.demo.state.unit.Unit;
 import io.github.fourlastor.game.demo.state.unit.UnitType;
-import io.github.fourlastor.game.demo.turns.PickMonster;
-import io.github.fourlastor.game.demo.turns.TurnStateMachine;
 import io.github.fourlastor.game.ui.TileOnMap;
 import io.github.fourlastor.game.ui.UnitOnMap;
 import io.github.fourlastor.game.ui.YSort;
@@ -41,12 +41,12 @@ public class DemoScreen extends ScreenAdapter {
     private static final String TILES_LAYER_NAME = "terrain";
     private final Stage stage;
     private final Viewport viewport;
-    private final TurnStateMachine stateMachine;
+    private final GameStateMachine stateMachine;
     private final GameState state;
 
     @Inject
     public DemoScreen(
-            TurnStateMachine.Factory stateMachineFactory,
+            GameStateMachine.Factory stateMachineFactory,
             Provider<PickMonster> pickMonsterProvider,
             AssetManager assetManager) {
         viewport = new FitViewport(512, 288);

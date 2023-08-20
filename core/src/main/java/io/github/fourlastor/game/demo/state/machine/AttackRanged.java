@@ -1,4 +1,4 @@
-package io.github.fourlastor.game.demo.turns;
+package io.github.fourlastor.game.demo.state.machine;
 
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.MathUtils;
@@ -12,7 +12,7 @@ import dagger.assisted.AssistedInject;
 import io.github.fourlastor.game.demo.state.GameState;
 import io.github.fourlastor.game.demo.state.unit.Unit;
 
-public class AttackRanged extends TurnState {
+public class AttackRanged extends BaseState {
 
     private final StateRouter router;
 
