@@ -33,17 +33,27 @@ public class PickMove extends BaseState {
                 continue;
             }
             GraphPath<Tile> path = localGraph.calculatePath(unit.hex, tile);
-            // path includes the tile at the unit's location, so it's 1 longer than expected
-            if (path.getCount() <= 1 || path.getCount() > unit.type.speed + 1) {
+
+            if (path.getCount() <= 1 || path.getCount() > unit.type.speed + 2) {
                 continue;
             }
+
+            boolean isRanged = path.getCount() == unit.type.speed + 2;
             Unit tileUnit = state.unitAt(tile.hex);
             if (unit == tileUnit || tileUnit == null) {
-                tile.actor.addListener(new MoveListener(tile, path));
-                tile.actor.setColor(Color.CORAL);
+                if (isRanged) {
+                    tile.actor.setColor(Color.TEAL);
+                } else {
+                    tile.actor.addListener(new MoveListener(tile, path));
+                    tile.actor.setColor(Color.CORAL);
+                }
             } else {
-                tileUnit.actor.addListener(new AttackListener(tileUnit));
-                tileUnit.actor.setColor(Color.CORAL);
+                if (isRanged) {
+                    tileUnit.actor.setColor(Color.TEAL);
+                } else {
+                    tileUnit.actor.setColor(Color.CORAL);
+                }
+                tileUnit.actor.addListener(new AttackListener(tileUnit, isRanged));
             }
         }
     }
@@ -92,14 +102,20 @@ public class PickMove extends BaseState {
     private class AttackListener extends ClickListener {
 
         private final Unit target;
+        private boolean isRanged;
 
-        private AttackListener(Unit target) {
+        private AttackListener(Unit target, boolean isRanged) {
             this.target = target;
+            this.isRanged = isRanged;
         }
 
         @Override
         public void clicked(InputEvent event, float x, float y) {
-            router.attackMelee(unit, target);
+            if (isRanged) {
+                router.attackRanged(unit, target);
+            } else {
+                router.attackMelee(unit, target);
+            }
         }
     }
 }

@@ -5,6 +5,7 @@
  </properties>
  <tileset firstgid="1" source="../images/included/monsters.tsx"/>
  <tileset firstgid="3" source="../images/included/terrain.tsx"/>
+ <tileset firstgid="7" source="../images/included/Monsters.tsx"/>
  <layer id="4" name="terrain" width="8" height="8">
   <data encoding="csv">
 3,3,3,4,5,5,5,6,
@@ -17,14 +18,14 @@
 3,3,6,6,6,6,6,6
 </data>
  </layer>
- <layer id="3" name="monsters" width="8" height="8" visible="0">
+ <layer id="3" name="monsters" width="8" height="8">
   <data encoding="csv">
 0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,
+0,12,13,0,11,0,0,0,
 0,1,0,0,0,0,0,0,
 0,0,0,0,0,2,0,0,
-0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,9,0,
+0,0,0,0,10,0,0,0,
 0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0
 </data>
