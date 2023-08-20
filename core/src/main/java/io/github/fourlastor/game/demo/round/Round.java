@@ -44,14 +44,14 @@ public class Round extends RoundState {
 
     private void advanceToNextTurn() {
         turnCounter += 1;
-        startTurn();
-    }
-
-    private void startTurn() {
         if (turnCounter >= turns.size()) {
             router.round();
             return;
         }
+        startTurn();
+    }
+
+    private void startTurn() {
         Unit unit = turns.get(turnCounter).unit;
         router.turn(unit);
     }
