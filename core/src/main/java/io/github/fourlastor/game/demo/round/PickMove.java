@@ -25,6 +25,15 @@ public class PickMove extends AbilityState {
         this.unit = unit;
     }
 
+    // TODO: need @fourlastor's help to move this code.
+    private Color fromHex(String hexValue) {
+        if (hexValue.startsWith("#")) hexValue = hexValue.substring(1);
+        float r = (float) Integer.parseInt(hexValue.substring(0, 2), 16) / 255f;
+        float g = (float) Integer.parseInt(hexValue.substring(2, 4), 16) / 255f;
+        float b = (float) Integer.parseInt(hexValue.substring(4, 6), 16) / 255f;
+        return new Color(r, g, b, 1f);
+    }
+
     @Override
     public void enter(GameState state) {
         MapGraph localGraph = state.graph.forUnit(unit);
@@ -42,14 +51,14 @@ public class PickMove extends AbilityState {
             Unit tileUnit = state.unitAt(tile.hex);
             if (unit == tileUnit || tileUnit == null) {
                 if (isRanged) {
-                    tile.actor.setColor(Color.TEAL);
+                    tile.actor.setColor(fromHex("#03c2fc"));
                 } else {
                     tile.actor.addListener(new MoveListener(tile, path));
                     tile.actor.setColor(Color.CORAL);
                 }
             } else {
                 if (isRanged) {
-                    tileUnit.actor.setColor(Color.TEAL);
+                    tile.actor.setColor(fromHex("#03c2fc"));
                 } else {
                     tileUnit.actor.setColor(Color.CORAL);
                 }
@@ -65,16 +74,16 @@ public class PickMove extends AbilityState {
                 if (listener instanceof MoveListener) {
                     tile.actor.removeListener(listener);
                 }
-                tile.actor.setColor(Color.WHITE);
             }
+            tile.actor.setColor(Color.WHITE);
         }
         for (Unit unit : state.units) {
             for (EventListener listener : unit.actor.getListeners()) {
                 if (listener instanceof AttackListener) {
                     unit.actor.removeListener(listener);
                 }
-                unit.actor.setColor(Color.WHITE);
             }
+            unit.actor.setColor(Color.WHITE);
         }
     }
 
