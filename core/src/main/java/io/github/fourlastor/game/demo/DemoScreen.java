@@ -22,9 +22,9 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.github.tommyettinger.ds.ObjectList;
 import io.github.fourlastor.game.coordinates.HexCoordinates;
+import io.github.fourlastor.game.demo.round.GameStateMachine;
+import io.github.fourlastor.game.demo.round.Round;
 import io.github.fourlastor.game.demo.state.GameState;
-import io.github.fourlastor.game.demo.state.machine.GameStateMachine;
-import io.github.fourlastor.game.demo.state.machine.PickMonster;
 import io.github.fourlastor.game.demo.state.map.Tile;
 import io.github.fourlastor.game.demo.state.map.TileType;
 import io.github.fourlastor.game.demo.state.unit.Unit;
@@ -46,9 +46,7 @@ public class DemoScreen extends ScreenAdapter {
 
     @Inject
     public DemoScreen(
-            GameStateMachine.Factory stateMachineFactory,
-            Provider<PickMonster> pickMonsterProvider,
-            AssetManager assetManager) {
+            GameStateMachine.Factory stateMachineFactory, Provider<Round> roundProvider, AssetManager assetManager) {
         viewport = new FitViewport(512, 288);
         SpriteBatch batch = new SpriteBatch();
         stage = new Stage(viewport, batch);
@@ -116,7 +114,7 @@ public class DemoScreen extends ScreenAdapter {
             stage.addActor(ySort);
         }
         state = new GameState(units, tiles);
-        stateMachine = stateMachineFactory.create(state, pickMonsterProvider.get());
+        stateMachine = stateMachineFactory.create(state);
     }
 
     @Override

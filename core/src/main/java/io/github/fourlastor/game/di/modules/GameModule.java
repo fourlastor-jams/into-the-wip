@@ -3,16 +3,17 @@ package io.github.fourlastor.game.di.modules;
 import com.badlogic.gdx.ai.msg.MessageDispatcher;
 import dagger.Module;
 import dagger.Provides;
-import java.util.Random;
 import javax.inject.Singleton;
+import squidpony.squidmath.IRNG;
+import squidpony.squidmath.SilkRNG;
 
 @Module
 public class GameModule {
 
     @Provides
     @Singleton
-    public Random random() {
-        return new Random();
+    public IRNG random() {
+        return new SilkRNG();
     }
 
     @Provides

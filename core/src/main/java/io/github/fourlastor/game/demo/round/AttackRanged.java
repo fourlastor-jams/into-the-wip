@@ -1,18 +1,18 @@
-package io.github.fourlastor.game.demo.state.machine;
+package io.github.fourlastor.game.demo.round;
 
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import dagger.assisted.Assisted;
 import dagger.assisted.AssistedFactory;
 import dagger.assisted.AssistedInject;
 import io.github.fourlastor.game.demo.state.GameState;
 import io.github.fourlastor.game.demo.state.unit.Unit;
+import io.github.fourlastor.game.ui.Projectile;
 
-public class AttackRanged extends BaseState {
+public class AttackRanged extends AbilityState {
 
     private final StateRouter router;
 
@@ -24,7 +24,7 @@ public class AttackRanged extends BaseState {
     TextureAtlas textureAtlas;
 
     @AssistedInject
-    public AttackRanged(@Assisted Attack attack, @Assisted TextureAtlas textureAtlas, StateRouter router) {
+    public AttackRanged(@Assisted Attack attack, TextureAtlas textureAtlas, StateRouter router) {
         this.router = router;
         this.source = attack.source;
         this.target = attack.target;
@@ -69,14 +69,14 @@ public class AttackRanged extends BaseState {
 
         Vector2 sourcePos = source.getActorPosition().add(source.actor.getWidth() / 2, source.actor.getHeight() / 2);
         Vector2 targetPos = target.getActorPosition().add(target.actor.getWidth() / 2, target.actor.getHeight() / 2);
-        Projectile projectile = new Projectile(textureAtlas);
+        Projectile projectile = new Projectile(textureAtlas.findRegion("ball1"));
         projectile.setPosition(sourcePos.x, sourcePos.y);
         SequenceAction moveAnimation = Actions.sequence();
         moveAnimation.addAction(Actions.moveTo(targetPos.x, targetPos.y, distance / 400));
         moveAnimation.addAction(Actions.run(() -> {
             if (target != null) target.refreshHpLabel();
         }));
-        moveAnimation.addAction(Actions.run(router::pickMonster));
+        moveAnimation.addAction(Actions.run(router::endOfAction));
         moveAnimation.addAction(Actions.run(projectile::remove));
         projectile.addAction(moveAnimation);
         source.actor.getStage().addActor(projectile);
@@ -89,21 +89,18 @@ public class AttackRanged extends BaseState {
         // attackAnimation.addAction(Actions.run(() -> source.setActorPosition(originalPosition)));
     }
 
-    @Override
-    public void exit(GameState entity) {}
-
     /**
      * Factory interface for creating instances of the AttackRanged class.
      */
     @AssistedFactory
     public interface Factory {
-        AttackRanged create(Attack attack, TextureAtlas textureAtlas);
+        AttackRanged create(Attack attack);
     }
 
     /**
      * Represents an attack event with source and target units.
      */
-    static class Attack {
+    public static class Attack {
         public final Unit source;
         public final Unit target;
 
@@ -111,15 +108,5 @@ public class AttackRanged extends BaseState {
             this.source = source;
             this.target = target;
         }
-    }
-}
-
-/**
- * Animated between the source and target.
- */
-class Projectile extends Image {
-
-    public Projectile(TextureAtlas textureAtlas) {
-        super(textureAtlas.findRegion("ball1"));
     }
 }
