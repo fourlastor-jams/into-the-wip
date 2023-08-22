@@ -41,9 +41,9 @@ public class Move extends AbilityState {
         }
         Tile finalTile = path.get(path.getCount() - 1);
         Vector2 finalPosition = unit.coordinates.toWorldAtCenter(finalTile.hex, new Vector2());
-        finalPosition.x -= unit.actor.getWidth() / 2f;
+        finalPosition.x -= unit.group.getWidth() / 2f;
         SequenceAction steps = Actions.sequence(actions.toArray(new Action[0]));
-        unit.actor.addAction(Actions.sequence(
+        unit.group.addAction(Actions.sequence(
                 steps,
                 Actions.run(() -> unit.hex.set(tile.hex)),
                 Actions.run(() -> unit.setActorPosition(finalPosition)),

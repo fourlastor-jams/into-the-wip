@@ -7,6 +7,7 @@ import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.utils.Align;
 import dagger.assisted.Assisted;
 import dagger.assisted.AssistedFactory;
 import dagger.assisted.AssistedInject;
@@ -43,7 +44,9 @@ public class PickMove extends AbilityState {
     public void enter(GameState state) {
 
         arrow = new Image(textureAtlas.findRegion("arrow-down1"));
-        unit.actor.addActor(arrow);
+        arrow.setColor(Color.GREEN);
+        arrow.setPosition(0, 55, Align.center);
+        unit.group.addActor(arrow);
 
         MapGraph localGraph = state.graph.forUnit(unit);
         for (Tile tile : state.tiles) {
@@ -69,9 +72,9 @@ public class PickMove extends AbilityState {
                 if (isRanged) {
                     tile.actor.setColor(fromHex("#03c2fc"));
                 } else {
-                    tileUnit.actor.setColor(Color.CORAL);
+                    tileUnit.group.setColor(Color.CORAL);
                 }
-                tileUnit.actor.addListener(new AttackListener(tileUnit, isRanged));
+                tileUnit.group.addListener(new AttackListener(tileUnit, isRanged));
             }
         }
     }
@@ -88,12 +91,12 @@ public class PickMove extends AbilityState {
             tile.actor.setColor(Color.WHITE);
         }
         for (Unit unit : state.units) {
-            for (EventListener listener : unit.actor.getListeners()) {
+            for (EventListener listener : unit.group.getListeners()) {
                 if (listener instanceof AttackListener) {
-                    unit.actor.removeListener(listener);
+                    unit.group.removeListener(listener);
                 }
             }
-            unit.actor.setColor(Color.WHITE);
+            unit.group.setColor(Color.WHITE);
         }
     }
 

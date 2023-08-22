@@ -82,7 +82,7 @@ public class AttackMelee extends AbilityState {
             null,
         };
         Vector3 scale = this.scale.cpy().scl(distance, 1f, 1f);
-        return AttackAnimation.makeSequence(source.actor, runnables, positions, moveDuration, rotationDegrees, scale);
+        return AttackAnimation.makeSequence(source.group, runnables, positions, moveDuration, rotationDegrees, scale);
     }
 
     @Override
@@ -98,7 +98,7 @@ public class AttackMelee extends AbilityState {
                 setupAttackAnimation(distance, rotationDegrees),
                 Actions.run(() -> source.setActorPosition(originalPosition)),
                 Actions.run(router::endOfAction));
-        source.actor.addAction(attackAnimation);
+        source.group.addAction(attackAnimation);
     }
 
     /**
