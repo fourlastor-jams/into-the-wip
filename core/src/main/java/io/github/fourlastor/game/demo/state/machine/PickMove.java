@@ -34,26 +34,17 @@ public class PickMove extends BaseState {
             }
             GraphPath<Tile> path = localGraph.calculatePath(unit.hex, tile);
 
-            if (path.getCount() <= 1 || path.getCount() > unit.type.speed + 2) {
+            if (path.getCount() <= 1 || path.getCount() > unit.type.speed + 1) {
                 continue;
             }
 
-            boolean isRanged = path.getCount() == unit.type.speed + 2;
             Unit tileUnit = state.unitAt(tile.hex);
             if (unit == tileUnit || tileUnit == null) {
-                if (isRanged) {
-                    tile.actor.setColor(Color.TEAL);
-                } else {
-                    tile.actor.addListener(new MoveListener(tile, path));
-                    tile.actor.setColor(Color.CORAL);
-                }
+                tile.actor.addListener(new MoveListener(tile, path));
+                tile.actor.setColor(Color.CORAL);
             } else {
-                if (isRanged) {
-                    tileUnit.actor.setColor(Color.TEAL);
-                } else {
-                    tileUnit.actor.setColor(Color.CORAL);
-                }
-                tileUnit.actor.addListener(new AttackListener(tileUnit, isRanged));
+                tileUnit.actor.setColor(Color.CORAL);
+                tileUnit.actor.addListener(new AttackListener(tileUnit));
             }
         }
     }
@@ -103,7 +94,7 @@ public class PickMove extends BaseState {
 
         private final Unit target;
 
-        private AttackListener(Unit target, boolean isRanged) {
+        private AttackListener(Unit target) {
             this.target = target;
         }
 
