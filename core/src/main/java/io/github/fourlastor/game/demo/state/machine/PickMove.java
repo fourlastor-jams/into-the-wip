@@ -102,20 +102,14 @@ public class PickMove extends BaseState {
     private class AttackListener extends ClickListener {
 
         private final Unit target;
-        private boolean isRanged;
 
         private AttackListener(Unit target, boolean isRanged) {
             this.target = target;
-            this.isRanged = isRanged;
         }
 
         @Override
         public void clicked(InputEvent event, float x, float y) {
-            if (isRanged) {
-                router.attackRanged(unit, target);
-            } else {
-                router.attackMelee(unit, target);
-            }
+            router.attackMelee(unit, target);
         }
     }
 }
