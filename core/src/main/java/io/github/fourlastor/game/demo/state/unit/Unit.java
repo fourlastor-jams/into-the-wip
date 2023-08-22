@@ -6,6 +6,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import io.github.fourlastor.game.coordinates.Hex;
 import io.github.fourlastor.game.coordinates.HexCoordinates;
 import io.github.fourlastor.game.demo.state.map.Tile;
+import io.github.fourlastor.game.demo.state.map.TileType;
 import io.github.fourlastor.game.ui.UnitOnMap;
 
 public class Unit {
@@ -28,7 +29,7 @@ public class Unit {
     }
 
     public boolean canTravel(Tile tile) {
-        if (type.canFly) {
+        if (tile.type == TileType.WATER && (type.canSwim || type.canFly)) {
             return true;
         } else {
             return tile.type.allowWalking;

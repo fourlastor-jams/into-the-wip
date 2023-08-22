@@ -6,7 +6,7 @@
   <properties>
    <property name="tile" value="Terrain"/>
   </properties>
-  <image width="62" height="51" source="tiles/white.png"/>
+  <image width="62" height="80" source="tiles/white.png"/>
  </tile>
  <tile id="1">
   <properties>
@@ -18,13 +18,19 @@
   <properties>
    <property name="tile" value="Terrain"/>
   </properties>
-  <image width="62" height="51" source="tiles/trees.png"/>
+  <image width="62" height="80" source="tiles/trees.png"/>
  </tile>
  <tile id="3">
   <properties>
    <property name="tile" value="Water"/>
   </properties>
-  <image width="62" height="51" source="tiles/water.png"/>
+  <image width="62" height="80" source="tiles/water.png"/>
+ </tile>
+ <tile id="4">
+  <properties>
+   <property name="tile" value="Solid"/>
+  </properties>
+  <image width="62" height="80" source="tiles/mountain.png"/>
  </tile>
  <tile id="11">
   <properties>
