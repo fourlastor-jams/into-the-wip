@@ -1,5 +1,6 @@
 package io.github.fourlastor.game.demo.round.step;
 
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Action;
@@ -10,21 +11,26 @@ import dagger.assisted.AssistedFactory;
 import dagger.assisted.AssistedInject;
 import io.github.fourlastor.game.demo.AttackAnimation;
 import io.github.fourlastor.game.demo.state.GameState;
+import io.github.fourlastor.game.demo.state.map.Tile;
+import io.github.fourlastor.game.demo.state.map.TileType;
 import io.github.fourlastor.game.demo.state.unit.Unit;
+import io.github.fourlastor.game.ui.TileOnMap;
 
 public class AttackMelee extends SimpleStep {
 
     private final Unit source;
-    private final Unit target;
+    private Unit targetUnit;
+    private Tile targetTile;
     float moveDuration = 0.05f;
     // Amount to scale the animation by.
     private final Vector3 scale = new Vector3(1f / 16f, 1f, 1f);
     int damage = 2;
+    TextureAtlas textureAtlas;
 
     @AssistedInject
-    public AttackMelee(@Assisted("source") Unit source, @Assisted("target") Unit target) {
+    public AttackMelee(@Assisted("source") Unit source, @Assisted("target") Unit targetUnit) {
         this.source = source;
-        this.target = target;
+        this.targetUnit = targetUnit;
     }
 
     /**
@@ -68,7 +74,7 @@ public class AttackMelee extends SimpleStep {
             null,
             null,
             () -> {
-                if (target != null) target.refreshHpLabel();
+                if (targetUnit != null) targetUnit.refreshHpLabel();
             },
             null,
             null,
@@ -80,14 +86,11 @@ public class AttackMelee extends SimpleStep {
         return AttackAnimation.makeSequence(source.actor, runnables, positions, moveDuration, rotationDegrees, scale);
     }
 
-    @Override
-    public void enter(GameState state, Runnable continuation) {
-        Vector2 originalPosition = new Vector2(source.getActorPosition());
-        target.changeHp(-damage);
+    public void doAttackAnimation(Vector2 originalPosition, Vector2 targetPosition, Runnable continuation) {
         // Distance between source and target is used to scale the animation if needed.
-        float distance = source.getActorPosition().dst(target.getActorPosition());
+        float distance = source.getActorPosition().dst(targetPosition);
         // Angle offset of target from source.
-        float rotationDegrees = calculateAngle(source.getActorPosition(), target.getActorPosition());
+        float rotationDegrees = calculateAngle(originalPosition, targetPosition);
         SequenceAction attackAnimation = Actions.sequence(
                 setupAttackAnimation(distance, rotationDegrees),
                 Actions.run(() -> source.setActorPosition(originalPosition)),
@@ -95,6 +98,38 @@ public class AttackMelee extends SimpleStep {
         source.actor.addAction(attackAnimation);
     }
 
+    public void attackUnit(Runnable continuation) {
+        targetUnit.changeHp(-damage);
+        Vector2 originalPosition = new Vector2(source.getActorPosition());
+        Vector2 targetPosition = targetUnit.getActorPosition();
+        doAttackAnimation(originalPosition, targetPosition, continuation);
+    }
+
+    public void smashTile(Runnable continuation) {
+        targetTile.type = TileType.TERRAIN;
+        targetTile.actor = new TileOnMap(textureAtlas.findRegion("tiles/white"));
+        Vector2 originalPosition = new Vector2(source.getActorPosition());
+        Vector2 targetPosition = targetTile.getActorPosition();
+        doAttackAnimation(originalPosition, targetPosition, continuation);
+    }
+
+    @Override
+    public void enter(GameState state, Runnable continuation) {
+        if (targetUnit != null) {
+            attackUnit(continuation);
+        } else if (targetTile != null) {
+            smashTile(continuation);
+        }
+    }
+
+    @Override
+    public void exit(GameState state) {
+        // optional cleanup
+    }
+
+    /**
+     * Factory interface for creating instances of the AttackMelee class.
+     */
     @AssistedFactory
     public interface Factory {
         AttackMelee create(@Assisted("source") Unit source, @Assisted("target") Unit target);
