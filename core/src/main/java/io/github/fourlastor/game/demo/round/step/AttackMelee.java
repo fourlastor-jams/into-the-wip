@@ -1,13 +1,13 @@
 package io.github.fourlastor.game.demo.round.step;
 
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Action;
-import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import dagger.assisted.Assisted;
 import dagger.assisted.AssistedFactory;
 import dagger.assisted.AssistedInject;
@@ -16,8 +16,6 @@ import io.github.fourlastor.game.demo.state.GameState;
 import io.github.fourlastor.game.demo.state.map.Tile;
 import io.github.fourlastor.game.demo.state.map.TileType;
 import io.github.fourlastor.game.demo.state.unit.Unit;
-import io.github.fourlastor.game.ui.TileOnMap;
-import io.github.fourlastor.game.ui.YSort;
 
 public class AttackMelee extends SimpleStep {
 
@@ -111,23 +109,9 @@ public class AttackMelee extends SimpleStep {
     public void smashTile(Runnable continuation) {
         targetTile.type = TileType.TERRAIN;
 
-        // Actor-related.
-        Actor oldActor = targetTile.actor;
-        Stage stage = oldActor.getStage();
-        YSort ySort = null;
-        for (Actor actor : stage.getActors()) {
-            if (actor instanceof YSort) {
-                ySort = (YSort) actor;
-                break;
-            }
-        }
-        if (ySort != null) {
-            targetTile.actor = new TileOnMap(textureAtlas.findRegion("tiles/white"));
-            targetTile.actor.setPosition(oldActor.getX(), oldActor.getY());
-            ySort.addActor(targetTile.actor);
-            oldActor.remove();
-            ySort.sortChildren();
-        }
+        TextureRegion region = textureAtlas.findRegion("tiles/white");
+        targetTile.actor.setDrawable(new TextureRegionDrawable(region));
+        targetTile.actor.setSize(targetTile.actor.getPrefWidth(), targetTile.actor.getPrefHeight());
 
         Vector2 originalPosition = new Vector2(source.getActorPosition());
         Vector2 targetPosition = targetTile.getActorPosition();
