@@ -96,7 +96,7 @@ public class AttackMelee extends AbilityState {
         SequenceAction attackAnimation = Actions.sequence(
                 setupAttackAnimation(distance, rotationDegrees),
                 Actions.run(() -> source.setActorPosition(originalPosition)),
-                Actions.run(router::endOfAction));
+                Actions.run(router::endOfAbility));
         source.actor.addAction(attackAnimation);
     }
 

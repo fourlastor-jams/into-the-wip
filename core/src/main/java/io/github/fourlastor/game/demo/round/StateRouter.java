@@ -2,6 +2,7 @@ package io.github.fourlastor.game.demo.round;
 
 import com.badlogic.gdx.ai.msg.MessageDispatcher;
 import com.badlogic.gdx.ai.pfa.GraphPath;
+import io.github.fourlastor.game.demo.round.step.StepState;
 import io.github.fourlastor.game.demo.state.map.Tile;
 import io.github.fourlastor.game.demo.state.unit.Unit;
 import javax.inject.Inject;
@@ -15,7 +16,7 @@ public class StateRouter {
     private final PickMove.Factory pickMoveFactory;
     private final Move.Factory moveFactory;
     private final AttackMelee.Factory attackMeleeFactory;
-    private final Ability.Factory abilityFactory;
+    private final MoveAbility.Factory meleeAttackFactory;
 
     @Inject
     public StateRouter(
@@ -25,18 +26,18 @@ public class StateRouter {
             PickMove.Factory pickMoveFactory,
             Move.Factory moveFactory,
             AttackMelee.Factory attackMeleeFactory,
-            Ability.Factory abilityFactory) {
+            MoveAbility.Factory meleeAttackFactory) {
         this.dispatcher = dispatcher;
         this.roundProvider = roundProvider;
         this.turnFactory = turnFactory;
         this.pickMoveFactory = pickMoveFactory;
         this.moveFactory = moveFactory;
         this.attackMeleeFactory = attackMeleeFactory;
-        this.abilityFactory = abilityFactory;
+        this.meleeAttackFactory = meleeAttackFactory;
     }
 
     public void startAbility(Unit unit) {
-        dispatcher.dispatchMessage(GameMessage.ABILITY_START.ordinal(), abilityFactory.create(unit));
+        dispatcher.dispatchMessage(GameMessage.ABILITY_START.ordinal(), meleeAttackFactory.create(unit));
     }
 
     public void pickMove(Unit unit) {
@@ -67,7 +68,11 @@ public class StateRouter {
         dispatcher.dispatchMessage(GameMessage.ABILITY_PROCEED.ordinal(), state);
     }
 
-    public void endOfAction() {
+    public void nextStep(StepState<?> result) {
+        dispatcher.dispatchMessage(GameMessage.NEXT_STEP.ordinal(), result);
+    }
+
+    public void endOfAbility() {
         dispatcher.dispatchMessage(GameMessage.ABILITY_END.ordinal());
     }
 }

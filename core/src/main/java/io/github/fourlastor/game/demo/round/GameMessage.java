@@ -8,6 +8,7 @@ public enum GameMessage {
     TURN_END,
     ABILITY_START,
     ABILITY_PROCEED,
+    NEXT_STEP,
     ABILITY_END;
 
     public boolean handles(int code) {

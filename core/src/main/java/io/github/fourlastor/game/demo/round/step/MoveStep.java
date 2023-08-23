@@ -1,4 +1,4 @@
-package io.github.fourlastor.game.demo.round;
+package io.github.fourlastor.game.demo.round.step;
 
 import com.badlogic.gdx.ai.pfa.GraphPath;
 import com.badlogic.gdx.math.Interpolation;
@@ -16,23 +16,21 @@ import io.github.fourlastor.game.demo.state.unit.Unit;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Move extends AbilityState {
+public class MoveStep extends SimpleStep {
 
     private final Unit unit;
     private final Tile tile;
     private final GraphPath<Tile> path;
-    private final StateRouter router;
 
     @AssistedInject
-    public Move(@Assisted Unit unit, @Assisted Tile tile, @Assisted GraphPath<Tile> path, StateRouter router) {
+    public MoveStep(@Assisted Unit unit, @Assisted Tile tile, @Assisted GraphPath<Tile> path) {
         this.unit = unit;
         this.tile = tile;
         this.path = path;
-        this.router = router;
     }
 
     @Override
-    public void enter(GameState state) {
+    public void enter(GameState state, Runnable continuation) {
         List<Action> actions = new ArrayList<>();
         for (int i = 1; i < path.getCount(); i++) {
             Tile pathTile = path.get(i);
@@ -47,14 +45,11 @@ public class Move extends AbilityState {
                 steps,
                 Actions.run(() -> unit.hex.set(tile.hex)),
                 Actions.run(() -> unit.setActorPosition(finalPosition)),
-                Actions.run(router::endOfAbility)));
+                Actions.run(continuation)));
     }
-
-    @Override
-    public void exit(GameState state) {}
 
     @AssistedFactory
     public interface Factory {
-        Move create(Unit unit, Tile tile, GraphPath<Tile> path);
+        MoveStep create(Unit unit, Tile tile, GraphPath<Tile> path);
     }
 }
