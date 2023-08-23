@@ -33,17 +33,18 @@ public class PickMove extends BaseState {
                 continue;
             }
             GraphPath<Tile> path = localGraph.calculatePath(unit.hex, tile);
-            // path includes the tile at the unit's location, so it's 1 longer than expected
+
             if (path.getCount() <= 1 || path.getCount() > unit.type.speed + 1) {
                 continue;
             }
+
             Unit tileUnit = state.unitAt(tile.hex);
             if (unit == tileUnit || tileUnit == null) {
                 tile.actor.addListener(new MoveListener(tile, path));
                 tile.actor.setColor(Color.CORAL);
             } else {
-                tileUnit.actor.addListener(new AttackListener(tileUnit));
                 tileUnit.actor.setColor(Color.CORAL);
+                tileUnit.actor.addListener(new AttackListener(tileUnit));
             }
         }
     }
