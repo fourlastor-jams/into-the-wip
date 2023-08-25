@@ -55,6 +55,7 @@ dependencies {
     implementation(libs.gdx.controllers.core)
     implementation(libs.ashley)
     implementation(libs.jdkgdxds)
+    implementation(libs.simpleGraphs)
     implementation(libs.squidLib.core)
     implementation(libs.textratypist)
     implementation(libs.dagger.core)

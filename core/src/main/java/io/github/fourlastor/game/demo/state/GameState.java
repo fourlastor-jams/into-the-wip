@@ -4,6 +4,7 @@ import com.badlogic.gdx.math.GridPoint3;
 import com.badlogic.gdx.utils.Null;
 import com.github.tommyettinger.ds.ObjectList;
 import io.github.fourlastor.game.coordinates.Hex;
+import io.github.fourlastor.game.demo.state.map.GraphMap;
 import io.github.fourlastor.game.demo.state.map.MapGraph;
 import io.github.fourlastor.game.demo.state.map.Tile;
 import io.github.fourlastor.game.demo.state.unit.Unit;
@@ -13,12 +14,15 @@ public class GameState {
     public final ObjectList<Unit> units;
     public final ObjectList<Tile> tiles;
     public final MapGraph graph;
+    public final GraphMap newGraph;
 
     public GameState(ObjectList<Unit> units, ObjectList<Tile> tiles) {
         this.units = units;
         this.tiles = tiles;
         graph = new MapGraph();
+        newGraph = new GraphMap();
         for (Tile tile : tiles) {
+            newGraph.add(tile);
             graph.addTile(tile);
         }
         for (Tile tile : tiles) {
@@ -37,6 +41,10 @@ public class GameState {
         }
     }
 
+    public Tile tileAt(Hex hex) {
+        return tiles.stream().filter(it -> it.hex.equals(hex)).findFirst().orElse(null);
+    }
+
     public Unit unitAt(Hex hex) {
         return units.stream().filter(it -> it.hex.equals(hex)).findFirst().orElse(null);
     }
@@ -45,6 +53,7 @@ public class GameState {
         if (adjacent == null) {
             return;
         }
+        newGraph.connect(tile, adjacent);
         graph.connect(tile, adjacent);
     }
 

@@ -4,7 +4,9 @@ import java.util.Arrays;
 
 public enum TileType {
     TERRAIN("terrain", true),
-    WATER("water", false);
+    WATER("water", false),
+    SOLID("solid", false),
+    ;
 
     public final String mapName;
     public final boolean allowWalking;
