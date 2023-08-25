@@ -10,6 +10,7 @@ import com.badlogic.gdx.math.GridPoint2;
 import com.badlogic.gdx.math.GridPoint3;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Null;
+import com.badlogic.gdx.utils.Predicate;
 import com.github.tommyettinger.ds.IntObjectMap;
 import com.github.tommyettinger.ds.ObjectList;
 import com.github.tommyettinger.ds.ObjectObjectMap;
@@ -29,8 +30,8 @@ import java.util.Set;
 public class MapGraph implements IndexedGraph<Tile> {
 
     private final Heuristic<Tile> heuristic = new TileHeuristic();
-    private final IntObjectMap<Tile> tiles;
-    private final List<Tile> indexed;
+    private final IntObjectMap<Tile> tiles; // (sheerst) Question: what does the index here represent?
+    public final List<Tile> indexed;
     private final Map<Tile, List<Connection<Tile>>> connections;
 
     public MapGraph() {
@@ -64,6 +65,36 @@ public class MapGraph implements IndexedGraph<Tile> {
     }
 
     private final GridPoint2 cached = new GridPoint2();
+
+    /**
+     * Return a copy of this object.
+     *
+     * @return new MapGraph
+     */
+    public MapGraph cpy() {
+        List<Tile> newIndexed = new ArrayList<>(indexed);
+        IntObjectMap<Tile> newTiles = new IntObjectMap<>(tiles);
+        ObjectObjectMap<Tile, List<Connection<Tile>>> newConnections = new ObjectObjectMap<>(connections);
+        return new MapGraph(newTiles, newIndexed, newConnections);
+    }
+
+    /**
+     * Filter this MapGraph based on a List of conditionals and return the MapGraph.
+     *
+     * (sheerst) Note: this feels like a common usecase, I wonder if an existing library already handles this.
+     *
+     * @param conditionals
+     * @return new MapGraph
+     */
+    public MapGraph filter(List<Predicate<Tile>> conditionals) {
+        MapGraph newGraph = cpy();
+        indexed.stream().forEach(tile -> {
+            if (tile == null) return;
+            if (!conditionals.stream().allMatch(condition -> condition.evaluate(tile)))
+                newGraph.removeTile(tile.hex.offset);
+        });
+        return newGraph;
+    }
 
     /** Returns an instance of this graph specific for the unit, removing tiles the unit cannot pass and so forth. */
     public MapGraph forUnit(Unit unit) {
