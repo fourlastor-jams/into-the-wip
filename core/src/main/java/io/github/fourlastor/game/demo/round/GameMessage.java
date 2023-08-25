@@ -7,7 +7,6 @@ public enum GameMessage {
     TURN_START,
     TURN_END,
     ABILITY_START,
-    ABILITY_PROCEED,
     NEXT_STEP,
     ABILITY_END;
 

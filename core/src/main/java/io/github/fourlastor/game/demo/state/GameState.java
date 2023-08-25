@@ -41,10 +41,12 @@ public class GameState {
         }
     }
 
+    @Null
     public Tile tileAt(Hex hex) {
         return tiles.stream().filter(it -> it.hex.equals(hex)).findFirst().orElse(null);
     }
 
+    @Null
     public Unit unitAt(Hex hex) {
         return units.stream().filter(it -> it.hex.equals(hex)).findFirst().orElse(null);
     }

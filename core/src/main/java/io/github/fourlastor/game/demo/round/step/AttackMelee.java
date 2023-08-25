@@ -1,4 +1,4 @@
-package io.github.fourlastor.game.demo.round;
+package io.github.fourlastor.game.demo.round.step;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
@@ -12,27 +12,22 @@ import io.github.fourlastor.game.demo.AttackAnimation;
 import io.github.fourlastor.game.demo.state.GameState;
 import io.github.fourlastor.game.demo.state.unit.Unit;
 
-public class AttackMelee extends AbilityState {
-
-    private final StateRouter router;
+public class AttackMelee extends SimpleStep {
 
     private final Unit source;
     private final Unit target;
     float moveDuration = 0.05f;
     // Amount to scale the animation by.
-    Vector3 scale = new Vector3(1f / 16f, 1f, 1f);
+    private final Vector3 scale = new Vector3(1f / 16f, 1f, 1f);
     int damage = 2;
 
     @AssistedInject
-    public AttackMelee(@Assisted Attack attack, StateRouter router) {
-        this.router = router;
-        this.source = attack.source;
-        this.target = attack.target;
+    public AttackMelee(@Assisted("source") Unit source, @Assisted("target") Unit target) {
+        this.source = source;
+        this.target = target;
     }
 
     /**
-     * TODO: This functionality can be used generically. Unsure where to move it to.
-     *
      * Calculate the angle in degrees between two 2D vectors.
      *
      * @param source The source vector.
@@ -86,7 +81,7 @@ public class AttackMelee extends AbilityState {
     }
 
     @Override
-    public void enter(GameState state) {
+    public void enter(GameState state, Runnable continuation) {
         Vector2 originalPosition = new Vector2(source.getActorPosition());
         target.changeHp(-damage);
         // Distance between source and target is used to scale the animation if needed.
@@ -96,28 +91,12 @@ public class AttackMelee extends AbilityState {
         SequenceAction attackAnimation = Actions.sequence(
                 setupAttackAnimation(distance, rotationDegrees),
                 Actions.run(() -> source.setActorPosition(originalPosition)),
-                Actions.run(router::endOfAbility));
+                Actions.run(continuation));
         source.actor.addAction(attackAnimation);
     }
 
-    /**
-     * Factory interface for creating instances of the AttackMelee class.
-     */
     @AssistedFactory
     public interface Factory {
-        AttackMelee create(Attack attack);
-    }
-
-    /**
-     * Represents an attack event with source and target units.
-     */
-    public static class Attack {
-        public final Unit source;
-        public final Unit target;
-
-        public Attack(Unit source, Unit target) {
-            this.source = source;
-            this.target = target;
-        }
+        AttackMelee create(@Assisted("source") Unit source, @Assisted("target") Unit target);
     }
 }

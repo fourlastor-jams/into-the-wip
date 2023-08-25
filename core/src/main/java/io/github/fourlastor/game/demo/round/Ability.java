@@ -29,10 +29,10 @@ public abstract class Ability extends RoundState {
     @Override
     public void enter(GameState state) {
         stateMachine = new StateMachine(state, new InitialState());
-        createSteps().run();
+        createSteps(state).run();
     }
 
-    protected abstract Builder<?> createSteps();
+    protected abstract Builder<?> createSteps(GameState state);
 
     @Override
     public void update(GameState state) {
@@ -46,10 +46,7 @@ public abstract class Ability extends RoundState {
 
     @Override
     public boolean onMessage(GameState state, Telegram telegram) {
-        if (GameMessage.ABILITY_PROCEED.handles(telegram.message)) {
-            stateMachine.changeState(((AbilityState) telegram.extraInfo));
-            return true;
-        } else if (GameMessage.NEXT_STEP.handles(telegram.message)) {
+        if (GameMessage.NEXT_STEP.handles(telegram.message)) {
             stateMachine.changeState((AbilityState) telegram.extraInfo);
             return true;
         } else {
