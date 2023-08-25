@@ -11,7 +11,7 @@ import io.github.fourlastor.game.ui.UnitOnMap;
 
 public class Unit {
 
-    public final UnitOnMap actor;
+    public final UnitOnMap group;
     private final Label hpLabel;
     public final Hex hex;
     public final HexCoordinates coordinates;
@@ -19,8 +19,8 @@ public class Unit {
     private final int maxHp = 20;
     private int currentHp;
 
-    public Unit(UnitOnMap actor, Label hpLabel, GridPoint2 position, HexCoordinates coordinates, UnitType type) {
-        this.actor = actor;
+    public Unit(UnitOnMap unitOnMap, Label hpLabel, GridPoint2 position, HexCoordinates coordinates, UnitType type) {
+        this.group = unitOnMap;
         this.hex = new Hex(position);
         this.coordinates = coordinates;
         this.type = type;
@@ -50,14 +50,14 @@ public class Unit {
     }
 
     public Vector2 getActorPosition() {
-        return new Vector2(actor.getX(), actor.getY());
+        return new Vector2(group.getX(), group.getY());
     }
 
     public void setActorPosition(Vector2 targetPosition) {
-        actor.setPosition(targetPosition.x, targetPosition.y);
+        group.setPosition(targetPosition.x, targetPosition.y);
     }
 
     public void alignHpBar() {
-        hpLabel.setPosition(actor.getX() + actor.getWidth() / 2, actor.getY() + 40);
+        hpLabel.setPosition(group.getX() + group.getWidth() / 2, group.getY() + 40);
     }
 }
