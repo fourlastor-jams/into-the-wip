@@ -13,10 +13,11 @@ gretty="4.0.3"
 gwt-framework="2.8.2"
 gwt-plugin="1.1.18"
 harlequin="1.1.0"
-shadow = "7.1.2"
-spotless = "6.10.0"
 perceptual = "1.0.0"
 regexodus = "0.1.15"
+shadow = "7.1.2"
+simple-graphs = "5.1.1"
+spotless = "6.10.0"
 textratypist = "0.8.3"
 [libraries]
 ashley = { module = "com.badlogicgames.ashley:ashley", version.ref = "ashley" }
@@ -40,6 +41,7 @@ harlequin-core = { module = "io.github.fourlastor.gdx:harlequin", version.ref = 
 harlequin-ashley = { module = "io.github.fourlastor.gdx:harlequin-ashley", version.ref = "harlequin" }
 perceptual = { module = "io.github.fourlastor.gdx:perceptual", version.ref = "perceptual" }
 regexodus = { module = "com.github.tommyettinger:regexodus", version.ref = "regexodus" }
+simpleGraphs = { module = "space.earlygrey:simple-graphs", version.ref = "simple-graphs" }
 textratypist = { module = "com.github.tommyettinger:textratypist", version.ref = "textratypist" }
 [plugins]
 gretty = { id = "org.gretty", version.ref = "gretty" }
