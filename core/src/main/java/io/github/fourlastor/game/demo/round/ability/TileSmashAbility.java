@@ -33,10 +33,13 @@ public class TileSmashAbility extends Ability {
 
     @Override
     protected Builder<?> createSteps(GameState state) {
-        Predicate<SearchStep<Tile>> movementLogic = Filter.any(
-                Filter.canTravel(unit),
-                step -> unit.canTravel(step.previous()) && step.vertex().type == TileType.SOLID);
-        BiPredicate<GameState, Tile> searchLogic = Filter.all(Filter.canReach(state.tileAt(unit.hex), movementLogic));
+        Predicate<SearchStep<Tile>> movementLogic = Filter.all(
+                Filter.sameAxisAs(unit.hex),
+                Filter.any(
+                        Filter.canTravel(unit),
+                        step -> unit.canTravel(step.previous()) && step.vertex().type == TileType.SOLID));
+        BiPredicate<GameState, Tile> searchLogic =
+                Filter.all(Filter.canReach(state.tileAt(unit.hex), movementLogic), Filter.ofType(TileType.SOLID));
 
         return start(steps.searchTile(searchLogic)).sequence(hex -> {
             List<Tile> path =

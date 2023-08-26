@@ -11,7 +11,6 @@ import javax.inject.Inject;
 public class Steps {
 
     private final SearchTile.Factory searchTileFactory;
-    private final SearchSmashTile.Factory searchSmashTileFactory;
     private final SearchUnit.Factory searchUnitFactory;
     private final MoveStep.Factory moveFactory;
     private final AttackMelee.Factory attackMeleeFactory;
@@ -20,13 +19,11 @@ public class Steps {
     @Inject
     public Steps(
             SearchTile.Factory searchTileFactory,
-            SearchSmashTile.Factory searchSmashTileFactory,
             SearchUnit.Factory searchUnitFactory,
             MoveStep.Factory moveFactory,
             AttackMelee.Factory attackMeleeFactory,
             TileSmash.Factory tileSmashFactory) {
         this.searchTileFactory = searchTileFactory;
-        this.searchSmashTileFactory = searchSmashTileFactory;
         this.searchUnitFactory = searchUnitFactory;
         this.moveFactory = moveFactory;
         this.attackMeleeFactory = attackMeleeFactory;

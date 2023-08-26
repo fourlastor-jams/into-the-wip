@@ -10,8 +10,8 @@ import java.util.function.Predicate;
 import space.earlygrey.simplegraphs.algorithms.SearchStep;
 
 public interface Filter {
-    static BiPredicate<GameState, Tile> ofType(TileType... types) {
-        return (state, tile) -> Arrays.binarySearch(types, tile.type) > 0;
+    static BiPredicate<GameState, Tile> ofType(TileType type) {
+        return (state, tile) -> tile.type == type;
     }
 
     static <T> Predicate<T> all(Predicate<T>... filters) {
