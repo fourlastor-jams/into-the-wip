@@ -121,6 +121,7 @@ dependencies {
     sources(libs.jdkgdxds)
     sources(libs.textratypist)
     sources(libs.simpleGraphs)
+    sources(libs.squidLib.core)
     sources(libs.regexodus)
     sources(libs.harlequin.core)
     sources(libs.harlequin.ashley)

@@ -27,7 +27,7 @@
  </tile>
  <tile id="4">
   <properties>
-   <property name="unit" value="MON5"/>
+   <property name="unit" value="TECTONNE"/>
   </properties>
   <image width="30" height="41" source="monsters/monster-5.png"/>
  </tile>

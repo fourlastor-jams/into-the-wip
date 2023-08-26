@@ -3,23 +3,29 @@ package io.github.fourlastor.game.demo.state.unit;
 import java.util.Arrays;
 
 public enum UnitType {
-    CEREBRY("cerebry", true, 2),
-    BLOBHOT("blobhot", false, 3),
-    MON3("MON3", false, 3),
-    MON4("MON4", false, 3),
-    MON5("MON5", true, 3),
-    MON6("MON6", false, 3),
-    MON7("MON7", false, 3);
+    CEREBRY("cerebry", 2, true),
+    BLOBHOT("blobhot", 3, false),
+    MON3("MON3", 3, false),
+    MON4("MON4", 3, false),
+    TECTONNE("tectonne", 3, false),
+    MON6("MON6", 3, false),
+    MON7("MON7", 3, false);
 
     public final String mapName;
     public final boolean canFly;
+    public final boolean canSwim;
 
     public final int speed;
 
-    UnitType(String mapName, boolean canFly, int speed) {
+    UnitType(String mapName, int speed, boolean canFly) {
+        this(mapName, speed, canFly, false);
+    }
+
+    UnitType(String mapName, int speed, boolean canFly, boolean canSwim) {
         this.mapName = mapName;
-        this.canFly = canFly;
         this.speed = speed;
+        this.canFly = canFly;
+        this.canSwim = canSwim;
     }
 
     public static UnitType fromMap(String mapName) {

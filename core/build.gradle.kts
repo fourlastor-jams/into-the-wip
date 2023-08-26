@@ -56,6 +56,7 @@ dependencies {
     implementation(libs.ashley)
     implementation(libs.jdkgdxds)
     implementation(libs.simpleGraphs)
+    implementation(libs.squidLib.core)
     implementation(libs.textratypist)
     implementation(libs.dagger.core)
     api(libs.dagger.gwt)

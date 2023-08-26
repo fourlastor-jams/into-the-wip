@@ -53,8 +53,16 @@ public class Hex {
         return result;
     }
 
+    public boolean isOnSameAxisAs(Hex other) {
+        return cube.x == other.cube.x || cube.y == other.cube.y || cube.z == other.cube.z;
+    }
+
     public void set(Hex other) {
         offset.set(other.offset);
         cube.set(other.cube);
+    }
+
+    public boolean sameAxisAs(Hex hex) {
+        return hex.cube.x == cube.x || hex.cube.y == cube.y || hex.cube.z == cube.z;
     }
 }

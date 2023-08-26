@@ -2,13 +2,14 @@ package io.github.fourlastor.game.demo.state.map;
 
 import com.badlogic.gdx.ai.pfa.Connection;
 import com.badlogic.gdx.math.GridPoint2;
+import com.badlogic.gdx.math.Vector2;
 import io.github.fourlastor.game.coordinates.Hex;
 import io.github.fourlastor.game.ui.TileOnMap;
 
 public class Tile {
-    public final TileOnMap actor;
+    public TileOnMap actor;
     public final Hex hex;
-    public final TileType type;
+    public TileType type;
 
     public Tile(TileOnMap image, GridPoint2 position, TileType type) {
         this.actor = image;
@@ -40,5 +41,13 @@ public class Tile {
         public Tile getToNode() {
             return to;
         }
+    }
+
+    public Vector2 getActorPosition() {
+        return new Vector2(actor.getX(), actor.getY());
+    }
+
+    public void setActorPosition(Vector2 targetPosition) {
+        actor.setPosition(targetPosition.x, targetPosition.y);
     }
 }
