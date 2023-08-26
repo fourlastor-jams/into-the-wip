@@ -10,6 +10,7 @@ import com.badlogic.gdx.math.GridPoint2;
 import com.badlogic.gdx.math.GridPoint3;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Null;
+import com.badlogic.gdx.utils.Predicate;
 import com.github.tommyettinger.ds.IntObjectMap;
 import com.github.tommyettinger.ds.ObjectList;
 import com.github.tommyettinger.ds.ObjectObjectMap;
@@ -17,19 +18,20 @@ import com.github.tommyettinger.ds.ObjectSet;
 import io.github.fourlastor.game.coordinates.Hex;
 import io.github.fourlastor.game.coordinates.Packer;
 import io.github.fourlastor.game.demo.state.unit.Unit;
-import java.util.AbstractMap;
+import io.github.fourlastor.game.demo.state.unit.UnitType;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 public class MapGraph implements IndexedGraph<Tile> {
 
     private final Heuristic<Tile> heuristic = new TileHeuristic();
-    private final IntObjectMap<Tile> tiles;
-    private final List<Tile> indexed;
+    private final IntObjectMap<Tile> tiles; // (sheerst) Question: what does the index here represent?
+    public final List<Tile> indexed;
     private final Map<Tile, List<Connection<Tile>>> connections;
 
     public MapGraph() {
@@ -64,24 +66,94 @@ public class MapGraph implements IndexedGraph<Tile> {
 
     private final GridPoint2 cached = new GridPoint2();
 
+    /**
+     * Return a copy of this object.
+     *
+     * @return new MapGraph
+     */
+    public MapGraph cpy() {
+        List<Tile> newIndexed = new ArrayList<>(indexed);
+        IntObjectMap<Tile> newTiles = new IntObjectMap<>(tiles);
+        ObjectObjectMap<Tile, List<Connection<Tile>>> newConnections = new ObjectObjectMap<>(connections);
+        return new MapGraph(newTiles, newIndexed, newConnections);
+    }
+
+    /**
+     * Filter this MapGraph based on a List of conditionals and return the MapGraph.
+     *
+     * (sheerst) Note: this feels like a common usecase, I wonder if an existing library already handles this.
+     *
+     * @param conditionals
+     * @return new MapGraph
+     */
+    public MapGraph filter(List<Predicate<Tile>> conditionals) {
+        MapGraph newGraph = cpy();
+        indexed.stream().forEach(tile -> {
+            if (tile == null) return;
+            if (!conditionals.stream().allMatch(condition -> condition.evaluate(tile)))
+                newGraph.removeTile(tile.hex.offset);
+        });
+        return newGraph;
+    }
+
     /** Returns an instance of this graph specific for the unit, removing tiles the unit cannot pass and so forth. */
     public MapGraph forUnit(Unit unit) {
-        List<Tile> newIndexed =
-                this.indexed.stream().filter(unit::canTravel).collect(Collectors.toCollection(ObjectList::new));
-        IntObjectMap<Tile> newTiles = new IntObjectMap<>();
-        tiles.entrySet().stream()
-                .filter((it) -> newIndexed.contains(it.value))
-                .forEach((it) -> newTiles.put(it.key, it.value));
-        ObjectObjectMap<Tile, List<Connection<Tile>>> newConnections = new ObjectObjectMap<>();
-        connections.entrySet().stream()
-                .filter((it) -> newIndexed.contains(it.getKey()))
-                .map((it) -> new AbstractMap.SimpleEntry<>(
-                        it.getKey(),
-                        it.getValue().stream()
-                                .filter((connection) -> newIndexed.contains(connection.getToNode()))
-                                .collect(Collectors.toList())))
-                .forEach((it) -> newConnections.put(it.getKey(), it.getValue()));
+        List<Tile> newIndexed = new ArrayList<>();
 
+        // Perform a breadth-first search to determine which tiles are reachable
+        Set<Tile> reachableTiles = new HashSet<>();
+        LinkedList<Tile> queue = new LinkedList<Tile>();
+        Tile startTile = indexed.stream()
+                .filter((it) -> unit.hex.equals(it.hex))
+                .findFirst()
+                .get();
+
+        queue.add(startTile);
+
+        while (!queue.isEmpty()) {
+            Tile currentTile = queue.poll();
+            if (!reachableTiles.contains(currentTile)) {
+                reachableTiles.add(currentTile);
+
+                // Add neighboring tiles to the queue if they are passable and not solid.
+                // Special rules apply to Tectonne.
+                for (Connection<Tile> connection : connections.get(currentTile)) {
+                    Tile neighborTile = connection.getToNode();
+                    if (unit.type == UnitType.TECTONNE && neighborTile.type == TileType.SOLID) {
+                        reachableTiles.add(neighborTile);
+                        continue;
+                    }
+
+                    if (!unit.canTravel(neighborTile)) {
+                        continue;
+                    }
+                    queue.add(neighborTile);
+                }
+            }
+        }
+
+        // Filter the indexed tiles based on reachability
+        for (Tile tile : indexed) {
+            if (reachableTiles.contains(tile)) {
+                newIndexed.add(tile);
+            }
+        }
+
+        // Create new maps for tiles and connections
+        IntObjectMap<Tile> newTiles = new IntObjectMap<>();
+        ObjectObjectMap<Tile, List<Connection<Tile>>> newConnections = new ObjectObjectMap<>();
+
+        for (Tile tile : reachableTiles) {
+            newTiles.put(tiles.findKey(tile, 0), tile);
+
+            List<Connection<Tile>> newTileConnections = new ArrayList<>();
+            for (Connection<Tile> connection : connections.get(tile)) {
+                if (reachableTiles.contains(connection.getToNode())) {
+                    newTileConnections.add(connection);
+                }
+            }
+            newConnections.put(tile, newTileConnections);
+        }
         return new MapGraph(newTiles, newIndexed, newConnections);
     }
 

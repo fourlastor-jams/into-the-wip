@@ -26,6 +26,12 @@
   </properties>
   <image width="62" height="51" source="tiles/water.png"/>
  </tile>
+ <tile id="4">
+  <properties>
+   <property name="tile" value="Solid"/>
+  </properties>
+  <image width="62" height="80" source="tiles/mountain1.png"/>
+ </tile>
  <tile id="11">
   <properties>
    <property name="tile" value="Terrain"/>

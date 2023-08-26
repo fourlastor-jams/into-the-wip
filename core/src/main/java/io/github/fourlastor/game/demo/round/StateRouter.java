@@ -2,6 +2,7 @@ package io.github.fourlastor.game.demo.round;
 
 import com.badlogic.gdx.ai.msg.MessageDispatcher;
 import io.github.fourlastor.game.demo.round.ability.MeleeAttackAbility;
+import io.github.fourlastor.game.demo.round.ability.TileSmashAbility;
 import io.github.fourlastor.game.demo.round.step.StepState;
 import io.github.fourlastor.game.demo.state.unit.Unit;
 import javax.inject.Inject;
@@ -13,17 +14,20 @@ public class StateRouter {
     private final Provider<Round> roundProvider;
     private final Turn.Factory turnFactory;
     private final MeleeAttackAbility.Factory meleeAttackFactory;
+    private final TileSmashAbility.Factory tileSmashFactory;
 
     @Inject
     public StateRouter(
             MessageDispatcher dispatcher,
             Provider<Round> roundProvider,
             Turn.Factory turnFactory,
-            MeleeAttackAbility.Factory meleeAttackFactory) {
+            MeleeAttackAbility.Factory meleeAttackFactory,
+            TileSmashAbility.Factory tileSmashFactory) {
         this.dispatcher = dispatcher;
         this.roundProvider = roundProvider;
         this.turnFactory = turnFactory;
         this.meleeAttackFactory = meleeAttackFactory;
+        this.tileSmashFactory = tileSmashFactory;
     }
 
     public void startAbility(Ability ability) {

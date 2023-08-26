@@ -7,6 +7,7 @@ import dagger.assisted.AssistedFactory;
 import dagger.assisted.AssistedInject;
 import io.github.fourlastor.game.demo.round.ability.MeleeAttackAbility;
 import io.github.fourlastor.game.demo.round.ability.MoveAbility;
+import io.github.fourlastor.game.demo.round.ability.TileSmashAbility;
 import io.github.fourlastor.game.demo.state.GameState;
 import io.github.fourlastor.game.demo.state.unit.Unit;
 import io.github.fourlastor.game.ui.ActorSupport;
@@ -17,6 +18,7 @@ public class Turn extends RoundState {
     private final StateRouter router;
     private final MeleeAttackAbility.Factory meleeAttackFactory;
     private final MoveAbility.Factory moveFactory;
+    private final TileSmashAbility.Factory tileSmashFactory;
 
     private boolean acted = false;
 
@@ -25,18 +27,20 @@ public class Turn extends RoundState {
             @Assisted Unit unit,
             StateRouter router,
             MeleeAttackAbility.Factory meleeAttackFactory,
-            MoveAbility.Factory moveFactory) {
+            MoveAbility.Factory moveFactory,
+            TileSmashAbility.Factory tileSmashFactory) {
         this.unit = unit;
         this.router = router;
         this.meleeAttackFactory = meleeAttackFactory;
         this.moveFactory = moveFactory;
+        this.tileSmashFactory = tileSmashFactory;
     }
 
     @Override
     public void enter(GameState state) {
         if (!acted) {
             state.ui.meleeAttack.addListener(
-                    new PickMoveListener(() -> router.startAbility(meleeAttackFactory.create(unit))));
+                    new PickMoveListener(() -> router.startAbility(tileSmashFactory.create(unit))));
             state.ui.move.addListener(new PickMoveListener(() -> router.startAbility(moveFactory.create(unit))));
         } else {
             router.endOfTurn();

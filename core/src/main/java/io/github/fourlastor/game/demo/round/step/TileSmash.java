@@ -17,11 +17,10 @@ import io.github.fourlastor.game.demo.state.map.Tile;
 import io.github.fourlastor.game.demo.state.map.TileType;
 import io.github.fourlastor.game.demo.state.unit.Unit;
 
-public class AttackMelee extends SimpleStep {
+public class TileSmash extends SimpleStep {
 
     private final Unit source;
-    private Unit targetUnit;
-    private Tile targetTile;
+    private final Tile target;
     float moveDuration = 0.05f;
     // Amount to scale the animation by.
     private final Vector3 scale = new Vector3(1f / 16f, 1f, 1f);
@@ -29,9 +28,10 @@ public class AttackMelee extends SimpleStep {
     TextureAtlas textureAtlas;
 
     @AssistedInject
-    public AttackMelee(@Assisted("source") Unit source, @Assisted("target") Unit targetUnit) {
+    public TileSmash(@Assisted("source") Unit source, @Assisted("target") Tile target, TextureAtlas textureAtlas) {
         this.source = source;
-        this.targetUnit = targetUnit;
+        this.target = target;
+        this.textureAtlas = textureAtlas;
     }
 
     /**
@@ -75,7 +75,11 @@ public class AttackMelee extends SimpleStep {
             null,
             null,
             () -> {
-                if (targetUnit != null) targetUnit.refreshHpLabel();
+                if (target != null) {
+                    TextureRegion region = textureAtlas.findRegion("tiles/white");
+                    target.actor.setDrawable(new TextureRegionDrawable(region));
+                    target.actor.setSize(target.actor.getPrefWidth(), target.actor.getPrefHeight());
+                }
             },
             null,
             null,
@@ -87,7 +91,13 @@ public class AttackMelee extends SimpleStep {
         return AttackAnimation.makeSequence(source.group, runnables, positions, moveDuration, rotationDegrees, scale);
     }
 
-    public void doAttackAnimation(Vector2 originalPosition, Vector2 targetPosition, Runnable continuation) {
+    @Override
+    public void enter(GameState state, Runnable continuation) {
+
+        target.type = TileType.TERRAIN;
+
+        Vector2 originalPosition = new Vector2(source.getActorPosition());
+        Vector2 targetPosition = target.getActorPosition();
         // Distance between source and target is used to scale the animation if needed.
         float distance = source.getActorPosition().dst(targetPosition);
         // Angle offset of target from source.
@@ -99,44 +109,8 @@ public class AttackMelee extends SimpleStep {
         source.group.addAction(attackAnimation);
     }
 
-    public void attackUnit(Runnable continuation) {
-        targetUnit.changeHp(-damage);
-        Vector2 originalPosition = new Vector2(source.getActorPosition());
-        Vector2 targetPosition = targetUnit.getActorPosition();
-        doAttackAnimation(originalPosition, targetPosition, continuation);
-    }
-
-    public void smashTile(Runnable continuation) {
-        targetTile.type = TileType.TERRAIN;
-
-        TextureRegion region = textureAtlas.findRegion("tiles/white");
-        targetTile.actor.setDrawable(new TextureRegionDrawable(region));
-        targetTile.actor.setSize(targetTile.actor.getPrefWidth(), targetTile.actor.getPrefHeight());
-
-        Vector2 originalPosition = new Vector2(source.getActorPosition());
-        Vector2 targetPosition = targetTile.getActorPosition();
-        doAttackAnimation(originalPosition, targetPosition, continuation);
-    }
-
-    @Override
-    public void enter(GameState state, Runnable continuation) {
-        if (targetUnit != null) {
-            attackUnit(continuation);
-        } else if (targetTile != null) {
-            smashTile(continuation);
-        }
-    }
-
-    @Override
-    public void exit(GameState state) {
-        // optional cleanup
-    }
-
-    /**
-     * Factory interface for creating instances of the AttackMelee class.
-     */
     @AssistedFactory
     public interface Factory {
-        AttackMelee create(@Assisted("source") Unit source, @Assisted("target") Unit target);
+        TileSmash create(@Assisted("source") Unit source, @Assisted("target") Tile target);
     }
 }
