@@ -8,6 +8,7 @@ import dagger.assisted.AssistedFactory;
 import dagger.assisted.AssistedInject;
 import io.github.fourlastor.game.demo.round.ability.MeleeAttackAbility;
 import io.github.fourlastor.game.demo.round.ability.MoveAbility;
+import io.github.fourlastor.game.demo.round.ability.RangedAttackAbility;
 import io.github.fourlastor.game.demo.round.ability.TileSmashAbility;
 import io.github.fourlastor.game.demo.state.GameState;
 import io.github.fourlastor.game.demo.state.unit.Unit;
@@ -17,8 +18,9 @@ public class Turn extends RoundState {
 
     private final Unit unit;
     private final StateRouter router;
-    private final MeleeAttackAbility.Factory meleeAttackFactory;
     private final MoveAbility.Factory moveFactory;
+    private final MeleeAttackAbility.Factory meleeAttackFactory;
+    private final RangedAttackAbility.Factory rangedAttackFactory;
     private final TileSmashAbility.Factory tileSmashFactory;
 
     private boolean acted = false;
@@ -28,11 +30,13 @@ public class Turn extends RoundState {
             @Assisted Unit unit,
             StateRouter router,
             MeleeAttackAbility.Factory meleeAttackFactory,
+            RangedAttackAbility.Factory rangedAttackFactory,
             MoveAbility.Factory moveFactory,
             TileSmashAbility.Factory tileSmashFactory) {
         this.unit = unit;
         this.router = router;
         this.meleeAttackFactory = meleeAttackFactory;
+        this.rangedAttackFactory = rangedAttackFactory;
         this.moveFactory = moveFactory;
         this.tileSmashFactory = tileSmashFactory;
     }
@@ -50,6 +54,10 @@ public class Turn extends RoundState {
             // Melee attack button.
             state.ui.meleeAttack.addListener(new PickMoveListener(
                     () -> router.startAbility(meleeAttackFactory.create(unit, () -> acted = false))));
+
+            // Ranged attack button.
+            state.ui.rangedAttack.addListener(new PickMoveListener(
+                    () -> router.startAbility(rangedAttackFactory.create(unit, () -> acted = false))));
 
             // Tile smash ability button.
             state.ui.tileSmash.addListener(new PickMoveListener(

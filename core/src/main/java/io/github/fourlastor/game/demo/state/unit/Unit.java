@@ -45,6 +45,14 @@ public class Unit {
         }
     }
 
+    public boolean inLineOfSight(Tile tile) {
+        if (tile.type == TileType.WATER && (type.canSwim || type.canFly)) {
+            return true;
+        } else {
+            return tile.type.allowWalking;
+        }
+    }
+
     public void changeHp(int changeAmount) {
         setHp(currentHp + changeAmount);
     }
