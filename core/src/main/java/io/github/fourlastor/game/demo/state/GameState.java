@@ -6,7 +6,6 @@ import com.github.tommyettinger.ds.ObjectList;
 import io.github.fourlastor.game.coordinates.Hex;
 import io.github.fourlastor.game.demo.round.faction.Faction;
 import io.github.fourlastor.game.demo.state.map.GraphMap;
-import io.github.fourlastor.game.demo.state.map.MapGraph;
 import io.github.fourlastor.game.demo.state.map.Tile;
 import io.github.fourlastor.game.demo.state.unit.Unit;
 import io.github.fourlastor.game.ui.UiLayer;
@@ -18,7 +17,6 @@ public class GameState {
 
     public final ObjectList<Unit> units;
     public final ObjectList<Tile> tiles;
-    public final MapGraph graph;
     public final GraphMap newGraph;
     public final UiLayer ui;
 
@@ -26,11 +24,9 @@ public class GameState {
         this.units = units;
         this.tiles = tiles;
         this.ui = ui;
-        graph = new MapGraph();
         newGraph = new GraphMap();
         for (Tile tile : tiles) {
             newGraph.add(tile);
-            graph.addTile(tile);
         }
         for (Tile tile : tiles) {
             connectTiles(tile, adjacent(tile, 0, 1, -1));
@@ -71,11 +67,13 @@ public class GameState {
             return;
         }
         newGraph.connect(tile, adjacent);
-        graph.connect(tile, adjacent);
     }
 
     private Tile adjacent(Tile tile, int x, int y, int z) {
         GridPoint3 position = tile.hex.cube.cpy().add(x, y, z);
-        return graph.get(position);
+        return tiles.stream()
+                .filter(it -> it.hex.cube.equals(position))
+                .findFirst()
+                .orElse(null);
     }
 }
