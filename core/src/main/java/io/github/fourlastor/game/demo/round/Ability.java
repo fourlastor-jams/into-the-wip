@@ -29,7 +29,7 @@ public abstract class Ability extends RoundState {
     @Override
     public void enter(GameState state) {
         stateMachine = new StateMachine(state, new InitialState());
-        createSteps(state).run();
+        createSteps(state).run(ignored -> router.endOfAbility());
     }
 
     protected abstract Builder<?> createSteps(GameState state);
@@ -88,7 +88,7 @@ public abstract class Ability extends RoundState {
 
         public <R> Builder<R> sequence(Function<T, Builder<R>> factory) {
             return new Builder<>(
-                    (next) -> current.accept(result -> factory.apply(result).run()));
+                    (next) -> current.accept(result -> factory.apply(result).run(next)));
         }
 
         public <R> Builder<R> then(Step<R> next) {
@@ -100,8 +100,8 @@ public abstract class Ability extends RoundState {
                     current.accept(result -> router.nextStep(stateFactory.create(factory.apply(result), next))));
         }
 
-        public void run() {
-            current.accept(ignored -> router.endOfAbility());
+        public void run(Consumer<T> completion) {
+            current.accept(completion);
         }
     }
 }
