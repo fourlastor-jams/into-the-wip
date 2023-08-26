@@ -39,6 +39,10 @@ public interface Filter {
         return step -> step.distance() <= distance;
     }
 
+    static Predicate<SearchStep<Tile>> atDistance(int distance) {
+        return step -> step.distance() == distance;
+    }
+
     static Predicate<SearchStep<Tile>> canTravel(Unit unit) {
         return step -> unit.canTravel(step.vertex());
     }

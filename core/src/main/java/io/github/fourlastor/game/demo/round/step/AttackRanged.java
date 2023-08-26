@@ -19,9 +19,9 @@ public class AttackRanged extends SimpleStep {
     private final TextureAtlas textureAtlas;
 
     @AssistedInject
-    public AttackRanged(@Assisted Attack attack, TextureAtlas textureAtlas) {
-        this.source = attack.source;
-        this.target = attack.target;
+    public AttackRanged(@Assisted("source") Unit source, @Assisted("target") Unit target, TextureAtlas textureAtlas) {
+        this.source = source;
+        this.target = target;
         this.textureAtlas = textureAtlas;
         this.originalPosition.set(source.getActorPosition());
     }
@@ -56,19 +56,6 @@ public class AttackRanged extends SimpleStep {
      */
     @AssistedFactory
     public interface Factory {
-        AttackRanged create(Attack attack);
-    }
-
-    /**
-     * Represents an attack event with source and target units.
-     */
-    public static class Attack {
-        public final Unit source;
-        public final Unit target;
-
-        public Attack(Unit source, Unit target) {
-            this.source = source;
-            this.target = target;
-        }
+        AttackRanged create(@Assisted("source") Unit source, @Assisted("target") Unit target);
     }
 }
