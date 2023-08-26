@@ -11,6 +11,7 @@ import io.github.fourlastor.game.demo.state.map.Tile;
 import io.github.fourlastor.game.demo.state.unit.Unit;
 import io.github.fourlastor.game.ui.UiLayer;
 import java.util.List;
+import java.util.function.BiPredicate;
 import java.util.stream.Collectors;
 
 public class GameState {
@@ -39,6 +40,10 @@ public class GameState {
             connectTiles(tile, adjacent(tile, 1, -1, 0));
             connectTiles(tile, adjacent(tile, -1, 1, 0));
         }
+    }
+
+    public List<Tile> search(BiPredicate<GameState, Tile> filter) {
+        return tiles.stream().filter(tile -> filter.test(this, tile)).collect(Collectors.toCollection(ObjectList::new));
     }
 
     public void alignAllHpBars() {

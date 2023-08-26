@@ -8,31 +8,26 @@ import dagger.assisted.AssistedFactory;
 import dagger.assisted.AssistedInject;
 import io.github.fourlastor.game.coordinates.Hex;
 import io.github.fourlastor.game.demo.state.GameState;
-import io.github.fourlastor.game.demo.state.map.GraphMap;
 import io.github.fourlastor.game.demo.state.map.Tile;
 import io.github.fourlastor.game.demo.state.unit.Unit;
 import io.github.fourlastor.game.ui.ActorSupport;
 import java.util.List;
+import java.util.function.BiPredicate;
 import java.util.function.Consumer;
 
 public class SearchUnit extends Step<Hex> {
 
-    private final Hex hex;
-    private final GraphMap.Filter filter;
+    private final BiPredicate<GameState, Tile> filter;
 
     @AssistedInject
-    public SearchUnit(@Assisted Hex hex, @Assisted GraphMap.Filter filter) {
-        this.hex = hex;
+    public SearchUnit(@Assisted BiPredicate<GameState, Tile> filter) {
         this.filter = filter;
     }
 
     @Override
     public void enter(GameState state, Consumer<Hex> continuation) {
-        List<Tile> searched = state.newGraph.search(state.tileAt(hex), filter);
+        List<Tile> searched = state.search(filter);
         for (Tile tile : searched) {
-            if (tile.hex.equals(hex)) {
-                continue;
-            }
             Unit unit = state.unitAt(tile.hex);
             if (unit != null) {
                 unit.group.image.addListener(new SearchListener(unit, continuation));
@@ -52,7 +47,7 @@ public class SearchUnit extends Step<Hex> {
 
     @AssistedFactory
     public interface Factory {
-        SearchUnit create(Hex hex, GraphMap.Filter filter);
+        SearchUnit create(BiPredicate<GameState, Tile> filter);
     }
 
     private static class SearchListener extends ClickListener {

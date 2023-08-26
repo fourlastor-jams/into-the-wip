@@ -1,5 +1,6 @@
 package io.github.fourlastor.game.demo.round.ability;
 
+import com.github.tommyettinger.ds.ObjectList;
 import dagger.assisted.Assisted;
 import dagger.assisted.AssistedFactory;
 import dagger.assisted.AssistedInject;
@@ -7,11 +8,13 @@ import io.github.fourlastor.game.demo.round.Ability;
 import io.github.fourlastor.game.demo.round.StateRouter;
 import io.github.fourlastor.game.demo.round.step.StepState;
 import io.github.fourlastor.game.demo.round.step.Steps;
+import io.github.fourlastor.game.demo.state.Filter;
 import io.github.fourlastor.game.demo.state.GameState;
-import io.github.fourlastor.game.demo.state.map.GraphMap;
 import io.github.fourlastor.game.demo.state.map.Tile;
 import io.github.fourlastor.game.demo.state.unit.Unit;
-import space.earlygrey.simplegraphs.Path;
+import java.util.function.BiPredicate;
+import java.util.function.Predicate;
+import space.earlygrey.simplegraphs.algorithms.SearchStep;
 
 public class MeleeAttackAbility extends Ability {
 
@@ -27,13 +30,18 @@ public class MeleeAttackAbility extends Ability {
 
     @Override
     protected Builder<?> createSteps(GameState state) {
-        GraphMap.Filter movementLogic = GraphMap.Filter.all(
-                // TODO: add back the check for max distance = 1 when ability selection is ready
-                step -> unit.canTravel(step.vertex()));
-        return start(steps.searchUnit(unit.hex, movementLogic)).sequence(hex -> {
-            Path<Tile> path = state.newGraph.path(state.tileAt(unit.hex), state.tileAt(hex), movementLogic);
-            if (path.size >= 2) {
-                return start(steps.move(unit, path.get(path.size - 2), movementLogic))
+        Predicate<SearchStep<Tile>> movementLogic =
+                Filter.all(Filter.maxDistance(unit.type.speed), Filter.canTravel(unit));
+        BiPredicate<GameState, Tile> searchLogic = Filter.all(
+                Filter.canReach(state.tileAt(unit.hex), movementLogic),
+                Filter.hasUnit(),
+                (ignored, tile) -> !unit.hex.equals(tile.hex));
+        return start(steps.searchUnit(searchLogic)).sequence(hex -> {
+            ObjectList<Tile> path =
+                    new ObjectList<>(state.newGraph.path(state.tileAt(unit.hex), state.tileAt(hex), movementLogic));
+            if (path.size() >= 2) {
+                int tileIndex = path.size() - 1;
+                return start(steps.move(unit, path.get(tileIndex), path.subList(0, tileIndex)))
                         .then(steps.attackMelee(unit, state.unitAt(hex)));
             } else {
                 return start(steps.attackMelee(unit, state.unitAt(hex)));

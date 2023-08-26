@@ -1,9 +1,10 @@
 package io.github.fourlastor.game.demo.round.step;
 
-import io.github.fourlastor.game.coordinates.Hex;
-import io.github.fourlastor.game.demo.state.map.GraphMap;
+import io.github.fourlastor.game.demo.state.GameState;
 import io.github.fourlastor.game.demo.state.map.Tile;
 import io.github.fourlastor.game.demo.state.unit.Unit;
+import java.util.List;
+import java.util.function.BiPredicate;
 import javax.inject.Inject;
 
 public class Steps {
@@ -25,16 +26,16 @@ public class Steps {
         this.attackMeleeFactory = attackMeleeFactory;
     }
 
-    public SearchTile searchTile(Hex hex, GraphMap.Filter filter) {
-        return searchTileFactory.create(hex, filter);
+    public SearchTile searchTile(BiPredicate<GameState, Tile> filter) {
+        return searchTileFactory.create(filter);
     }
 
-    public SearchUnit searchUnit(Hex hex, GraphMap.Filter filter) {
-        return searchUnitFactory.create(hex, filter);
+    public SearchUnit searchUnit(BiPredicate<GameState, Tile> filter) {
+        return searchUnitFactory.create(filter);
     }
 
-    public MoveStep move(Unit unit, Tile tile, GraphMap.Filter filter) {
-        return moveFactory.create(unit, tile, filter);
+    public MoveStep move(Unit unit, Tile tile, List<Tile> path) {
+        return moveFactory.create(unit, tile, path);
     }
 
     public AttackMelee attackMelee(Unit source, Unit target) {
