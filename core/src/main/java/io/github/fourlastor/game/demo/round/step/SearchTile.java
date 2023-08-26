@@ -35,7 +35,7 @@ public class SearchTile extends Step<Hex> {
     @Override
     public void exit(GameState state) {
         for (Tile tile : state.tiles) {
-            if (ActorSupport.removeListeners(tile.actor, SearchListener.class)) {
+            if (ActorSupport.removeListeners(tile.actor, it -> it instanceof SearchListener)) {
                 tile.actor.setColor(Color.WHITE);
             }
         }

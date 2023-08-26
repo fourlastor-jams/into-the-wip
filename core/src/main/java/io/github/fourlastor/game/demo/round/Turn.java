@@ -49,8 +49,8 @@ public class Turn extends RoundState {
 
     @Override
     public void exit(GameState state) {
-        ActorSupport.removeListeners(state.ui.meleeAttack, PickMoveListener.class);
-        ActorSupport.removeListeners(state.ui.move, PickMoveListener.class);
+        ActorSupport.removeListeners(state.ui.meleeAttack, it -> it instanceof PickMoveListener);
+        ActorSupport.removeListeners(state.ui.move, it -> it instanceof PickMoveListener);
     }
 
     private class PickMoveListener extends ClickListener {

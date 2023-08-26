@@ -39,7 +39,7 @@ public class SearchUnit extends Step<Hex> {
     @Override
     public void exit(GameState state) {
         for (Unit unit : state.units) {
-            if (ActorSupport.removeListeners(unit.group.image, SearchListener.class)) {
+            if (ActorSupport.removeListeners(unit.group.image, it -> it instanceof SearchListener)) {
                 unit.group.image.setColor(Color.WHITE);
             }
         }
