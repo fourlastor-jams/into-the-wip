@@ -16,7 +16,9 @@
 	<inherits name="com.github.tommyettinger.jdkgdxds" />
 	<inherits name="simple_graphs" />
 	<inherits name="squidpony.squidlib-util" />
-
+	<extend-configuration-property name="gdx.reflect.include" value="com.badlogic.gdx.maps.MapGroupLayer" />
+	<extend-configuration-property name="gdx.reflect.include" value="com.badlogic.gdx.maps.tiled.TiledMapTileLayer" />
+	<extend-configuration-property name="gdx.reflect.include" value="com.badlogic.gdx.graphics.g2d.TextureAtlas" />
 	<entry-point class="io.github.fourlastor.game.client.HtmlLauncher" />
 	<set-configuration-property name="xsiframe.failIfScriptTag" value="FALSE"/>
 	<set-configuration-property name="gdx.assetpath" value="../assets" />
