@@ -4,6 +4,7 @@ import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.tiled.AtlasTmxMapLoader;
@@ -21,12 +22,14 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.github.tommyettinger.ds.ObjectList;
 import io.github.fourlastor.game.coordinates.HexCoordinates;
 import io.github.fourlastor.game.demo.round.GameStateMachine;
+import io.github.fourlastor.game.demo.round.faction.Faction;
 import io.github.fourlastor.game.demo.state.GameState;
 import io.github.fourlastor.game.demo.state.map.Tile;
 import io.github.fourlastor.game.demo.state.map.TileType;
 import io.github.fourlastor.game.demo.state.unit.Unit;
 import io.github.fourlastor.game.demo.state.unit.UnitType;
 import io.github.fourlastor.game.ui.TileOnMap;
+import io.github.fourlastor.game.ui.UiLayer;
 import io.github.fourlastor.game.ui.UnitOnMap;
 import io.github.fourlastor.game.ui.YSort;
 import javax.inject.Inject;
@@ -47,7 +50,8 @@ public class DemoScreen extends ScreenAdapter {
             AssetManager assetManager,
             Viewport viewport,
             Stage stage,
-            InputMultiplexer multiplexer) {
+            InputMultiplexer multiplexer,
+            TextureAtlas atlas) {
         this.viewport = viewport;
         this.stage = stage;
         this.multiplexer = multiplexer;
@@ -56,6 +60,7 @@ public class DemoScreen extends ScreenAdapter {
         int hexSideLength = map.getProperties().get("hexsidelength", Integer.class);
         ObjectList<Unit> units = new ObjectList<>();
         ObjectList<Tile> tiles = new ObjectList<>();
+        int factionIndex = 0;
         for (MapLayer mapLayer : map.getLayers()) {
 
             if (!(mapLayer instanceof TiledMapTileLayer)) {
@@ -92,8 +97,16 @@ public class DemoScreen extends ScreenAdapter {
                         // Set up the Hp bar Label.
                         Label hpLabel = new Label("", hpLabelStyle);
                         hpLabel.setAlignment(Align.center);
+                        Faction faction = Faction.values()[factionIndex];
+                        factionIndex += 1;
+                        factionIndex %= Faction.values().length;
                         Unit unit = new Unit(
-                                unitOnMap, hpLabel, new GridPoint2(x, y), coordinates, UnitType.fromMap(mapUnitType));
+                                faction,
+                                unitOnMap,
+                                hpLabel,
+                                new GridPoint2(x, y),
+                                coordinates,
+                                UnitType.fromMap(mapUnitType));
                         ySort.addActor(unitOnMap);
                         ySort.addActor(hpLabel);
                         units.add(unit);
@@ -112,7 +125,9 @@ public class DemoScreen extends ScreenAdapter {
             ySort.sortChildren();
             this.stage.addActor(ySort);
         }
-        state = new GameState(units, tiles);
+        UiLayer ui = new UiLayer(atlas);
+        stage.addActor(ui);
+        state = new GameState(units, tiles, ui);
         stateMachine = stateMachineFactory.create(state);
     }
 

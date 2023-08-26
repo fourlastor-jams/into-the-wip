@@ -1,10 +1,11 @@
 package io.github.fourlastor.game.demo.round.step;
 
 import com.badlogic.gdx.math.Interpolation;
-import io.github.fourlastor.game.coordinates.Hex;
-import io.github.fourlastor.game.demo.state.map.GraphMap;
+import io.github.fourlastor.game.demo.state.GameState;
 import io.github.fourlastor.game.demo.state.map.Tile;
 import io.github.fourlastor.game.demo.state.unit.Unit;
+import java.util.List;
+import java.util.function.BiPredicate;
 import javax.inject.Inject;
 
 public class Steps {
@@ -32,23 +33,19 @@ public class Steps {
         this.tileSmashFactory = tileSmashFactory;
     }
 
-    public SearchTile searchTile(Hex hex, GraphMap.Filter filter) {
-        return searchTileFactory.create(hex, filter);
+    public SearchTile searchTile(BiPredicate<GameState, Tile> filter) {
+        return searchTileFactory.create(filter);
     }
 
-    public SearchSmashTile searchSmashTile(Hex hex, GraphMap.Filter filter) {
-        return searchSmashTileFactory.create(hex, filter);
+    public SearchUnit searchUnit(BiPredicate<GameState, Tile> filter) {
+        return searchUnitFactory.create(filter);
     }
 
-    public SearchUnit searchUnit(Hex hex, GraphMap.Filter filter) {
-        return searchUnitFactory.create(hex, filter);
-    }
-
-    public MoveStep move(Unit unit, Tile tile, GraphMap.Filter filter) {
+    public MoveStep move(Unit unit, Tile tile, List<Tile> filter) {
         return move(unit, tile, filter, Interpolation.sine);
     }
 
-    public MoveStep move(Unit unit, Tile tile, GraphMap.Filter filter, Interpolation interpolation) {
+    public MoveStep move(Unit unit, Tile tile, List<Tile> filter, Interpolation interpolation) {
         return moveFactory.create(unit, tile, filter, interpolation);
     }
 

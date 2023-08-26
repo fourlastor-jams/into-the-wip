@@ -30,8 +30,8 @@ public class StateRouter {
         this.tileSmashFactory = tileSmashFactory;
     }
 
-    public void startAbility(Unit unit) {
-        dispatcher.dispatchMessage(GameMessage.ABILITY_START.ordinal(), tileSmashFactory.create(unit));
+    public void startAbility(Ability ability) {
+        dispatcher.dispatchMessage(GameMessage.ABILITY_START.ordinal(), ability);
     }
 
     public void round() {

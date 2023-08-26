@@ -61,4 +61,8 @@ public class Hex {
         offset.set(other.offset);
         cube.set(other.cube);
     }
+
+    public boolean sameAxisAs(Hex hex) {
+        return hex.cube.x == cube.x || hex.cube.y == cube.y || hex.cube.z == cube.z;
+    }
 }

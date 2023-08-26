@@ -9,37 +9,32 @@ import dagger.assisted.AssistedFactory;
 import dagger.assisted.AssistedInject;
 import io.github.fourlastor.game.coordinates.Hex;
 import io.github.fourlastor.game.demo.state.GameState;
-import io.github.fourlastor.game.demo.state.map.GraphMap;
 import io.github.fourlastor.game.demo.state.map.Tile;
-import io.github.fourlastor.game.demo.state.map.TileType;
-import java.util.List;
 import java.util.function.Consumer;
 
 public class SearchSmashTile extends Step<Hex> {
 
     private final Hex hex;
-    private final GraphMap.Filter filter;
 
     @AssistedInject
-    public SearchSmashTile(@Assisted Hex hex, @Assisted GraphMap.Filter filter) {
+    public SearchSmashTile(@Assisted Hex hex) {
         this.hex = hex;
-        this.filter = filter;
     }
 
     @Override
     public void enter(GameState state, Consumer<Hex> continuation) {
-        List<Tile> searched = state.newGraph.search(state.tileAt(hex), filter);
-        for (Tile tile : searched) {
-            if (tile.hex.equals(hex)) {
-                continue;
-            }
-            if (tile.type == TileType.SOLID) {
-                tile.actor.addListener(new SearchListener(tile, continuation));
-                tile.actor.setColor(Color.YELLOW);
-            } else {
-                tile.actor.setColor(Color.CORAL);
-            }
-        }
+        //        List<Tile> searched = state.newGraph.search(state.tileAt(hex), filter);
+        //        for (Tile tile : searched) {
+        //            if (tile.hex.equals(hex)) {
+        //                continue;
+        //            }
+        //            if (tile.type == TileType.SOLID) {
+        //                tile.actor.addListener(new SearchListener(tile, continuation));
+        //                tile.actor.setColor(Color.YELLOW);
+        //            } else {
+        //                tile.actor.setColor(Color.CORAL);
+        //            }
+        //        }
     }
 
     @Override
@@ -56,7 +51,7 @@ public class SearchSmashTile extends Step<Hex> {
 
     @AssistedFactory
     public interface Factory {
-        SearchSmashTile create(Hex hex, GraphMap.Filter filter);
+        SearchSmashTile create(Hex hex);
     }
 
     private static class SearchListener extends ClickListener {
