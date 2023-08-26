@@ -53,11 +53,7 @@ public class MoveStep extends SimpleStep {
     }
 
     @AssistedFactory
-    public abstract static class Factory {
-        public abstract MoveStep create(Unit unit, Tile tile, List<Tile> path, Interpolation interpolation);
-
-        public MoveStep create(Unit unit, Tile tile, List<Tile> path) {
-            return create(unit, tile, path, Interpolation.sine);
-        }
+    public interface Factory {
+        MoveStep create(Unit unit, Tile tile, List<Tile> path, Interpolation interpolation);
     }
 }
