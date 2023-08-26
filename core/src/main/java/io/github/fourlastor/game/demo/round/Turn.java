@@ -1,5 +1,6 @@
 package io.github.fourlastor.game.demo.round;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import dagger.assisted.Assisted;
@@ -38,13 +39,14 @@ public class Turn extends RoundState {
 
     @Override
     public void enter(GameState state) {
+
+        state.tileAt(unit.hex).actor.setColor(Color.PINK);
+
         if (!acted) {
             state.ui.meleeAttack.addListener(new PickMoveListener(
                     () -> router.startAbility(tileSmashFactory.create(unit, () -> acted = false))));
             state.ui.move.addListener(
                     new PickMoveListener(() -> router.startAbility(moveFactory.create(unit, () -> acted = false))));
-
-                    
         } else {
             router.endOfTurn();
         }
@@ -52,6 +54,7 @@ public class Turn extends RoundState {
 
     @Override
     public void exit(GameState state) {
+        state.tileAt(unit.hex).actor.setColor(Color.WHITE);
         ActorSupport.removeListeners(state.ui.meleeAttack, it -> it instanceof PickMoveListener);
         ActorSupport.removeListeners(state.ui.move, it -> it instanceof PickMoveListener);
     }
