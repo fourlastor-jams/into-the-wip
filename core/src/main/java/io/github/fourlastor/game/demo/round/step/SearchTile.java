@@ -1,7 +1,6 @@
 package io.github.fourlastor.game.demo.round.step;
 
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import dagger.assisted.Assisted;
@@ -11,6 +10,7 @@ import io.github.fourlastor.game.coordinates.Hex;
 import io.github.fourlastor.game.demo.state.GameState;
 import io.github.fourlastor.game.demo.state.map.GraphMap;
 import io.github.fourlastor.game.demo.state.map.Tile;
+import io.github.fourlastor.game.ui.ActorSupport;
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -40,10 +40,7 @@ public class SearchTile extends Step<Hex> {
     @Override
     public void exit(GameState state) {
         for (Tile tile : state.tiles) {
-            for (EventListener listener : tile.actor.getListeners()) {
-                if (listener instanceof SearchListener) {
-                    tile.actor.removeListener(listener);
-                }
+            if (ActorSupport.removeListeners(tile.actor, SearchListener.class)) {
                 tile.actor.setColor(Color.WHITE);
             }
         }
