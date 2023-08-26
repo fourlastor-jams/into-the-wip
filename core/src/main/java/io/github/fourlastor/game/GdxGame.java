@@ -17,8 +17,6 @@ public class GdxGame extends Game implements Router {
 
     private Screen pendingScreen = null;
 
-    public static boolean debugMode = true;
-
     @Inject
     public GdxGame(InputMultiplexer multiplexer, DemoComponent.Builder demoComponentBuilder) {
         this.multiplexer = multiplexer;
