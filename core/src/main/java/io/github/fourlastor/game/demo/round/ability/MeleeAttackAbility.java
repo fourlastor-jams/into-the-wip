@@ -22,8 +22,13 @@ public class MeleeAttackAbility extends Ability {
     private final Steps steps;
 
     @AssistedInject
-    public MeleeAttackAbility(@Assisted Unit unit, StateRouter router, StepState.Factory stateFactory, Steps steps) {
-        super(router, stateFactory);
+    public MeleeAttackAbility(
+            @Assisted Unit unit,
+            @Assisted Runnable cancel,
+            StateRouter router,
+            StepState.Factory stateFactory,
+            Steps steps) {
+        super(router, stateFactory, cancel);
         this.unit = unit;
         this.steps = steps;
     }
@@ -51,6 +56,6 @@ public class MeleeAttackAbility extends Ability {
 
     @AssistedFactory
     public interface Factory {
-        MeleeAttackAbility create(Unit unit);
+        MeleeAttackAbility create(Unit unit, Runnable cancel);
     }
 }

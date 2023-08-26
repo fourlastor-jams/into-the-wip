@@ -8,7 +8,7 @@ public abstract class SimpleStep extends Step<Void> {
     public abstract void enter(GameState state, Runnable continuation);
 
     @Override
-    public void enter(GameState state, Consumer<Void> continuation) {
+    public void enter(GameState state, Consumer<Void> continuation, Runnable cancel) {
         enter(state, () -> continuation.accept(null));
     }
 }

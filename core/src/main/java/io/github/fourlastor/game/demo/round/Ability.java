@@ -5,6 +5,7 @@ import com.badlogic.gdx.ai.msg.Telegram;
 import io.github.fourlastor.game.demo.round.step.Step;
 import io.github.fourlastor.game.demo.round.step.StepState;
 import io.github.fourlastor.game.demo.state.GameState;
+import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
@@ -12,10 +13,12 @@ public abstract class Ability extends RoundState {
     private final StateRouter router;
     private StateMachine stateMachine;
     private final StepState.Factory stateFactory;
+    private final Runnable cancel;
 
-    public Ability(StateRouter router, StepState.Factory stateFactory) {
+    public Ability(StateRouter router, StepState.Factory stateFactory, Runnable cancel) {
         this.router = router;
         this.stateFactory = stateFactory;
+        this.cancel = cancel;
     }
 
     protected <T> Builder<T> start(Step<T> initial) {
@@ -29,7 +32,10 @@ public abstract class Ability extends RoundState {
     @Override
     public void enter(GameState state) {
         stateMachine = new StateMachine(state, new InitialState());
-        createSteps(state).run();
+        createSteps(state).run(ignored -> router.endOfAbility(), () -> {
+            cancel.run();
+            router.endOfAbility();
+        });
     }
 
     protected abstract Builder<?> createSteps(GameState state);
@@ -72,23 +78,23 @@ public abstract class Ability extends RoundState {
 
     protected class Builder<T> {
 
-        private final Consumer<Consumer<T>> current;
+        private final BiConsumer<Consumer<T>, Runnable> current;
 
         private Builder(T initial) {
-            current = next -> next.accept(initial);
+            current = (next, cancel) -> next.accept(initial);
         }
 
         private Builder(Step<T> initial) {
-            current = next -> router.nextStep(stateFactory.create(initial, next));
+            current = (next, cancel) -> router.nextStep(stateFactory.create(initial, next, cancel));
         }
 
-        private Builder(Consumer<Consumer<T>> initial) {
+        private Builder(BiConsumer<Consumer<T>, Runnable> initial) {
             current = initial;
         }
 
         public <R> Builder<R> sequence(Function<T, Builder<R>> factory) {
-            return new Builder<>(
-                    (next) -> current.accept(result -> factory.apply(result).run()));
+            return new Builder<>((next, cancel) ->
+                    current.accept(result -> factory.apply(result).run(next, cancel), cancel));
         }
 
         public <R> Builder<R> then(Step<R> next) {
@@ -96,12 +102,12 @@ public abstract class Ability extends RoundState {
         }
 
         public <R> Builder<R> then(Function<T, Step<R>> factory) {
-            return new Builder<>((next) ->
-                    current.accept(result -> router.nextStep(stateFactory.create(factory.apply(result), next))));
+            return new Builder<>((next, cancel) -> current.accept(
+                    result -> router.nextStep(stateFactory.create(factory.apply(result), next, cancel)), cancel));
         }
 
-        public void run() {
-            current.accept(ignored -> router.endOfAbility());
+        public void run(Consumer<T> completion, Runnable cancellation) {
+            current.accept(completion, cancellation);
         }
     }
 }
