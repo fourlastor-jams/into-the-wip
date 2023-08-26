@@ -71,9 +71,15 @@ public class GameState {
 
     private Tile adjacent(Tile tile, int x, int y, int z) {
         GridPoint3 position = tile.hex.cube.cpy().add(x, y, z);
-        return tiles.stream()
-                .filter(it -> it.hex.cube.equals(position))
-                .findFirst()
-                .orElse(null);
+        // inside an iterator for loop already
+        // and it would cause issues in GWT
+        //noinspection ForLoopReplaceableByForEach
+        for (int i = 0; i < tiles.size(); i++) {
+            Tile it = tiles.get(i);
+            if (it.hex.cube.equals(position)) {
+                return it;
+            }
+        }
+        return null;
     }
 }
