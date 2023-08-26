@@ -43,7 +43,7 @@ public class TileSmashAbility extends Ability {
 
         return start(steps.searchTile(searchLogic)).sequence(hex -> {
             List<Tile> path =
-                    new ObjectList<>(state.newGraph.path(state.tileAt(unit.hex), state.tileAt(hex), movementLogic));
+                    new ObjectList<>(state.graph.path(state.tileAt(unit.hex), state.tileAt(hex), movementLogic));
             if (path.size() >= 2) {
                 return start(steps.move(unit, path.get(path.size() - 2), path, Interpolation.linear))
                         .then(steps.tileSmash(unit, state.tileAt(hex)));

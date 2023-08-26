@@ -17,16 +17,16 @@ public class GameState {
 
     public final ObjectList<Unit> units;
     public final ObjectList<Tile> tiles;
-    public final GraphMap newGraph;
+    public final GraphMap graph;
     public final UiLayer ui;
 
     public GameState(ObjectList<Unit> units, ObjectList<Tile> tiles, UiLayer ui) {
         this.units = units;
         this.tiles = tiles;
         this.ui = ui;
-        newGraph = new GraphMap();
+        this.graph = new GraphMap();
         for (Tile tile : tiles) {
-            newGraph.add(tile);
+            graph.add(tile);
         }
         for (Tile tile : tiles) {
             connectTiles(tile, adjacent(tile, 0, 1, -1));
@@ -66,7 +66,7 @@ public class GameState {
         if (adjacent == null) {
             return;
         }
-        newGraph.connect(tile, adjacent);
+        graph.connect(tile, adjacent);
     }
 
     private Tile adjacent(Tile tile, int x, int y, int z) {

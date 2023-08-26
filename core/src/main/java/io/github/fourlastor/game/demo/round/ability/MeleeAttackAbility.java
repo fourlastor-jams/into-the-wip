@@ -38,7 +38,7 @@ public class MeleeAttackAbility extends Ability {
                 (ignored, tile) -> !unit.hex.equals(tile.hex));
         return start(steps.searchUnit(searchLogic)).sequence(hex -> {
             ObjectList<Tile> path =
-                    new ObjectList<>(state.newGraph.path(state.tileAt(unit.hex), state.tileAt(hex), movementLogic));
+                    new ObjectList<>(state.graph.path(state.tileAt(unit.hex), state.tileAt(hex), movementLogic));
             if (path.size() >= 2) {
                 int tileIndex = path.size() - 1;
                 return start(steps.move(unit, path.get(tileIndex), path.subList(0, tileIndex)))

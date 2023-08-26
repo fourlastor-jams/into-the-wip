@@ -37,8 +37,7 @@ public class MoveAbility extends Ability {
                 .then(hex -> steps.move(
                         unit,
                         state.tileAt(hex),
-                        new ObjectList<>(
-                                state.newGraph.path(state.tileAt(unit.hex), state.tileAt(hex), movementLogic))));
+                        new ObjectList<>(state.graph.path(state.tileAt(unit.hex), state.tileAt(hex), movementLogic))));
     }
 
     @AssistedFactory

@@ -31,7 +31,7 @@ public interface Filter {
     }
 
     static BiPredicate<GameState, Tile> canReach(Tile origin, Predicate<SearchStep<Tile>> filter) {
-        return (state, tile) -> !state.newGraph.path(origin, tile, filter).isEmpty();
+        return (state, tile) -> !state.graph.path(origin, tile, filter).isEmpty();
     }
 
     /* Movement filters - directly on SearchStep<Tile>. */
