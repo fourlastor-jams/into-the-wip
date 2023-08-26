@@ -5,11 +5,13 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import io.github.fourlastor.game.coordinates.Hex;
 import io.github.fourlastor.game.coordinates.HexCoordinates;
+import io.github.fourlastor.game.demo.round.faction.Faction;
 import io.github.fourlastor.game.demo.state.map.Tile;
 import io.github.fourlastor.game.ui.UnitOnMap;
 
 public class Unit {
 
+    public final Faction faction;
     public final UnitOnMap group;
     private final Label hpLabel;
     public final Hex hex;
@@ -18,7 +20,14 @@ public class Unit {
     private final int maxHp = 20;
     private int currentHp;
 
-    public Unit(UnitOnMap unitOnMap, Label hpLabel, GridPoint2 position, HexCoordinates coordinates, UnitType type) {
+    public Unit(
+            Faction faction,
+            UnitOnMap unitOnMap,
+            Label hpLabel,
+            GridPoint2 position,
+            HexCoordinates coordinates,
+            UnitType type) {
+        this.faction = faction;
         this.group = unitOnMap;
         this.hex = new Hex(position);
         this.coordinates = coordinates;

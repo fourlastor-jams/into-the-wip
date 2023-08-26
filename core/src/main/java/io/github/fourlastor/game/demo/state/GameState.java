@@ -4,10 +4,13 @@ import com.badlogic.gdx.math.GridPoint3;
 import com.badlogic.gdx.utils.Null;
 import com.github.tommyettinger.ds.ObjectList;
 import io.github.fourlastor.game.coordinates.Hex;
+import io.github.fourlastor.game.demo.round.faction.Faction;
 import io.github.fourlastor.game.demo.state.map.GraphMap;
 import io.github.fourlastor.game.demo.state.map.MapGraph;
 import io.github.fourlastor.game.demo.state.map.Tile;
 import io.github.fourlastor.game.demo.state.unit.Unit;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class GameState {
 
@@ -39,6 +42,10 @@ public class GameState {
         for (Unit unit : units) {
             unit.alignHpBar();
         }
+    }
+
+    public List<Unit> byFaction(Faction faction) {
+        return units.stream().filter(it -> it.faction == faction).collect(Collectors.toCollection(ObjectList::new));
     }
 
     @Null

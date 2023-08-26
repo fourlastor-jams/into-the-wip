@@ -21,6 +21,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.github.tommyettinger.ds.ObjectList;
 import io.github.fourlastor.game.coordinates.HexCoordinates;
 import io.github.fourlastor.game.demo.round.GameStateMachine;
+import io.github.fourlastor.game.demo.round.faction.Faction;
 import io.github.fourlastor.game.demo.state.GameState;
 import io.github.fourlastor.game.demo.state.map.Tile;
 import io.github.fourlastor.game.demo.state.map.TileType;
@@ -56,6 +57,7 @@ public class DemoScreen extends ScreenAdapter {
         int hexSideLength = map.getProperties().get("hexsidelength", Integer.class);
         ObjectList<Unit> units = new ObjectList<>();
         ObjectList<Tile> tiles = new ObjectList<>();
+        int factionIndex = 0;
         for (MapLayer mapLayer : map.getLayers()) {
 
             if (!(mapLayer instanceof TiledMapTileLayer)) {
@@ -92,8 +94,16 @@ public class DemoScreen extends ScreenAdapter {
                         // Set up the Hp bar Label.
                         Label hpLabel = new Label("", hpLabelStyle);
                         hpLabel.setAlignment(Align.center);
+                        Faction faction = Faction.values()[factionIndex];
+                        factionIndex += 1;
+                        factionIndex %= Faction.values().length;
                         Unit unit = new Unit(
-                                unitOnMap, hpLabel, new GridPoint2(x, y), coordinates, UnitType.fromMap(mapUnitType));
+                                faction,
+                                unitOnMap,
+                                hpLabel,
+                                new GridPoint2(x, y),
+                                coordinates,
+                                UnitType.fromMap(mapUnitType));
                         ySort.addActor(unitOnMap);
                         ySort.addActor(hpLabel);
                         units.add(unit);

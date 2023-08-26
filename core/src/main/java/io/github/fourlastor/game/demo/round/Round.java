@@ -1,10 +1,13 @@
 package io.github.fourlastor.game.demo.round;
 
 import com.github.tommyettinger.ds.ObjectList;
+import io.github.fourlastor.game.demo.round.faction.Faction;
 import io.github.fourlastor.game.demo.state.GameState;
 import io.github.fourlastor.game.demo.state.unit.Unit;
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 import javax.inject.Inject;
 import squidpony.squidmath.IRNG;
 
@@ -26,11 +29,10 @@ public class Round extends RoundState {
     @Override
     public void enter(GameState state) {
         if (turns == null) {
-            turns = new ObjectList<>(state.units.size());
-            for (Unit unit : state.units) {
-                turns.add(new TurnOrder(unit, rng.nextInt(20)));
-            }
-            turns.sort(BY_INITIATIVE);
+            turns = Arrays.stream(Faction.values())
+                    .flatMap(faction -> state.byFaction(faction).stream())
+                    .map(unit -> new TurnOrder(unit, 0))
+                    .collect(Collectors.toCollection(ObjectList::new));
             startFirstTurn();
         } else {
             advanceToNextTurn();
