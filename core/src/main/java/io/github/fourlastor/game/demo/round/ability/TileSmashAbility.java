@@ -25,8 +25,13 @@ public class TileSmashAbility extends Ability {
     private final Steps steps;
 
     @AssistedInject
-    public TileSmashAbility(@Assisted Unit unit, StateRouter router, StepState.Factory stateFactory, Steps steps) {
-        super(router, stateFactory);
+    public TileSmashAbility(
+            @Assisted Unit unit,
+            @Assisted Runnable cancel,
+            StateRouter router,
+            StepState.Factory stateFactory,
+            Steps steps) {
+        super(router, stateFactory, cancel);
         this.unit = unit;
         this.steps = steps;
     }
@@ -55,6 +60,6 @@ public class TileSmashAbility extends Ability {
 
     @AssistedFactory
     public interface Factory {
-        TileSmashAbility create(Unit unit);
+        TileSmashAbility create(Unit unit, Runnable cancel);
     }
 }

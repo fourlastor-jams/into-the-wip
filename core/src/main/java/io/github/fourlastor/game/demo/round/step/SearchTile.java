@@ -1,5 +1,7 @@
 package io.github.fourlastor.game.demo.round.step;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
@@ -24,11 +26,18 @@ public class SearchTile extends Step<Hex> {
     }
 
     @Override
-    public void enter(GameState state, Consumer<Hex> continuation) {
+    public void enter(GameState state, Consumer<Hex> continuation, Runnable cancel) {
         List<Tile> searched = state.search(filter);
         for (Tile tile : searched) {
             tile.actor.addListener(new SearchListener(tile, continuation));
             tile.actor.setColor(Color.CORAL);
+        }
+    }
+
+    @Override
+    public void update(GameState state, Consumer<Hex> next, Runnable cancel) {
+        if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
+            cancel.run();
         }
     }
 

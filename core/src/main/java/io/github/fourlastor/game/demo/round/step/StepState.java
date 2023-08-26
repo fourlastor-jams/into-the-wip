@@ -10,15 +10,22 @@ public class StepState<T> extends AbilityState {
 
     private final Step<T> step;
     private final Consumer<T> next;
+    private final Runnable cancel;
 
-    public StepState(Step<T> step, Consumer<T> next) {
+    public StepState(Step<T> step, Consumer<T> next, Runnable cancel) {
         this.step = step;
         this.next = next;
+        this.cancel = cancel;
     }
 
     @Override
     public void enter(GameState state) {
-        step.enter(state, next);
+        step.enter(state, next, cancel);
+    }
+
+    @Override
+    public void update(GameState state) {
+        step.update(state, next, cancel);
     }
 
     @Override
@@ -36,8 +43,8 @@ public class StepState<T> extends AbilityState {
         @Inject
         public Factory() {}
 
-        public <T> StepState<T> create(Step<T> step, Consumer<T> next) {
-            return new StepState<>(step, next);
+        public <T> StepState<T> create(Step<T> step, Consumer<T> next, Runnable cancel) {
+            return new StepState<>(step, next, cancel);
         }
     }
 }

@@ -22,8 +22,13 @@ public class MoveAbility extends Ability {
     private final Steps steps;
 
     @AssistedInject
-    public MoveAbility(@Assisted Unit unit, StateRouter router, StepState.Factory stateFactory, Steps steps) {
-        super(router, stateFactory);
+    public MoveAbility(
+            @Assisted Unit unit,
+            @Assisted Runnable cancel,
+            StateRouter router,
+            StepState.Factory stateFactory,
+            Steps steps) {
+        super(router, stateFactory, cancel);
         this.unit = unit;
         this.steps = steps;
     }
@@ -42,6 +47,6 @@ public class MoveAbility extends Ability {
 
     @AssistedFactory
     public interface Factory {
-        MoveAbility create(Unit unit);
+        MoveAbility create(Unit unit, Runnable cancel);
     }
 }
