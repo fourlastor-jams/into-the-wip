@@ -43,6 +43,8 @@ public class Turn extends RoundState {
                     () -> router.startAbility(tileSmashFactory.create(unit, () -> acted = false))));
             state.ui.move.addListener(
                     new PickMoveListener(() -> router.startAbility(moveFactory.create(unit, () -> acted = false))));
+
+                    
         } else {
             router.endOfTurn();
         }
