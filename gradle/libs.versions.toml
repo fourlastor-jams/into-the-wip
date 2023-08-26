@@ -4,14 +4,16 @@ controllers = "2.2.1"
 dagger = "2.47"
 download-plugin = "5.3.0"
 funderby = "0.1.1"
-digital = "0.3.3"
+digital = "0.3.7"
 javax = "1"
 jdkgdxds = "1.4.0"
 gdx = "1.12.0"
 gdxAi = "1.8.2"
 gretty="4.0.3"
-gwt-framework="2.8.2"
-gwt-plugin="1.1.18"
+gwt-framework="2.10.0"
+gwt-backend="1.1200.1"
+jsinterop="2.0.0"
+gwt-plugin="1.1.19"
 harlequin="1.1.0"
 perceptual = "1.0.0"
 regexodus = "0.1.15"
@@ -36,7 +38,8 @@ gdx-controllers-core = { module = "com.badlogicgames.gdx-controllers:gdx-control
 gdx-controllers-desktop = { module = "com.badlogicgames.gdx-controllers:gdx-controllers-desktop", version.ref = "controllers" }
 gdx-controllers-gwt = { module = "com.badlogicgames.gdx-controllers:gdx-controllers-gwt", version.ref = "controllers" }
 gdx-backend-lwjgl3 = { module = "com.badlogicgames.gdx:gdx-backend-lwjgl3", version.ref = "gdx" }
-gdx-backend-gwt = { module = "com.badlogicgames.gdx:gdx-backend-gwt", version.ref = "gdx" }
+gdx-backend-gwt = { module = "com.github.tommyettinger:gdx-backend-gwt", version.ref = "gwt-backend" }
+jsinterop = { module = "com.google.jsinterop:jsinterop-annotations", version.ref = "jsinterop" }
 gdx-tools = { module = "com.badlogicgames.gdx:gdx-tools", version.ref = "gdx" }
 harlequin-core = { module = "io.github.fourlastor.gdx:harlequin", version.ref = "harlequin" }
 harlequin-ashley = { module = "io.github.fourlastor.gdx:harlequin-ashley", version.ref = "harlequin" }
