@@ -1,5 +1,6 @@
 package io.github.fourlastor.game.demo.state.map;
 
+import com.badlogic.gdx.Gdx;
 import java.util.function.Predicate;
 import space.earlygrey.simplegraphs.Graph;
 import space.earlygrey.simplegraphs.Path;
@@ -15,6 +16,7 @@ public class GraphMap {
     }
 
     public void connect(Tile first, Tile second) {
+        Gdx.app.log("GraphMap", "Connecting " + first.hex.cube + " to " + second.hex.cube);
         graph.addEdge(first, second);
     }
 

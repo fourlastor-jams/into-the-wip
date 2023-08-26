@@ -1,5 +1,6 @@
 package io.github.fourlastor.game.demo.state;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.GridPoint3;
 import com.badlogic.gdx.utils.Null;
 import com.github.tommyettinger.ds.ObjectList;
@@ -9,6 +10,7 @@ import io.github.fourlastor.game.demo.state.map.GraphMap;
 import io.github.fourlastor.game.demo.state.map.Tile;
 import io.github.fourlastor.game.demo.state.unit.Unit;
 import io.github.fourlastor.game.ui.UiLayer;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.function.BiPredicate;
 import java.util.stream.Collectors;
@@ -25,10 +27,12 @@ public class GameState {
         this.tiles = tiles;
         this.ui = ui;
         this.graph = new GraphMap();
-        for (Tile tile : tiles) {
+        for (Tile tile : new ArrayList<>(tiles)) {
+            Gdx.app.log("GraphMap", "Tile");
             graph.add(tile);
         }
-        for (Tile tile : tiles) {
+        for (Tile tile : new ArrayList<>(tiles)) {
+            Gdx.app.log("GraphMap", "Tile");
             connectTiles(tile, adjacent(tile, 0, 1, -1));
             connectTiles(tile, adjacent(tile, 0, -1, 1));
             connectTiles(tile, adjacent(tile, 1, 0, -1));
@@ -64,6 +68,7 @@ public class GameState {
 
     private void connectTiles(Tile tile, @Null Tile adjacent) {
         if (adjacent == null) {
+            Gdx.app.log("GraphMap", "Adjacent not found");
             return;
         }
         graph.connect(tile, adjacent);
