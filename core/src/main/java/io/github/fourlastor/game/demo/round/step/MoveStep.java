@@ -22,12 +22,18 @@ public class MoveStep extends SimpleStep {
     private final Unit unit;
     private final Tile tile;
     private final GraphMap.Filter filter;
+    private final Interpolation interpolation;
 
     @AssistedInject
-    public MoveStep(@Assisted Unit unit, @Assisted Tile tile, @Assisted GraphMap.Filter filter) {
+    public MoveStep(
+            @Assisted Unit unit,
+            @Assisted Tile tile,
+            @Assisted GraphMap.Filter filter,
+            @Assisted Interpolation interpolation) {
         this.unit = unit;
         this.tile = tile;
         this.filter = filter;
+        this.interpolation = interpolation;
     }
 
     @Override
@@ -37,7 +43,7 @@ public class MoveStep extends SimpleStep {
         for (int i = 0; i < path.size; i++) {
             Tile pathTile = path.get(i);
             Vector2 position = unit.coordinates.toWorldAtCenter(pathTile.hex, new Vector2());
-            actions.add(Actions.moveToAligned(position.x, position.y, Align.bottom, 0.25f, Interpolation.sine));
+            actions.add(Actions.moveToAligned(position.x, position.y, Align.bottom, 0.25f, interpolation));
         }
         Tile finalTile = path.get(path.size - 1);
         Vector2 finalPosition = unit.coordinates.toWorldAtCenter(finalTile.hex, new Vector2());
@@ -51,7 +57,11 @@ public class MoveStep extends SimpleStep {
     }
 
     @AssistedFactory
-    public interface Factory {
-        MoveStep create(Unit unit, Tile tile, GraphMap.Filter filter);
+    public abstract static class Factory {
+        public abstract MoveStep create(Unit unit, Tile tile, GraphMap.Filter filter, Interpolation interpolation);
+
+        public MoveStep create(Unit unit, Tile tile, GraphMap.Filter filter) {
+            return create(unit, tile, filter, Interpolation.sine);
+        }
     }
 }

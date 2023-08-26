@@ -1,5 +1,6 @@
 package io.github.fourlastor.game.demo.round.ability;
 
+import com.badlogic.gdx.math.Interpolation;
 import dagger.assisted.Assisted;
 import dagger.assisted.AssistedFactory;
 import dagger.assisted.AssistedInject;
@@ -10,16 +11,17 @@ import io.github.fourlastor.game.demo.round.step.Steps;
 import io.github.fourlastor.game.demo.state.GameState;
 import io.github.fourlastor.game.demo.state.map.GraphMap;
 import io.github.fourlastor.game.demo.state.map.Tile;
+import io.github.fourlastor.game.demo.state.map.TileType;
 import io.github.fourlastor.game.demo.state.unit.Unit;
 import space.earlygrey.simplegraphs.Path;
 
-public class TectonSmashAbility extends Ability {
+public class TileSmashAbility extends Ability {
 
     private final Unit unit;
     private final Steps steps;
 
     @AssistedInject
-    public TectonSmashAbility(@Assisted Unit unit, StateRouter router, StepState.Factory stateFactory, Steps steps) {
+    public TileSmashAbility(@Assisted Unit unit, StateRouter router, StepState.Factory stateFactory, Steps steps) {
         super(router, stateFactory);
         this.unit = unit;
         this.steps = steps;
@@ -28,12 +30,15 @@ public class TectonSmashAbility extends Ability {
     @Override
     protected Builder<?> createSteps(GameState state) {
         GraphMap.Filter movementLogic = GraphMap.Filter.all(
-                step -> unit.hex.isOnSameAxisAs(step.vertex().hex), step -> unit.canTravel(step.vertex()));
+                step -> unit.hex.isOnSameAxisAs(step.vertex().hex),
+                GraphMap.Filter.any(
+                        step -> unit.canTravel(step.vertex()),
+                        step -> unit.canTravel(step.previous()) && step.vertex().type == TileType.SOLID));
 
-        return start(steps.searchTile(unit.hex, movementLogic)).sequence(hex -> {
+        return start(steps.searchSmashTile(unit.hex, movementLogic)).sequence(hex -> {
             Path<Tile> path = state.newGraph.path(state.tileAt(unit.hex), state.tileAt(hex), movementLogic);
             if (path.size >= 2) {
-                return start(steps.move(unit, path.get(path.size - 2), movementLogic))
+                return start(steps.move(unit, path.get(path.size - 2), movementLogic, Interpolation.linear))
                         .then(steps.tileSmash(unit, state.tileAt(hex)));
             } else {
                 return start(steps.tileSmash(unit, state.tileAt(hex)));
@@ -43,6 +48,6 @@ public class TectonSmashAbility extends Ability {
 
     @AssistedFactory
     public interface Factory {
-        TectonSmashAbility create(Unit unit);
+        TileSmashAbility create(Unit unit);
     }
 }

@@ -14,6 +14,7 @@ import dagger.assisted.AssistedInject;
 import io.github.fourlastor.game.demo.AttackAnimation;
 import io.github.fourlastor.game.demo.state.GameState;
 import io.github.fourlastor.game.demo.state.map.Tile;
+import io.github.fourlastor.game.demo.state.map.TileType;
 import io.github.fourlastor.game.demo.state.unit.Unit;
 
 public class TileSmash extends SimpleStep {
@@ -87,11 +88,13 @@ public class TileSmash extends SimpleStep {
             null,
         };
         Vector3 scale = this.scale.cpy().scl(distance, 1f, 1f);
-        return AttackAnimation.makeSequence(source.actor, runnables, positions, moveDuration, rotationDegrees, scale);
+        return AttackAnimation.makeSequence(source.group, runnables, positions, moveDuration, rotationDegrees, scale);
     }
 
     @Override
     public void enter(GameState state, Runnable continuation) {
+
+        target.type = TileType.TERRAIN;
 
         Vector2 originalPosition = new Vector2(source.getActorPosition());
         Vector2 targetPosition = target.getActorPosition();
@@ -103,7 +106,7 @@ public class TileSmash extends SimpleStep {
                 setupAttackAnimation(distance, rotationDegrees),
                 Actions.run(() -> source.setActorPosition(originalPosition)),
                 Actions.run(continuation));
-        source.actor.addAction(attackAnimation);
+        source.group.addAction(attackAnimation);
     }
 
     @AssistedFactory
