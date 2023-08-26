@@ -4,6 +4,7 @@ import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.tiled.AtlasTmxMapLoader;
@@ -28,6 +29,7 @@ import io.github.fourlastor.game.demo.state.map.TileType;
 import io.github.fourlastor.game.demo.state.unit.Unit;
 import io.github.fourlastor.game.demo.state.unit.UnitType;
 import io.github.fourlastor.game.ui.TileOnMap;
+import io.github.fourlastor.game.ui.UiLayer;
 import io.github.fourlastor.game.ui.UnitOnMap;
 import io.github.fourlastor.game.ui.YSort;
 import javax.inject.Inject;
@@ -48,7 +50,8 @@ public class DemoScreen extends ScreenAdapter {
             AssetManager assetManager,
             Viewport viewport,
             Stage stage,
-            InputMultiplexer multiplexer) {
+            InputMultiplexer multiplexer,
+            TextureAtlas atlas) {
         this.viewport = viewport;
         this.stage = stage;
         this.multiplexer = multiplexer;
@@ -122,7 +125,9 @@ public class DemoScreen extends ScreenAdapter {
             ySort.sortChildren();
             this.stage.addActor(ySort);
         }
-        state = new GameState(units, tiles);
+        UiLayer ui = new UiLayer(atlas);
+        stage.addActor(ui);
+        state = new GameState(units, tiles, ui);
         stateMachine = stateMachineFactory.create(state);
     }
 

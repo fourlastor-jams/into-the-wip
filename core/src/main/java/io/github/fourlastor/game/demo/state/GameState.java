@@ -9,6 +9,7 @@ import io.github.fourlastor.game.demo.state.map.GraphMap;
 import io.github.fourlastor.game.demo.state.map.MapGraph;
 import io.github.fourlastor.game.demo.state.map.Tile;
 import io.github.fourlastor.game.demo.state.unit.Unit;
+import io.github.fourlastor.game.ui.UiLayer;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -18,10 +19,12 @@ public class GameState {
     public final ObjectList<Tile> tiles;
     public final MapGraph graph;
     public final GraphMap newGraph;
+    public final UiLayer ui;
 
-    public GameState(ObjectList<Unit> units, ObjectList<Tile> tiles) {
+    public GameState(ObjectList<Unit> units, ObjectList<Tile> tiles, UiLayer ui) {
         this.units = units;
         this.tiles = tiles;
+        this.ui = ui;
         graph = new MapGraph();
         newGraph = new GraphMap();
         for (Tile tile : tiles) {

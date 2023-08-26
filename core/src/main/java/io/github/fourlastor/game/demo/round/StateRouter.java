@@ -26,8 +26,8 @@ public class StateRouter {
         this.meleeAttackFactory = meleeAttackFactory;
     }
 
-    public void startAbility(Unit unit) {
-        dispatcher.dispatchMessage(GameMessage.ABILITY_START.ordinal(), meleeAttackFactory.create(unit));
+    public void startAbility(Ability ability) {
+        dispatcher.dispatchMessage(GameMessage.ABILITY_START.ordinal(), ability);
     }
 
     public void round() {
