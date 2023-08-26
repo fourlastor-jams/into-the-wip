@@ -43,10 +43,17 @@ public class Turn extends RoundState {
         state.tileAt(unit.hex).actor.setColor(Color.PINK);
 
         if (!acted) {
-            state.ui.meleeAttack.addListener(new PickMoveListener(
-                    () -> router.startAbility(tileSmashFactory.create(unit, () -> acted = false))));
+            // Move unit button.
             state.ui.move.addListener(
                     new PickMoveListener(() -> router.startAbility(moveFactory.create(unit, () -> acted = false))));
+
+            // Melee attack button.
+            state.ui.meleeAttack.addListener(new PickMoveListener(
+                    () -> router.startAbility(meleeAttackFactory.create(unit, () -> acted = false))));
+
+            // Tile smash ability button.
+            state.ui.tileSmash.addListener(new PickMoveListener(
+                    () -> router.startAbility(tileSmashFactory.create(unit, () -> acted = false))));
         } else {
             router.endOfTurn();
         }
