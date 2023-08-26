@@ -110,6 +110,7 @@ dependencies {
     implementation(libs.java.inject)
     implementation(libs.gdx.backend.gwt)
     sources(libs.gdx.backend.gwt)
+    sources(libs.jsinterop)
     sources(libs.gdx.core)
     sources(libs.gdx.ai)
     sources(libs.gdx.controllers.core)
