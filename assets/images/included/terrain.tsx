@@ -30,7 +30,7 @@
   <properties>
    <property name="tile" value="Solid"/>
   </properties>
-  <image width="62" height="80" source="tiles/mountain.png"/>
+  <image width="62" height="80" source="tiles/mountain1.png"/>
  </tile>
  <tile id="11">
   <properties>
