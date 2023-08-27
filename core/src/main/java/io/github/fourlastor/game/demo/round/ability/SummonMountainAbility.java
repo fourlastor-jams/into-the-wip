@@ -33,9 +33,12 @@ public class SummonMountainAbility extends Ability {
 
     @Override
     protected Builder<?> createSteps(GameState state) {
-        Predicate<SearchStep<Tile>> movementLogic =
-                Filter.all(Filter.maxDistance(unit.type.speed), Filter.canTravel(unit));
-        BiPredicate<GameState, Tile> searchLogic = Filter.canReach(state.tileAt(unit.hex), movementLogic);
+        Predicate<SearchStep<Tile>> movementLogic = Filter.all(Filter.maxDistance(unit.type.speed));
+        BiPredicate<GameState, Tile> searchLogic = Filter.all(
+                Filter.canReach(state.tileAt(unit.hex), movementLogic),
+                (unused, tile) -> unit.canTravel(tile),
+                (unused, tile) -> tile.hex.sameAxisAs(unit.hex));
+
         return start(steps.searchTile(searchLogic)).then(hex -> steps.summonMountain(unit, state.tileAt(hex)));
     }
 
