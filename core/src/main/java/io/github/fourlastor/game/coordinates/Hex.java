@@ -1,7 +1,9 @@
 package io.github.fourlastor.game.coordinates;
 
 import com.badlogic.gdx.math.GridPoint2;
-import com.badlogic.gdx.math.GridPoint3;
+import com.badlogic.gdxplus.math.GridPoint3;
+import java.util.Arrays;
+import java.util.Optional;
 
 /**
  * Hex coordinates, in offset (odd-q) and cube systems.
@@ -53,10 +55,6 @@ public class Hex {
         return result;
     }
 
-    public boolean isOnSameAxisAs(Hex other) {
-        return cube.x == other.cube.x || cube.y == other.cube.y || cube.z == other.cube.z;
-    }
-
     public void set(Hex other) {
         offset.set(other.offset);
         cube.set(other.cube);
@@ -64,5 +62,67 @@ public class Hex {
 
     public boolean sameAxisAs(Hex hex) {
         return hex.cube.x == cube.x || hex.cube.y == cube.y || hex.cube.z == cube.z;
+    }
+
+    public Hex offset(Direction direction) {
+        return new Hex(direction.cube.cpy().inverse());
+    }
+
+    public enum Direction {
+        N(0, 0, 1),
+        NE(1, 0, 0),
+        SE(0, -1, 0),
+        S(0, 0, -1),
+        SW(-1, 0, 0),
+        NW(0, 1, 0),
+        NONE(0, 0, 0),
+        ;
+
+        private final GridPoint3 cube;
+
+        Direction(int x, int y, int z) {
+            cube = new GridPoint3(x, y, z);
+        }
+
+        public static Direction byValue(GridPoint3 cube) {
+            return Arrays.stream(values())
+                    .filter(dir -> dir.cube.equals(cube))
+                    .findFirst()
+                    .get();
+        }
+
+        public static Direction byName(String value) {
+
+            Optional<Direction> test = Arrays.stream(values())
+                    .filter(dir -> dir.name().equalsIgnoreCase(value))
+                    .findFirst();
+            return test.orElse(null);
+        }
+
+        public static Direction byValue(int x, int y, int z) {
+            return byValue(new GridPoint3(x, y, z));
+        }
+
+        public boolean equals(Direction direction) {
+            return cube.equals(direction.cube);
+        }
+
+        public Direction opposite() {
+            return byValue(cube.cpy().inverse());
+        }
+
+        /**
+         * Starting at 0 degrees = East direction, counter-clockwise.
+         */
+        public static Direction fromRotation(float degrees) {
+
+            degrees = degrees % 360.0f;
+            if (degrees < 30.0f) return NE;
+            else if (degrees < 150.0f) return N;
+            else if (degrees < 210.0f) return NW;
+            else if (degrees < 330.0f) return S;
+            else if (degrees < 360.0f) return SE;
+            return NONE;
+        }
     }
 }
