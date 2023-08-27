@@ -8,6 +8,7 @@ public class UiLayer extends Table {
 
     public final Image meleeAttack;
     public final Image move;
+    public final Image summonMountain;
     public final Image tileSmash;
     public final Image rangedAttack;
 
@@ -21,6 +22,8 @@ public class UiLayer extends Table {
         add(move);
         tileSmash = new Image(atlas.findRegion("abilities/spells/tile_smash"));
         add(tileSmash);
+        summonMountain = new Image(atlas.findRegion("abilities/spells/summon_mountain"));
+        add(summonMountain);
         rangedAttack = new Image(atlas.findRegion("abilities/spells/ranged_attack"));
         add(rangedAttack);
     }
