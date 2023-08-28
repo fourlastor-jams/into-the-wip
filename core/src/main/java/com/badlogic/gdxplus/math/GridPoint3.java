@@ -16,6 +16,19 @@ public class GridPoint3 extends com.badlogic.gdx.math.GridPoint3 {
         this.z = point.z;
     }
 
+    public GridPoint3 cpy() {
+        return new GridPoint3(this);
+    }
+
+    public GridPoint3 add(GridPoint3 other) {
+        x += other.x;
+        y += other.y;
+        z += other.z;
+        return this;
+    }
+
+    // New stuff.
+
     public GridPoint3 inverse() {
         x = -x;
         y = -y;
@@ -23,7 +36,10 @@ public class GridPoint3 extends com.badlogic.gdx.math.GridPoint3 {
         return this;
     }
 
-    public GridPoint3 cpy() {
-        return new GridPoint3(this);
+    public GridPoint3 scl(int amount) {
+        x *= amount;
+        y *= amount;
+        z *= amount;
+        return this;
     }
 }

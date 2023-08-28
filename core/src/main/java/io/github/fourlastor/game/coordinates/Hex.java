@@ -32,6 +32,7 @@ public class Hex {
     }
 
     public static GridPoint2 toOffset(GridPoint3 cube) {
+
         int x = cube.x;
         int y = cube.y + (cube.x - (Math.abs(cube.x % 2))) / 2;
         return new GridPoint2(x, y);
@@ -64,17 +65,17 @@ public class Hex {
         return hex.cube.x == cube.x || hex.cube.y == cube.y || hex.cube.z == cube.z;
     }
 
-    public Hex offset(Direction direction) {
-        return new Hex(direction.cube.cpy().inverse());
+    public Hex offset(Direction direction, int amount) {
+        return new Hex(cube.cpy().add(direction.cube.cpy().scl(amount)));
     }
 
     public enum Direction {
-        N(0, 0, 1),
-        NE(1, 0, 0),
-        SE(0, -1, 0),
-        S(0, 0, -1),
-        SW(-1, 0, 0),
-        NW(0, 1, 0),
+        S(0, -1, 1),
+        SE(1, -1, 0),
+        NE(1, 0, -1),
+        N(0, +1, -1),
+        NW(-1, 1, 0),
+        SW(-1, 0, 1),
         NONE(0, 0, 0),
         ;
 
@@ -114,14 +115,15 @@ public class Hex {
         /**
          * Starting at 0 degrees = East direction, counter-clockwise.
          */
-        public static Direction fromRotation(float degrees) {
+        public static Direction fromRotation(int degrees) {
 
-            degrees = degrees % 360.0f;
-            if (degrees < 30.0f) return NE;
-            else if (degrees < 150.0f) return N;
-            else if (degrees < 210.0f) return NW;
-            else if (degrees < 330.0f) return S;
-            else if (degrees < 360.0f) return SE;
+            degrees = Math.floorMod(degrees, 360);
+            if (degrees <= 60) return NE;
+            else if (degrees <= 120) return N;
+            else if (degrees <= 180) return NW;
+            else if (degrees <= 240) return SW;
+            else if (degrees <= 300) return S;
+            else if (degrees <= 360) return SE;
             return NONE;
         }
     }
