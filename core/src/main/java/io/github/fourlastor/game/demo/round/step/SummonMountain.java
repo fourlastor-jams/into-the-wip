@@ -118,11 +118,7 @@ public class SummonMountain extends SimpleStep {
         // Move units on target tile off of it.
         hitUnit = state.unitAt(target.hex); // Model code
         if (hitUnit != null) {
-            System.out.println(hitUnit.hex.cube);
-            System.out.println(hitUnit.hex.offset);
             hitUnit.hex.set(hitUnit.hex.offset(facingDirection, 1)); // Model code
-            System.out.println(hitUnit.hex.cube);
-            System.out.println(hitUnit.hex.offset);
         }
 
         SequenceAction attackAnimation = Actions.sequence(
