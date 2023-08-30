@@ -8,6 +8,16 @@ buildscript {
     }
 }
 
+@Suppress(
+    // known false positive: https://youtrack.jetbrains.com/issue/KTIJ-19369
+    "DSL_SCOPE_VIOLATION"
+)
+plugins {
+    alias(libs.plugins.kotlin.jvm) apply false
+    alias(libs.plugins.kotlin.kapt) apply false
+
+}
+
 allprojects {
     buildscript {
         repositories {
