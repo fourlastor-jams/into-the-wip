@@ -5,10 +5,10 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 
 class UiLayer(atlas: TextureAtlas) : Table() {
-  @JvmField val meleeAttack: Image
-  @JvmField val move: Image
-  @JvmField val tileSmash: Image
-  @JvmField val rangedAttack: Image
+  val meleeAttack: Image
+  val move: Image
+  val tileSmash: Image
+  val rangedAttack: Image
 
   // TODO: Remove atlas from here
   init {

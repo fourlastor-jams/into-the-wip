@@ -12,8 +12,8 @@ plugins {
     alias(libs.plugins.gwt)
 }
 
-java.sourceCompatibility = JavaVersion.VERSION_1_8
-java.targetCompatibility = JavaVersion.VERSION_1_8
+java.sourceCompatibility = JavaVersion.VERSION_11
+java.targetCompatibility = JavaVersion.VERSION_11
 
 war.webAppDirName = "webapp"
 

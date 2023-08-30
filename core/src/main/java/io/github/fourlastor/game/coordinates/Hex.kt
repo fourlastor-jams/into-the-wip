@@ -9,11 +9,9 @@ import kotlin.math.abs
  * [original blog post](https://www.redblobgames.com/grids/hexagons/#coordinates). Cube is useful
  * for pathfinding, offset is what we get from tiled, and it's useful for the on-screen coordinates.
  */
-data class Hex
-@JvmOverloads
-constructor(
-    @JvmField val offset: GridPoint2,
-    @JvmField val cube: GridPoint3 = toCube(offset),
+data class Hex(
+    val offset: GridPoint2,
+    val cube: GridPoint3 = toCube(offset),
 ) {
   fun isOnSameAxisAs(other: Hex): Boolean =
       cube.x == other.cube.x || cube.y == other.cube.y || cube.z == other.cube.z

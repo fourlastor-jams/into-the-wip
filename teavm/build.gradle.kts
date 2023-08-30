@@ -1,9 +1,13 @@
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+
 @Suppress(
   // known false positive: https://youtrack.jetbrains.com/issue/KTIJ-19369
   "DSL_SCOPE_VIOLATION"
 )
 plugins {
   java
+  alias(libs.plugins.kotlin.jvm)
   alias(libs.plugins.gretty)
 }
 
@@ -22,6 +26,9 @@ java {
   sourceCompatibility = JavaVersion.VERSION_11
 }
 
+tasks.withType<KotlinCompile>().configureEach {
+  compilerOptions { jvmTarget.set(JvmTarget.JVM_11) }
+}
 dependencies {
   implementation (libs.gdx.backend.teavm)
   implementation(libs.google.gson)

@@ -6,7 +6,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.WidgetGroup
 import com.badlogic.gdx.utils.Align
 
 class UnitOnMap(region: TextureRegion) : WidgetGroup() {
-  @JvmField val image: Image
+  val image: Image
 
   init {
     image = Image(region)

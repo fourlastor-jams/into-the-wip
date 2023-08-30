@@ -1,4 +1,6 @@
 import com.badlogic.gdx.tools.texturepacker.TexturePacker
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 @Suppress(
     // known false positive: https://youtrack.jetbrains.com/issue/KTIJ-19369
@@ -12,8 +14,12 @@ plugins {
     alias(libs.plugins.kotlin.kapt)
 }
 
-java.sourceCompatibility = JavaVersion.VERSION_1_8
-java.targetCompatibility = JavaVersion.VERSION_1_8
+java.sourceCompatibility = JavaVersion.VERSION_11
+java.targetCompatibility = JavaVersion.VERSION_11
+
+tasks.withType<KotlinCompile>().configureEach {
+    compilerOptions { jvmTarget.set(JvmTarget.JVM_11) }
+}
 
 val assetsDir = rootProject.files("assets")
 
