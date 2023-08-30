@@ -25,7 +25,7 @@ object AttackAnimation {
     val frames = frames(runnables, positionsRelative)
     val actions = ArrayList<Action>(frames.size)
     for (frame in frames) {
-      val rotatedPositionRelative = frame.positionRelative!!.cpy()
+      val rotatedPositionRelative = frame.positionRelative.cpy()
       // Scale the animation by a given value.
       rotatedPositionRelative.scl(scale.x, scale.y, scale.z)
       // Rotate around the z-axis so that animation points at target.
@@ -51,23 +51,18 @@ object AttackAnimation {
   }
 
   /** @return List of animation frames. */
-  private fun frames(
-      runnables: Array<Runnable?>,
-      positionsRelative: Array<Vector3>
-  ): ArrayList<Frame> {
-    val frames = ArrayList<Frame>()
-    val numFrames = max(positionsRelative.size.toDouble(), runnables.size.toDouble()).toInt()
-    for (i in 0 until numFrames) {
-      val frame = Frame()
-      if (i < positionsRelative.size) frame.positionRelative = positionsRelative[i]
-      if (i < runnables.size && runnables[i] != null) frame.runnable = runnables[i]
-      frames.add(frame)
+  private fun frames(runnables: Array<Runnable?>, positionsRelative: Array<Vector3>): List<Frame> {
+    val numFrames = max(positionsRelative.size, runnables.size)
+    return List(numFrames) {
+      Frame(
+          positionsRelative.getOrNull(it) ?: Vector3(0f, 0f, 0f),
+          runnables.getOrNull(it) ?: Runnable {},
+      )
     }
-    return frames
   }
 
-  private class Frame {
-    var positionRelative: Vector3? = Vector3(0f, 0f, 0f)
-    var runnable: Runnable? = Runnable {}
-  }
+  private class Frame(
+      val positionRelative: Vector3 = Vector3(0f, 0f, 0f),
+      val runnable: Runnable = Runnable {}
+  )
 }
