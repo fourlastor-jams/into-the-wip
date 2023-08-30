@@ -8,6 +8,8 @@ plugins {
     `java-library`
     idea
     alias(libs.plugins.spotless)
+    alias(libs.plugins.kotlin.jvm)
+    alias(libs.plugins.kotlin.kapt)
 }
 
 java.sourceCompatibility = JavaVersion.VERSION_1_8
@@ -25,6 +27,9 @@ spotless {
     isEnforceCheck = false
     java {
         palantirJavaFormat()
+    }
+    kotlin {
+        ktfmt("0.37")
     }
 }
 
@@ -60,5 +65,5 @@ dependencies {
     implementation(libs.textratypist)
     implementation(libs.dagger.core)
     api(libs.dagger.gwt)
-    annotationProcessor(libs.dagger.compiler)
+    kapt(libs.dagger.compiler)
 }

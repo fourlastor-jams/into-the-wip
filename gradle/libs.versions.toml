@@ -7,6 +7,7 @@ funderby = "0.1.1"
 digital = "0.3.7"
 javax = "1"
 jdkgdxds = "1.4.0"
+kotlin = "1.8.21"
 gdx = "1.12.0"
 gdx-teavm = "1.0.0-b4"
 gdxAi = "1.8.2"
@@ -55,5 +56,7 @@ textratypist = { module = "com.github.tommyettinger:textratypist", version.ref =
 [plugins]
 gretty = { id = "org.gretty", version.ref = "gretty" }
 gwt = { id = "org.wisepersist.gwt", version.ref = "gwt-plugin" }
+kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
+kotlin-kapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kotlin" }
 shadow = { id = "com.github.johnrengelman.shadow", version.ref = "shadow" }
 spotless = { id = "com.diffplug.spotless", version.ref = "spotless" }

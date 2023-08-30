@@ -7,5 +7,5 @@ repos:
         args:
           - spotlessApply
         language: script
-        files: \.java$
+        files: \.(java|kt)$
         pass_filenames: false
