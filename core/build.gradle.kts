@@ -50,7 +50,7 @@ dependencies {
     implementation(libs.harlequin.core)
     implementation(libs.harlequin.ashley)
     implementation(libs.perceptual)
-    implementation(libs.gdx.core)
+    api(libs.gdx.core)
     implementation(libs.gdx.ai)
     implementation(libs.gdx.controllers.core)
     implementation(libs.ashley)
