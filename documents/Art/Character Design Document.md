@@ -41,9 +41,24 @@ Reference art:
 | ![image](https://github.com/fourlastor-jams/into-the-wip/assets/4059636/edb1ca3d-9345-45e1-bf69-5bd00eb5ac20) | ![image](https://github.com/fourlastor-jams/into-the-wip/assets/4059636/d7374676-fb04-4d57-811e-716a10028dbb) | ![image](https://github.com/fourlastor-jams/into-the-wip/assets/4059636/1897931e-3508-4b19-bb55-35859f466e85) |
 
 ### Mechanical
+Mechanical monsters are a race of creatures that have mechanically enhanced capabilities by having parts of their bodies replaced by robotic limbs and parts.
+Their `cunning` nature is followed by `long and thin`, `rectangular shaped`, `flat lines`. Mechanical parts are `silver`, and the rest of their bodies are regular coloured. The lights on their bodies are `green`. They are `agile` speedy creatures and their texture is metallic and robotic. 
+
+They're quite the contrast to the `rounded` nuclear monsters.
+
+* Emotion?
+* Colour?
+* Shape?
+* Texture?
+* Line?
+* Speed?
+* Size?
+* Opposing concept?
 
 ### Nuclear
-Nuclear pokemons is a race of creatures affected by nuclear fallout and devestation following the post-apocalyptic event. Their `unyielding` nature is complemented by `big` `rounded shapes`, `curved lines` and `green colour`. Their speed is `sluggish` And their texture is `oozing`. They're quite the contrast to the long and elegant aliens.
+Nuclear monsters is a race of creatures affected by nuclear fallout and devestation following the post-apocalyptic event. Their `unyielding` nature is complemented by `big` `rounded shapes`, `curved lines` and `green colour`. Their speed is `sluggish` And their texture is `oozing`. 
+
+They're quite the contrast to the `long and elegant` aliens.
 
 Reference art:
 
