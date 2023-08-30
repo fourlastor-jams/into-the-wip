@@ -18,7 +18,7 @@ import java.util.function.Consumer
 
 class SearchUnit
 @AssistedInject
-constructor(@param:Assisted private val filter: BiPredicate<GameState, Tile>) : Step<Hex>() {
+constructor(@Assisted private val filter: BiPredicate<GameState, Tile>) : Step<Hex>() {
   override fun enter(
       state: GameState,
       continuation: (Hex) -> kotlin.Unit,

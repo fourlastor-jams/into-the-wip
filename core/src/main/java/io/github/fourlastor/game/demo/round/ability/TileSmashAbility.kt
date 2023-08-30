@@ -19,7 +19,7 @@ import space.earlygrey.simplegraphs.algorithms.SearchStep
 class TileSmashAbility
 @AssistedInject
 constructor(
-    @param:Assisted private val unit: Unit,
+    @Assisted private val unit: Unit,
     @Assisted cancel: Runnable,
     router: StateRouter,
     stateFactory: StepState.Factory,

@@ -17,7 +17,7 @@ import io.github.fourlastor.game.ui.ActorSupport
 class Turn
 @AssistedInject
 constructor(
-    @param:Assisted private val unit: Unit,
+    @Assisted private val unit: Unit,
     private val router: StateRouter,
     private val meleeAttackFactory: MeleeAttackAbility.Factory,
     private val rangedAttackFactory: RangedAttackAbility.Factory,

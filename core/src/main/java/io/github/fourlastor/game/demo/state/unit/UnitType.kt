@@ -1,7 +1,6 @@
 package io.github.fourlastor.game.demo.state.unit
 
-enum class UnitType
-constructor(
+enum class UnitType(
     val mapName: String,
     val speed: Int,
     val canFly: Boolean,

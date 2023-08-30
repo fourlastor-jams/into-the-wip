@@ -12,8 +12,8 @@ import io.github.fourlastor.game.demo.state.unit.Unit
 class AttackRanged
 @AssistedInject
 constructor(
-    @param:Assisted("source") private val source: Unit,
-    @param:Assisted("target") private val target: Unit,
+    @Assisted("source") private val source: Unit,
+    @Assisted("target") private val target: Unit,
     private val textureAtlas: TextureAtlas
 ) : SimpleStep() {
 

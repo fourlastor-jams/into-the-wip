@@ -17,7 +17,7 @@ import java.util.function.Consumer
 
 class SearchTile
 @AssistedInject
-constructor(@param:Assisted private val filter: BiPredicate<GameState, Tile>) : Step<Hex>() {
+constructor(@Assisted private val filter: BiPredicate<GameState, Tile>) : Step<Hex>() {
   override fun enter(state: GameState, continuation: (Hex) -> Unit, cancel: () -> Unit) {
     val searched = state.search(filter)
     for (tile in searched) {

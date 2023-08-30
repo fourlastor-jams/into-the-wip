@@ -19,8 +19,8 @@ import io.github.fourlastor.game.demo.state.unit.Unit
 class AttackMelee
 @AssistedInject
 constructor(
-    @param:Assisted("source") private val source: Unit,
-    @param:Assisted("target") private val targetUnit: Unit,
+    @Assisted("source") private val source: Unit,
+    @Assisted("target") private val targetUnit: Unit,
     private val textureAtlas: TextureAtlas,
 ) : SimpleStep() {
   private val targetTile: Tile? = null

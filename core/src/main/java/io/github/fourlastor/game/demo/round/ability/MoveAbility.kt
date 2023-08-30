@@ -15,7 +15,7 @@ import io.github.fourlastor.game.demo.state.unit.Unit
 class MoveAbility
 @AssistedInject
 constructor(
-    @param:Assisted private val unit: Unit,
+    @Assisted private val unit: Unit,
     @Assisted cancel: Runnable,
     router: StateRouter,
     stateFactory: StepState.Factory,

@@ -15,10 +15,10 @@ import io.github.fourlastor.game.demo.state.unit.Unit
 class MoveStep
 @AssistedInject
 constructor(
-    @param:Assisted private val unit: Unit,
-    @param:Assisted private val tile: Tile,
-    @param:Assisted private val path: List<Tile>,
-    @param:Assisted private val interpolation: Interpolation
+    @Assisted private val unit: Unit,
+    @Assisted private val tile: Tile,
+    @Assisted private val path: List<Tile>,
+    @Assisted private val interpolation: Interpolation
 ) : SimpleStep() {
   override fun enter(state: GameState, continuation: () -> kotlin.Unit) {
     val actions: MutableList<Action> = ArrayList()

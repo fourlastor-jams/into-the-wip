@@ -16,7 +16,7 @@ import java.util.function.BiPredicate
 class MeleeAttackAbility
 @AssistedInject
 constructor(
-    @param:Assisted private val unit: Unit,
+    @Assisted private val unit: Unit,
     @Assisted cancel: Runnable,
     router: StateRouter,
     stateFactory: StepState.Factory,
