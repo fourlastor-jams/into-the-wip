@@ -9,7 +9,6 @@ pluginManagement {
 
 include(":desktop")
 include(":core")
-include(":html")
 include(":teavm")
 
 dependencyResolutionManagement {
