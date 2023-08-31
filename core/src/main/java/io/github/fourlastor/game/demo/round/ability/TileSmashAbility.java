@@ -7,6 +7,7 @@ import dagger.assisted.AssistedFactory;
 import dagger.assisted.AssistedInject;
 import io.github.fourlastor.game.demo.round.Ability;
 import io.github.fourlastor.game.demo.round.StateRouter;
+import io.github.fourlastor.game.demo.round.UnitInTurn;
 import io.github.fourlastor.game.demo.round.step.StepState;
 import io.github.fourlastor.game.demo.round.step.Steps;
 import io.github.fourlastor.game.demo.state.Filter;
@@ -26,13 +27,9 @@ public class TileSmashAbility extends Ability {
 
     @AssistedInject
     public TileSmashAbility(
-            @Assisted Unit unit,
-            @Assisted Runnable cancel,
-            StateRouter router,
-            StepState.Factory stateFactory,
-            Steps steps) {
-        super(router, stateFactory, cancel);
-        this.unit = unit;
+            @Assisted UnitInTurn unitInTurn, StateRouter router, StepState.Factory stateFactory, Steps steps) {
+        super(unitInTurn, router, stateFactory);
+        this.unit = unitInTurn.unit;
         this.steps = steps;
     }
 
@@ -58,6 +55,6 @@ public class TileSmashAbility extends Ability {
 
     @AssistedFactory
     public interface Factory {
-        TileSmashAbility create(Unit unit, Runnable cancel);
+        TileSmashAbility create(UnitInTurn unitInTurn);
     }
 }

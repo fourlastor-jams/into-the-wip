@@ -2,7 +2,6 @@ package io.github.fourlastor.game.demo.round;
 
 import com.badlogic.gdx.ai.msg.MessageDispatcher;
 import io.github.fourlastor.game.demo.round.step.StepState;
-import io.github.fourlastor.game.demo.state.unit.Unit;
 import javax.inject.Inject;
 import javax.inject.Provider;
 
@@ -27,7 +26,7 @@ public class StateRouter {
         dispatcher.dispatchMessage(GameMessage.ROUND_START.ordinal(), roundProvider.get());
     }
 
-    public void turn(Unit unit) {
+    public void turn(UnitInTurn unit) {
         dispatcher.dispatchMessage(GameMessage.TURN_START.ordinal(), turnFactory.create(unit));
     }
 

@@ -68,36 +68,33 @@ public class Round extends RoundState {
 
     private void startTurn(GameState state) {
         CurrentFaction currentFaction = factions.get(factionCounter);
-        currentFaction.units.stream()
-                .filter(unit -> !currentFaction.alreadyDidTurn.contains(unit))
-                .forEach(unit -> {
-                    state.tileAt(unit.hex).actor.setColor(Color.PINK);
-                    unit.group.image.addListener(new TurnListener(unit, currentFaction));
-                });
+        currentFaction.units.stream().filter(unitInTurn -> !unitInTurn.hasActed).forEach(unitInTurn -> {
+            state.tileAt(unitInTurn.unit.hex).actor.setColor(Color.PINK);
+            unitInTurn.unit.group.image.addListener(new TurnListener(unitInTurn, currentFaction));
+        });
     }
 
     private static class CurrentFaction {
-        final List<Unit> units;
+        final List<UnitInTurn> units;
         final List<Unit> alreadyDidTurn = new ArrayList<>();
 
         private CurrentFaction(List<Unit> units) {
-            this.units = units;
+            this.units = units.stream().map(UnitInTurn::new).collect(Collectors.toList());
         }
     }
 
     private class TurnListener extends ClickListener {
 
-        private final Unit unit;
+        private final UnitInTurn unit;
         private final CurrentFaction currentFaction;
 
-        public TurnListener(Unit unit, CurrentFaction currentFaction) {
+        public TurnListener(UnitInTurn unit, CurrentFaction currentFaction) {
             this.unit = unit;
             this.currentFaction = currentFaction;
         }
 
         @Override
         public void clicked(InputEvent event, float x, float y) {
-            currentFaction.alreadyDidTurn.add(unit);
             router.turn(unit);
         }
     }
