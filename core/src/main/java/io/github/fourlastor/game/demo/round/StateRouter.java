@@ -26,7 +26,7 @@ public class StateRouter {
         dispatcher.dispatchMessage(GameMessage.ROUND_START.ordinal(), roundProvider.get());
     }
 
-    public void turn(UnitInTurn unit) {
+    public void turn(UnitInRound unit) {
         dispatcher.dispatchMessage(GameMessage.TURN_START.ordinal(), turnFactory.create(unit));
     }
 

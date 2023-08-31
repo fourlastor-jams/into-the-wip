@@ -18,7 +18,7 @@ import io.github.fourlastor.game.ui.ActorSupport;
 
 public class Turn extends RoundState {
 
-    private final UnitInTurn unitInTurn;
+    private final UnitInRound unitInRound;
     private final StateRouter router;
     private final MoveAbility.Factory moveFactory;
     private final MeleeAttackAbility.Factory meleeAttackFactory;
@@ -29,13 +29,13 @@ public class Turn extends RoundState {
 
     @AssistedInject
     public Turn(
-            @Assisted UnitInTurn unitInTurn,
+            @Assisted UnitInRound unitInRound,
             StateRouter router,
             MeleeAttackAbility.Factory meleeAttackFactory,
             RangedAttackAbility.Factory rangedAttackFactory,
             MoveAbility.Factory moveFactory,
             TileSmashAbility.Factory tileSmashFactory) {
-        this.unitInTurn = unitInTurn;
+        this.unitInRound = unitInRound;
         this.router = router;
         this.meleeAttackFactory = meleeAttackFactory;
         this.rangedAttackFactory = rangedAttackFactory;
@@ -45,24 +45,24 @@ public class Turn extends RoundState {
 
     @Override
     public void enter(GameState state) {
-        Unit unit = unitInTurn.unit;
+        Unit unit = unitInRound.unit;
         state.tileAt(unit.hex).actor.setColor(Color.PINK);
 
         if (!acted) {
             // Move unit button.
-            state.ui.move.addListener(new PickMoveListener(() -> router.startAbility(moveFactory.create(unitInTurn))));
+            state.ui.move.addListener(new PickMoveListener(() -> router.startAbility(moveFactory.create(unitInRound))));
 
             // Melee attack button.
             state.ui.meleeAttack.addListener(
-                    new PickMoveListener(() -> router.startAbility(meleeAttackFactory.create(unitInTurn))));
+                    new PickMoveListener(() -> router.startAbility(meleeAttackFactory.create(unitInRound))));
 
             // Ranged attack button.
             state.ui.rangedAttack.addListener(
-                    new PickMoveListener(() -> router.startAbility(rangedAttackFactory.create(unitInTurn))));
+                    new PickMoveListener(() -> router.startAbility(rangedAttackFactory.create(unitInRound))));
 
             // Tile smash ability button.
             state.ui.tileSmash.addListener(
-                    new PickMoveListener(() -> router.startAbility(tileSmashFactory.create(unitInTurn))));
+                    new PickMoveListener(() -> router.startAbility(tileSmashFactory.create(unitInRound))));
         } else {
             router.endOfTurn();
         }
@@ -77,7 +77,7 @@ public class Turn extends RoundState {
 
     @Override
     public void exit(GameState state) {
-        state.tileAt(unitInTurn.unit.hex).actor.setColor(Color.WHITE);
+        state.tileAt(unitInRound.unit.hex).actor.setColor(Color.WHITE);
         ActorSupport.removeListeners(state.ui.meleeAttack, it -> it instanceof PickMoveListener);
         ActorSupport.removeListeners(state.ui.move, it -> it instanceof PickMoveListener);
     }
@@ -99,6 +99,6 @@ public class Turn extends RoundState {
 
     @AssistedFactory
     public interface Factory {
-        Turn create(UnitInTurn unit);
+        Turn create(UnitInRound unit);
     }
 }

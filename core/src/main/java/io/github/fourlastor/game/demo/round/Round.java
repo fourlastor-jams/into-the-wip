@@ -71,10 +71,10 @@ public class Round extends RoundState {
     }
 
     private static class CurrentFaction {
-        final List<UnitInTurn> units;
+        final List<UnitInRound> units;
 
         private CurrentFaction(List<Unit> units) {
-            this.units = units.stream().map(UnitInTurn::new).collect(Collectors.toList());
+            this.units = units.stream().map(UnitInRound::new).collect(Collectors.toList());
         }
 
         boolean allUnitsActed() {
@@ -84,9 +84,9 @@ public class Round extends RoundState {
 
     private class TurnListener extends ClickListener {
 
-        private final UnitInTurn unit;
+        private final UnitInRound unit;
 
-        public TurnListener(UnitInTurn unit) {
+        public TurnListener(UnitInRound unit) {
             this.unit = unit;
         }
 

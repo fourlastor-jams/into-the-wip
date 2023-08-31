@@ -6,7 +6,7 @@ import dagger.assisted.AssistedFactory;
 import dagger.assisted.AssistedInject;
 import io.github.fourlastor.game.demo.round.Ability;
 import io.github.fourlastor.game.demo.round.StateRouter;
-import io.github.fourlastor.game.demo.round.UnitInTurn;
+import io.github.fourlastor.game.demo.round.UnitInRound;
 import io.github.fourlastor.game.demo.round.step.StepState;
 import io.github.fourlastor.game.demo.round.step.Steps;
 import io.github.fourlastor.game.demo.state.Filter;
@@ -24,9 +24,9 @@ public class MoveAbility extends Ability {
 
     @AssistedInject
     public MoveAbility(
-            @Assisted UnitInTurn unitInTurn, StateRouter router, StepState.Factory stateFactory, Steps steps) {
-        super(unitInTurn, router, stateFactory);
-        this.unit = unitInTurn.unit;
+            @Assisted UnitInRound unitInRound, StateRouter router, StepState.Factory stateFactory, Steps steps) {
+        super(unitInRound, router, stateFactory);
+        this.unit = unitInRound.unit;
         this.steps = steps;
     }
 
@@ -44,6 +44,6 @@ public class MoveAbility extends Ability {
 
     @AssistedFactory
     public interface Factory {
-        MoveAbility create(UnitInTurn unitInTurn);
+        MoveAbility create(UnitInRound unitInRound);
     }
 }

@@ -11,13 +11,13 @@ import java.util.function.Function;
 
 public abstract class Ability extends RoundState {
 
-    private final UnitInTurn unitInTurn;
+    private final UnitInRound unitInRound;
     private final StateRouter router;
     private StateMachine stateMachine;
     private final StepState.Factory stateFactory;
 
-    public Ability(UnitInTurn unitInTurn, StateRouter router, StepState.Factory stateFactory) {
-        this.unitInTurn = unitInTurn;
+    public Ability(UnitInRound unitInRound, StateRouter router, StepState.Factory stateFactory) {
+        this.unitInRound = unitInRound;
         this.router = router;
         this.stateFactory = stateFactory;
     }
@@ -36,7 +36,7 @@ public abstract class Ability extends RoundState {
         createSteps(state)
                 .run(
                         ignored -> {
-                            unitInTurn.hasActed = true;
+                            unitInRound.hasActed = true;
                             router.endOfAbility();
                         },
                         router::endOfAbility);
