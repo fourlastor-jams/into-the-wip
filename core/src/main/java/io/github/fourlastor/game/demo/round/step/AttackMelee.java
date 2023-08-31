@@ -1,32 +1,24 @@
 package io.github.fourlastor.game.demo.round.step;
 
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import dagger.assisted.Assisted;
 import dagger.assisted.AssistedFactory;
 import dagger.assisted.AssistedInject;
 import io.github.fourlastor.game.demo.AttackAnimation;
 import io.github.fourlastor.game.demo.state.GameState;
-import io.github.fourlastor.game.demo.state.map.Tile;
-import io.github.fourlastor.game.demo.state.map.TileType;
 import io.github.fourlastor.game.demo.state.unit.Unit;
 
 public class AttackMelee extends SimpleStep {
 
+    private static final float MOVE_DURATION = 0.05f;
+    private static final Vector3 SCALE = new Vector3(1f / 16f, 1f, 1f);
+    private static final int DAMAGE = 2;
     private final Unit source;
-    private Unit targetUnit;
-    private Tile targetTile;
-    float moveDuration = 0.05f;
-    // Amount to scale the animation by.
-    private final Vector3 scale = new Vector3(1f / 16f, 1f, 1f);
-    int damage = 2;
-    TextureAtlas textureAtlas;
+    private final Unit targetUnit;
 
     @AssistedInject
     public AttackMelee(@Assisted("source") Unit source, @Assisted("target") Unit targetUnit) {
@@ -74,17 +66,15 @@ public class AttackMelee extends SimpleStep {
             null,
             null,
             null,
-            () -> {
-                if (targetUnit != null) targetUnit.refreshHpLabel();
-            },
+            targetUnit::refreshHpLabel,
             null,
             null,
             null,
             null,
             null,
         };
-        Vector3 scale = this.scale.cpy().scl(distance, 1f, 1f);
-        return AttackAnimation.makeSequence(source.group, runnables, positions, moveDuration, rotationDegrees, scale);
+        Vector3 scale = SCALE.cpy().scl(distance, 1f, 1f);
+        return AttackAnimation.makeSequence(source.group, runnables, positions, MOVE_DURATION, rotationDegrees, scale);
     }
 
     public void doAttackAnimation(Vector2 originalPosition, Vector2 targetPosition, Runnable continuation) {
@@ -99,32 +89,12 @@ public class AttackMelee extends SimpleStep {
         source.group.addAction(attackAnimation);
     }
 
-    public void attackUnit(Runnable continuation) {
-        targetUnit.changeHp(-damage);
+    @Override
+    public void enter(GameState state, Runnable continuation) {
+        targetUnit.changeHp(-DAMAGE);
         Vector2 originalPosition = new Vector2(source.getActorPosition());
         Vector2 targetPosition = targetUnit.getActorPosition();
         doAttackAnimation(originalPosition, targetPosition, continuation);
-    }
-
-    public void smashTile(Runnable continuation) {
-        targetTile.type = TileType.TERRAIN;
-
-        TextureRegion region = textureAtlas.findRegion("tiles/white");
-        targetTile.actor.setDrawable(new TextureRegionDrawable(region));
-        targetTile.actor.setSize(targetTile.actor.getPrefWidth(), targetTile.actor.getPrefHeight());
-
-        Vector2 originalPosition = new Vector2(source.getActorPosition());
-        Vector2 targetPosition = targetTile.getActorPosition();
-        doAttackAnimation(originalPosition, targetPosition, continuation);
-    }
-
-    @Override
-    public void enter(GameState state, Runnable continuation) {
-        if (targetUnit != null) {
-            attackUnit(continuation);
-        } else if (targetTile != null) {
-            smashTile(continuation);
-        }
     }
 
     @Override
