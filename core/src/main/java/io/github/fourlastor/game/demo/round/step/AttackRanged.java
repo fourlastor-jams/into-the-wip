@@ -2,6 +2,7 @@ package io.github.fourlastor.game.demo.round.step;
 
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
@@ -15,15 +16,16 @@ public class AttackRanged extends SimpleStep {
 
     private final Unit source;
     private final Unit target;
-    Vector2 originalPosition = new Vector2();
     private final TextureAtlas textureAtlas;
+    private final Stage stage;
 
     @AssistedInject
-    public AttackRanged(@Assisted("source") Unit source, @Assisted("target") Unit target, TextureAtlas textureAtlas) {
+    public AttackRanged(
+            @Assisted("source") Unit source, @Assisted("target") Unit target, TextureAtlas textureAtlas, Stage stage) {
         this.source = source;
         this.target = target;
         this.textureAtlas = textureAtlas;
-        this.originalPosition.set(source.getActorPosition());
+        this.stage = stage;
     }
 
     @Override
@@ -42,13 +44,11 @@ public class AttackRanged extends SimpleStep {
         projectile.setPosition(sourcePos.x, sourcePos.y);
         SequenceAction moveAnimation = Actions.sequence();
         moveAnimation.addAction(Actions.moveTo(targetPos.x, targetPos.y, distance / 400));
-        moveAnimation.addAction(Actions.run(() -> {
-            if (target != null) target.refreshHpLabel();
-        }));
+        moveAnimation.addAction(Actions.run(target::refreshHpLabel));
         moveAnimation.addAction(Actions.run(continuation));
         moveAnimation.addAction(Actions.run(projectile::remove));
         projectile.addAction(moveAnimation);
-        source.group.getStage().addActor(projectile);
+        stage.addActor(projectile);
     }
 
     /**
