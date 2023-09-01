@@ -1,5 +1,7 @@
 package io.github.fourlastor.game.demo.round.step;
 
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import dagger.assisted.Assisted;
 import dagger.assisted.AssistedFactory;
 import dagger.assisted.AssistedInject;
@@ -11,17 +13,23 @@ public class Poison extends SimpleStep {
 
     private final Unit source;
     private final Unit target;
+    private final PoisonEffect poisonEffect;
 
     @AssistedInject
-    public Poison(@Assisted("source") Unit source, @Assisted("target") Unit target) {
+    public Poison(@Assisted("source") Unit source, @Assisted("target") Unit target, PoisonEffect poisonEffect) {
         this.source = source;
         this.target = target;
+        this.poisonEffect = poisonEffect;
     }
 
     @Override
     public void enter(GameState state, Runnable continuation) {
-        target.addEffect(new PoisonEffect());
-        continuation.run();
+        target.group.image.addAction(Actions.sequence(
+                Actions.color(Color.OLIVE, 0.5f),
+                Actions.color(Color.GREEN, 0.2f),
+                Actions.color(Color.WHITE, 0.3f),
+                Actions.run(() -> target.addEffect(poisonEffect)),
+                Actions.run(continuation::run)));
     }
 
     /**
