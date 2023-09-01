@@ -8,6 +8,8 @@ import io.github.fourlastor.game.coordinates.HexCoordinates;
 import io.github.fourlastor.game.demo.round.faction.Faction;
 import io.github.fourlastor.game.demo.state.map.Tile;
 import io.github.fourlastor.game.demo.state.map.TileType;
+import io.github.fourlastor.game.demo.state.unit.effect.Effect;
+import io.github.fourlastor.game.demo.state.unit.effect.EffectStacks;
 import io.github.fourlastor.game.ui.UnitOnMap;
 
 public class Unit {
@@ -19,6 +21,7 @@ public class Unit {
     public final HexCoordinates coordinates;
     public final UnitType type;
     private final int maxHp = 20;
+    private final EffectStacks stacks = new EffectStacks();
     private int currentHp;
 
     public Unit(
@@ -35,6 +38,18 @@ public class Unit {
         this.type = type;
         this.hpLabel = hpLabel;
         setHp(maxHp);
+    }
+
+    public void onRoundStart() {
+        stacks.onRoundStart(this);
+    }
+
+    public void onRoundEnd() {
+        stacks.tickStacks();
+    }
+
+    public void addEffect(Effect effect) {
+        stacks.addStack(effect, 3);
     }
 
     public boolean canTravel(Tile tile) {

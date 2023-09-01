@@ -27,13 +27,18 @@ public class Round extends RoundState {
     @Override
     public void enter(GameState state) {
         if (factions == null) {
-            factions = Arrays.stream(Faction.values())
-                    .map(faction -> new CurrentFaction(state.byFaction(faction)))
-                    .collect(Collectors.toCollection(ObjectList::new));
+            startOfRound(state);
             startFirstTurn(state);
         } else {
             advanceToNextTurn(state);
         }
+    }
+
+    private void startOfRound(GameState state) {
+        factions = Arrays.stream(Faction.values())
+                .map(faction -> new CurrentFaction(state.byFaction(faction)))
+                .collect(Collectors.toCollection(ObjectList::new));
+        factions.forEach(faction -> faction.units.forEach(unitInRound -> unitInRound.unit.onRoundStart()));
     }
 
     @Override
@@ -56,6 +61,7 @@ public class Round extends RoundState {
             factionCounter += 1;
         }
         if (factionCounter >= factions.size()) {
+            factions.forEach(faction -> faction.units.forEach(unitInRound -> unitInRound.unit.onRoundEnd()));
             router.round();
             return;
         }

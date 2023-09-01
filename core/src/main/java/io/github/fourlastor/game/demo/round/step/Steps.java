@@ -15,6 +15,7 @@ public class Steps {
     private final MoveStep.Factory moveFactory;
     private final AttackMelee.Factory attackMeleeFactory;
     private final AttackRanged.Factory attackRangedFactory;
+    private final Poison.Factory poisonFactory;
     private final TileSmash.Factory tileSmashFactory;
 
     @Inject
@@ -24,12 +25,14 @@ public class Steps {
             MoveStep.Factory moveFactory,
             AttackMelee.Factory attackMeleeFactory,
             AttackRanged.Factory attackRangedFactory,
+            Poison.Factory poisonFactory,
             TileSmash.Factory tileSmashFactory) {
         this.searchTileFactory = searchTileFactory;
         this.searchUnitFactory = searchUnitFactory;
         this.moveFactory = moveFactory;
         this.attackMeleeFactory = attackMeleeFactory;
         this.attackRangedFactory = attackRangedFactory;
+        this.poisonFactory = poisonFactory;
         this.tileSmashFactory = tileSmashFactory;
     }
 
@@ -55,6 +58,10 @@ public class Steps {
 
     public AttackRanged attackRanged(Unit source, Unit target) {
         return attackRangedFactory.create(source, target);
+    }
+
+    public Poison poison(Unit source, Unit target) {
+        return poisonFactory.create(source, target);
     }
 
     public TileSmash tileSmash(Unit source, Tile target) {

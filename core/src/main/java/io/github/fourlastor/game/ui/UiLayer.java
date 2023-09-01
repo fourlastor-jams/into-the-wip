@@ -10,6 +10,7 @@ public class UiLayer extends Table {
     public final Image move;
     public final Image tileSmash;
     public final Image rangedAttack;
+    public final Image poison;
 
     // TODO: Remove atlas from here
     public UiLayer(TextureAtlas atlas) {
@@ -23,5 +24,7 @@ public class UiLayer extends Table {
         add(tileSmash);
         rangedAttack = new Image(atlas.findRegion("abilities/spells/ranged_attack"));
         add(rangedAttack);
+        poison = new Image(atlas.findRegion("abilities/debuffs/poisoned"));
+        add(poison);
     }
 }

@@ -10,6 +10,7 @@ import dagger.assisted.AssistedFactory;
 import dagger.assisted.AssistedInject;
 import io.github.fourlastor.game.demo.round.ability.MeleeAttackAbility;
 import io.github.fourlastor.game.demo.round.ability.MoveAbility;
+import io.github.fourlastor.game.demo.round.ability.PoisonAbility;
 import io.github.fourlastor.game.demo.round.ability.RangedAttackAbility;
 import io.github.fourlastor.game.demo.round.ability.TileSmashAbility;
 import io.github.fourlastor.game.demo.state.GameState;
@@ -23,6 +24,7 @@ public class Turn extends RoundState {
     private final MoveAbility.Factory moveFactory;
     private final MeleeAttackAbility.Factory meleeAttackFactory;
     private final RangedAttackAbility.Factory rangedAttackFactory;
+    private final PoisonAbility.Factory poisonFactory;
     private final TileSmashAbility.Factory tileSmashFactory;
 
     private boolean acted = false;
@@ -34,12 +36,14 @@ public class Turn extends RoundState {
             MeleeAttackAbility.Factory meleeAttackFactory,
             RangedAttackAbility.Factory rangedAttackFactory,
             MoveAbility.Factory moveFactory,
+            PoisonAbility.Factory poisonFactory,
             TileSmashAbility.Factory tileSmashFactory) {
         this.unitInRound = unitInRound;
         this.router = router;
         this.meleeAttackFactory = meleeAttackFactory;
         this.rangedAttackFactory = rangedAttackFactory;
         this.moveFactory = moveFactory;
+        this.poisonFactory = poisonFactory;
         this.tileSmashFactory = tileSmashFactory;
     }
 
@@ -63,6 +67,9 @@ public class Turn extends RoundState {
             // Tile smash ability button.
             state.ui.tileSmash.addListener(
                     new PickMoveListener(() -> router.startAbility(tileSmashFactory.create(unitInRound))));
+            // Poison.
+            state.ui.poison.addListener(
+                    new PickMoveListener(() -> router.startAbility(poisonFactory.create(unitInRound))));
         } else {
             router.endOfTurn();
         }
@@ -80,6 +87,9 @@ public class Turn extends RoundState {
         state.tileAt(unitInRound.unit.hex).actor.setColor(Color.WHITE);
         ActorSupport.removeListeners(state.ui.meleeAttack, it -> it instanceof PickMoveListener);
         ActorSupport.removeListeners(state.ui.move, it -> it instanceof PickMoveListener);
+        ActorSupport.removeListeners(state.ui.rangedAttack, it -> it instanceof PickMoveListener);
+        ActorSupport.removeListeners(state.ui.tileSmash, it -> it instanceof PickMoveListener);
+        ActorSupport.removeListeners(state.ui.poison, it -> it instanceof PickMoveListener);
     }
 
     private class PickMoveListener extends ClickListener {
