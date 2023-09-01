@@ -1,5 +1,8 @@
 package io.github.fourlastor.game.demo.state.unit.effect;
 
+import com.badlogic.gdx.scenes.scene2d.Action;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
 import com.badlogic.gdx.utils.ObjectIntMap;
 import io.github.fourlastor.game.demo.state.unit.Unit;
 
@@ -27,11 +30,13 @@ public class EffectStacks {
         return stacks.get(effect, 0);
     }
 
-    public void onRoundStart(Unit unit) {
+    public Action onRoundStart(Unit unit) {
+        SequenceAction sequence = Actions.sequence();
         for (Effect effect : stacks.keys()) {
             if (effect instanceof Effect.OnRoundStart) {
-                ((Effect.OnRoundStart) effect).onRoundStart(unit, getStack(effect));
+                sequence.addAction(((Effect.OnRoundStart) effect).onRoundStart(unit, getStack(effect)));
             }
         }
+        return sequence;
     }
 }

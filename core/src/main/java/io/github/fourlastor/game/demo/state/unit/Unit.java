@@ -2,6 +2,7 @@ package io.github.fourlastor.game.demo.state.unit;
 
 import com.badlogic.gdx.math.GridPoint2;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import io.github.fourlastor.game.coordinates.Hex;
 import io.github.fourlastor.game.coordinates.HexCoordinates;
@@ -40,8 +41,8 @@ public class Unit {
         setHp(maxHp);
     }
 
-    public void onRoundStart() {
-        stacks.onRoundStart(this);
+    public Action onRoundStart() {
+        return stacks.onRoundStart(this);
     }
 
     public void onRoundEnd() {
