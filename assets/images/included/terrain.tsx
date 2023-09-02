@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<tileset version="1.10" tiledversion="1.10.2" name="Terrain" tilewidth="66" tileheight="60" tilecount="10" columns="0">
+<tileset version="1.10" tiledversion="1.10.2" name="Terrain" tilewidth="66" tileheight="60" tilecount="12" columns="0">
  <tileoffset x="0" y="15"/>
  <grid orientation="orthogonal" width="1" height="1"/>
  <tile id="0">
@@ -30,7 +30,7 @@
   <properties>
    <property name="tile" value="Solid"/>
   </properties>
-  <image width="62" height="80" source="tiles/mountain1.png"/>
+  <image width="66" height="59" source="tiles/mountain1.png"/>
  </tile>
  <tile id="11">
   <properties>
@@ -67,5 +67,11 @@
    <property name="tile" value="Terrain"/>
   </properties>
   <image width="62" height="51" source="tiles/base1.png"/>
+ </tile>
+ <tile id="17">
+  <properties>
+   <property name="tile" value="Terrain"/>
+  </properties>
+  <image width="62" height="46" source="tiles/grass2.png"/>
  </tile>
 </tileset>
