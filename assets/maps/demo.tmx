@@ -1,32 +1,40 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="hexagonal" renderorder="right-down" width="8" height="8" tilewidth="62" tileheight="31" infinite="0" hexsidelength="32" staggeraxis="x" staggerindex="odd" nextlayerid="5" nextobjectid="6">
+<map version="1.10" tiledversion="1.10.2" orientation="hexagonal" renderorder="right-down" width="12" height="12" tilewidth="62" tileheight="31" infinite="0" hexsidelength="32" staggeraxis="x" staggerindex="odd" nextlayerid="5" nextobjectid="6">
  <properties>
   <property name="atlas" value="../images/packed/images.pack.atlas"/>
  </properties>
  <tileset firstgid="1" source="../images/included/monsters.tsx"/>
  <tileset firstgid="9" source="../images/included/terrain.tsx"/>
- <layer id="4" name="terrain" width="8" height="8">
+ <layer id="4" name="terrain" width="12" height="12">
   <data encoding="csv">
-25,25,10,11,24,22,23,22,
-10,20,21,25,11,12,24,12,
-20,21,12,12,12,11,12,24,
-10,20,12,12,11,11,11,12,
-25,11,11,11,20,20,11,12,
-10,10,11,10,21,20,10,12,
-25,25,25,12,10,12,12,12,
-10,10,12,12,12,12,12,12
+26,26,26,26,12,12,12,13,12,12,12,12,
+26,26,26,20,12,12,12,13,13,13,12,12,
+26,20,20,20,26,11,24,22,23,22,12,12,
+26,26,20,20,21,26,20,12,24,12,12,12,
+26,26,20,21,12,12,12,12,12,12,12,12,
+26,26,26,20,12,12,12,11,12,12,12,12,
+11,11,26,11,11,11,20,20,11,12,12,12,
+11,11,26,26,11,26,21,20,26,12,12,12,
+11,11,26,26,26,12,26,12,12,12,12,12,
+11,26,26,26,12,12,12,12,12,12,12,12,
+26,26,26,12,26,12,26,26,26,26,12,12,
+26,26,12,12,12,12,12,12,12,12,12,12
 </data>
  </layer>
- <layer id="3" name="monsters" width="8" height="8">
+ <layer id="3" name="monsters" width="12" height="12">
   <data encoding="csv">
-0,0,0,0,0,0,0,0,
-0,6,7,0,5,0,0,0,
-0,1,0,0,0,0,0,0,
-0,0,0,0,0,2,0,0,
-0,0,0,0,0,0,3,0,
-0,0,0,0,4,0,0,0,
-0,8,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0
+0,2,0,0,0,0,0,0,0,0,0,0,
+0,0,3,0,0,0,0,0,1,0,0,0,
+7,0,0,0,0,0,0,0,0,0,0,0,
+0,6,0,0,0,0,5,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,
+0,8,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,4,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
 </map>
