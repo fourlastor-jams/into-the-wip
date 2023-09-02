@@ -9,7 +9,9 @@ public enum UnitType {
     MON4("MON4", 3, false),
     TECTONNE("tectonne", 3, false),
     MON6("MON6", 3, false),
-    MON7("MON7", 3, false);
+    MON7("MON7", 3, false),
+    MON8("MON8", 3, false),
+    ;
 
     public final String mapName;
     public final boolean canFly;
