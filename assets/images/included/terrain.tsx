@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<tileset version="1.10" tiledversion="1.10.2" name="Terrain" tilewidth="66" tileheight="60" tilecount="12" columns="0">
+<tileset version="1.10" tiledversion="1.10.2" name="Terrain" tilewidth="66" tileheight="60" tilecount="29" columns="0">
  <tileoffset x="0" y="15"/>
  <grid orientation="orthogonal" width="1" height="1"/>
  <tile id="0">
@@ -73,5 +73,107 @@
    <property name="tile" value="Terrain"/>
   </properties>
   <image width="62" height="46" source="tiles/grass2.png"/>
+ </tile>
+ <tile id="18">
+  <properties>
+   <property name="tile" value="Terrain"/>
+  </properties>
+  <image width="62" height="46" source="tiles/mechanical1.png"/>
+ </tile>
+ <tile id="19">
+  <properties>
+   <property name="tile" value="Terrain"/>
+  </properties>
+  <image width="62" height="46" source="tiles/mechanical2.png"/>
+ </tile>
+ <tile id="20">
+  <properties>
+   <property name="tile" value="Terrain"/>
+  </properties>
+  <image width="62" height="46" source="tiles/mechanical3.png"/>
+ </tile>
+ <tile id="21">
+  <properties>
+   <property name="tile" value="Terrain"/>
+  </properties>
+  <image width="62" height="46" source="tiles/mechanical4.png"/>
+ </tile>
+ <tile id="22">
+  <properties>
+   <property name="tile" value="Terrain"/>
+  </properties>
+  <image width="62" height="46" source="tiles/mechanical5.png"/>
+ </tile>
+ <tile id="23">
+  <properties>
+   <property name="tile" value="Terrain"/>
+  </properties>
+  <image width="62" height="46" source="tiles/mechanical6.png"/>
+ </tile>
+ <tile id="24">
+  <properties>
+   <property name="tile" value="Terrain"/>
+  </properties>
+  <image width="62" height="46" source="tiles/mechanical7.png"/>
+ </tile>
+ <tile id="25">
+  <properties>
+   <property name="tile" value="Terrain"/>
+  </properties>
+  <image width="62" height="46" source="tiles/mechanical8.png"/>
+ </tile>
+ <tile id="26">
+  <properties>
+   <property name="tile" value="Terrain"/>
+  </properties>
+  <image width="62" height="35" source="tiles/nuclear1.png"/>
+ </tile>
+ <tile id="27">
+  <properties>
+   <property name="tile" value="Terrain"/>
+  </properties>
+  <image width="62" height="35" source="tiles/nuclear2.png"/>
+ </tile>
+ <tile id="28">
+  <properties>
+   <property name="tile" value="Terrain"/>
+  </properties>
+  <image width="62" height="35" source="tiles/nuclear3.png"/>
+ </tile>
+ <tile id="29">
+  <properties>
+   <property name="tile" value="Terrain"/>
+  </properties>
+  <image width="62" height="35" source="tiles/nuclear4.png"/>
+ </tile>
+ <tile id="30">
+  <properties>
+   <property name="tile" value="Terrain"/>
+  </properties>
+  <image width="62" height="50" source="tiles/nuclear5.png"/>
+ </tile>
+ <tile id="31">
+  <properties>
+   <property name="tile" value="Terrain"/>
+  </properties>
+  <image width="62" height="50" source="tiles/nuclear6.png"/>
+ </tile>
+ <tile id="32">
+  <properties>
+   <property name="tile" value="Terrain"/>
+  </properties>
+  <image width="62" height="50" source="tiles/nuclear7.png"/>
+ </tile>
+ <tile id="33">
+  <properties>
+   <property name="tile" value="Terrain"/>
+  </properties>
+  <image width="62" height="50" source="tiles/nuclear8.png"/>
+ </tile>
+ <tile id="34">
+  <properties>
+   <property name="tile" value="Terrain"/>
+  </properties>
+  <image width="62" height="50" source="tiles/nuclear9.png"/>
  </tile>
 </tileset>
