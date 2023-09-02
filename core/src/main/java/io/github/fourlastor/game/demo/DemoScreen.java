@@ -4,7 +4,6 @@ import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.tiled.AtlasTmxMapLoader;
@@ -50,8 +49,7 @@ public class DemoScreen extends ScreenAdapter {
             AssetManager assetManager,
             Viewport viewport,
             Stage stage,
-            InputMultiplexer multiplexer,
-            TextureAtlas atlas) {
+            InputMultiplexer multiplexer) {
         this.viewport = viewport;
         this.stage = stage;
         this.multiplexer = multiplexer;
@@ -125,7 +123,7 @@ public class DemoScreen extends ScreenAdapter {
             ySort.sortChildren();
             this.stage.addActor(ySort);
         }
-        UiLayer ui = new UiLayer(atlas);
+        UiLayer ui = new UiLayer();
         stage.addActor(ui);
         state = new GameState(units, tiles, ui);
         stateMachine = stateMachineFactory.create(state);
