@@ -75,9 +75,7 @@ public class Hex {
         NE(1, 0, -1),
         N(0, +1, -1),
         NW(-1, 1, 0),
-        SW(-1, 0, 1),
-        NONE(0, 0, 0),
-        ;
+        SW(-1, 0, 1);
 
         private final GridPoint3 cube;
 
@@ -100,14 +98,6 @@ public class Hex {
             return test.orElse(null);
         }
 
-        public static Direction byValue(int x, int y, int z) {
-            return byValue(new GridPoint3(x, y, z));
-        }
-
-        public boolean equals(Direction direction) {
-            return cube.equals(direction.cube);
-        }
-
         public Direction opposite() {
             return byValue(cube.cpy().inverse());
         }
@@ -124,7 +114,7 @@ public class Hex {
             else if (degrees <= 240) return SW;
             else if (degrees <= 300) return S;
             else if (degrees <= 360) return SE;
-            return NONE;
+            return null;
         }
     }
 }

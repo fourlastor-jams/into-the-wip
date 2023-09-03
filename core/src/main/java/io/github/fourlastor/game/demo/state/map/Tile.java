@@ -15,6 +15,9 @@ public class Tile {
         this.actor = image;
         this.hex = new Hex(position);
         this.type = type;
+        if (type == TileType.WATER) {
+            actor.setColor(1f, 1f, 1f, .9f);
+        }
     }
 
     public static class Link implements Connection<Tile> {
