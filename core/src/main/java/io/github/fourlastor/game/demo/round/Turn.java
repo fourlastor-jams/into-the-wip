@@ -9,6 +9,7 @@ import dagger.assisted.AssistedInject;
 import io.github.fourlastor.game.demo.round.ability.MeleeAttackAbility;
 import io.github.fourlastor.game.demo.round.ability.MoveAbility;
 import io.github.fourlastor.game.demo.round.ability.RangedAttackAbility;
+import io.github.fourlastor.game.demo.round.ability.SummonMountainAbility;
 import io.github.fourlastor.game.demo.round.ability.TileSmashAbility;
 import io.github.fourlastor.game.demo.state.GameState;
 import io.github.fourlastor.game.demo.state.unit.Unit;
@@ -21,6 +22,7 @@ public class Turn extends RoundState {
     private final MoveAbility.Factory moveFactory;
     private final MeleeAttackAbility.Factory meleeAttackFactory;
     private final RangedAttackAbility.Factory rangedAttackFactory;
+    private final SummonMountainAbility.Factory summonMountainFactory;
     private final TileSmashAbility.Factory tileSmashFactory;
 
     private boolean acted = false;
@@ -32,12 +34,14 @@ public class Turn extends RoundState {
             MeleeAttackAbility.Factory meleeAttackFactory,
             RangedAttackAbility.Factory rangedAttackFactory,
             MoveAbility.Factory moveFactory,
+            SummonMountainAbility.Factory summonMountainFactory,
             TileSmashAbility.Factory tileSmashFactory) {
         this.unit = unit;
         this.router = router;
         this.meleeAttackFactory = meleeAttackFactory;
         this.rangedAttackFactory = rangedAttackFactory;
         this.moveFactory = moveFactory;
+        this.summonMountainFactory = summonMountainFactory;
         this.tileSmashFactory = tileSmashFactory;
     }
 
@@ -62,6 +66,10 @@ public class Turn extends RoundState {
             // Tile smash ability button.
             state.ui.tileSmash.addListener(new PickMoveListener(
                     () -> router.startAbility(tileSmashFactory.create(unit, () -> acted = false))));
+
+            // Summon Mountain ability button.
+            state.ui.summonMountain.addListener(new PickMoveListener(
+                    () -> router.startAbility(summonMountainFactory.create(unit, () -> acted = false))));
         } else {
             router.endOfTurn();
         }
