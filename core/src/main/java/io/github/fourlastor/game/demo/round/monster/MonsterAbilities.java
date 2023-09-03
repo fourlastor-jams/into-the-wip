@@ -80,7 +80,7 @@ public interface MonsterAbilities {
 
         @Override
         public List<Abilities.Description> create() {
-            return Arrays.asList(abilities.move, abilities.blobAbsorb);
+            return Arrays.asList(abilities.move, abilities.blobAbsorb, abilities.blobToss);
         }
     }
 

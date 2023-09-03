@@ -33,8 +33,10 @@ public class BlobTossAbility extends Ability {
     @Override
     protected Builder<?> createSteps(GameState state) {
         Predicate<SearchStep<Tile>> movementLogic = Filter.maxDistance(unit.type.speed);
-        BiPredicate<GameState, Tile> searchLogic =
-                Filter.all(Filter.canReach(state.tileAt(unit.hex), movementLogic), Filter.ofType(TileType.SOLID));
+        BiPredicate<GameState, Tile> searchLogic = Filter.all(
+                Filter.canReach(state.tileAt(unit.hex), movementLogic),
+                Filter.ofType(TileType.SOLID).negate(),
+                Filter.ofType(TileType.WATER).negate());
 
         return start(steps.searchTile(searchLogic))
                 .then(hex -> steps.blobToss(unit, state.unitAt(unit.hex, it -> it != unit), state.tileAt(hex)));

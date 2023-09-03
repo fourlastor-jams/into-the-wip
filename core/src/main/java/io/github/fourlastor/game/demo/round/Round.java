@@ -6,6 +6,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.github.tommyettinger.ds.ObjectList;
 import io.github.fourlastor.game.demo.round.faction.Faction;
 import io.github.fourlastor.game.demo.state.GameState;
+import io.github.fourlastor.game.demo.state.map.Tile;
 import io.github.fourlastor.game.demo.state.unit.Unit;
 import io.github.fourlastor.game.ui.ActorSupport;
 import java.util.Arrays;
@@ -38,9 +39,9 @@ public class Round extends RoundState {
 
     @Override
     public void exit(GameState state) {
-        for (Unit unit : state.units) {
-            if (ActorSupport.removeListeners(unit.group.image, it -> it instanceof TurnListener)) {
-                state.tileAt(unit.hex).actor.setColor(Color.WHITE);
+        for (Tile tile : state.tiles) {
+            if (ActorSupport.removeListeners(tile.actor, it -> it instanceof TurnListener)) {
+                tile.actor.setColor(Color.WHITE);
             }
         }
     }
@@ -65,8 +66,9 @@ public class Round extends RoundState {
     private void startTurn(GameState state) {
         CurrentFaction currentFaction = factions.get(factionCounter);
         currentFaction.units.stream().filter(unitInTurn -> !unitInTurn.hasActed).forEach(unitInTurn -> {
-            state.tileAt(unitInTurn.unit.hex).actor.setColor(Color.PINK);
-            unitInTurn.unit.group.image.addListener(new TurnListener(unitInTurn));
+            Tile unitTile = state.tileAt(unitInTurn.unit.hex);
+            unitTile.actor.setColor(Color.PINK);
+            unitTile.actor.addListener(new TurnListener(unitInTurn));
         });
     }
 
