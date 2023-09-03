@@ -3,11 +3,12 @@ package io.github.fourlastor.game.demo;
 import dagger.BindsInstance;
 import dagger.Subcomponent;
 import io.github.fourlastor.game.demo.di.DemoModule;
+import io.github.fourlastor.game.demo.round.monster.MonsterAbilities;
 import io.github.fourlastor.game.di.ScreenScoped;
 import io.github.fourlastor.game.route.Router;
 
 @ScreenScoped
-@Subcomponent(modules = DemoModule.class)
+@Subcomponent(modules = {DemoModule.class, MonsterAbilities.class})
 public interface DemoComponent {
 
     @ScreenScoped
