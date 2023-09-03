@@ -16,6 +16,8 @@ public class Steps {
     private final AttackMelee.Factory attackMeleeFactory;
     private final AttackRanged.Factory attackRangedFactory;
     private final TileSmash.Factory tileSmashFactory;
+    private final BlobAbsorb.Factory blobAbsorbFactory;
+    private final BlobToss.Factory blobTossFactory;
 
     @Inject
     public Steps(
@@ -24,13 +26,17 @@ public class Steps {
             MoveStep.Factory moveFactory,
             AttackMelee.Factory attackMeleeFactory,
             AttackRanged.Factory attackRangedFactory,
-            TileSmash.Factory tileSmashFactory) {
+            TileSmash.Factory tileSmashFactory,
+            BlobAbsorb.Factory blobAbsorbFactory,
+            BlobToss.Factory blobTossFactory) {
         this.searchTileFactory = searchTileFactory;
         this.searchUnitFactory = searchUnitFactory;
         this.moveFactory = moveFactory;
         this.attackMeleeFactory = attackMeleeFactory;
         this.attackRangedFactory = attackRangedFactory;
         this.tileSmashFactory = tileSmashFactory;
+        this.blobAbsorbFactory = blobAbsorbFactory;
+        this.blobTossFactory = blobTossFactory;
     }
 
     public SearchTile searchTile(BiPredicate<GameState, Tile> filter) {
@@ -59,5 +65,13 @@ public class Steps {
 
     public TileSmash tileSmash(Unit source, Tile target) {
         return tileSmashFactory.create(source, target);
+    }
+
+    public BlobAbsorb blobAbsorb(Unit source, Unit target) {
+        return blobAbsorbFactory.create(source, target);
+    }
+
+    public BlobToss blobToss(Unit source, Unit targetUnit, Tile targetTile) {
+        return blobTossFactory.create(source, targetUnit, targetTile);
     }
 }

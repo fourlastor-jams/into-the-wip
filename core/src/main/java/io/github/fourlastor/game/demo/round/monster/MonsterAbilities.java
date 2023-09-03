@@ -29,7 +29,7 @@ public interface MonsterAbilities {
         @Binds
         @IntoMap
         @MonsterKey(UnitType.BLOBHOT)
-        MonsterAbilities blobhot(Blobhot blobhot);
+        MonsterAbilities blobhot(Blobanero blobhot);
 
         @MapKey
         @interface MonsterKey {
@@ -69,18 +69,18 @@ public interface MonsterAbilities {
         }
     }
 
-    class Blobhot implements MonsterAbilities {
+    class Blobanero implements MonsterAbilities {
 
         private final Abilities abilities;
 
         @Inject
-        public Blobhot(Abilities abilities) {
+        public Blobanero(Abilities abilities) {
             this.abilities = abilities;
         }
 
         @Override
         public List<Abilities.Description> create() {
-            return Arrays.asList(abilities.move, abilities.ranged);
+            return Arrays.asList(abilities.move, abilities.blobAbsorb);
         }
     }
 
