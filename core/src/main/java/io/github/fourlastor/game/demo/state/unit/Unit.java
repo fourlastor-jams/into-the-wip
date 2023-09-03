@@ -5,10 +5,17 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import io.github.fourlastor.game.coordinates.Hex;
 import io.github.fourlastor.game.coordinates.HexCoordinates;
+import io.github.fourlastor.game.demo.round.Ability;
+import io.github.fourlastor.game.demo.round.UnitInRound;
 import io.github.fourlastor.game.demo.round.faction.Faction;
+import io.github.fourlastor.game.demo.round.monster.MonsterAbilities;
 import io.github.fourlastor.game.demo.state.map.Tile;
 import io.github.fourlastor.game.demo.state.map.TileType;
 import io.github.fourlastor.game.ui.UnitOnMap;
+import java.util.Arrays;
+import java.util.List;
+import java.util.function.Function;
+import javax.inject.Inject;
 
 public class Unit {
 
@@ -76,5 +83,37 @@ public class Unit {
 
     public void alignHpBar() {
         hpLabel.setPosition(group.getX() + group.getWidth() / 2, group.getY() + 40);
+    }
+
+    public interface Abilities {
+        List<Description> create();
+
+        class Description {
+            public final String name;
+            public final String icon;
+            public final Function<UnitInRound, Ability> factory;
+
+            public Description(String name, String icon, Function<UnitInRound, Ability> factory) {
+                this.name = name;
+                this.icon = icon;
+                this.factory = factory;
+            }
+        }
+
+        /** Default fallback if monster abilities are not found. */
+        class Defaults implements Abilities {
+
+            private final MonsterAbilities.Descriptions descriptions;
+
+            @Inject
+            public Defaults(MonsterAbilities.Descriptions descriptions) {
+                this.descriptions = descriptions;
+            }
+
+            @Override
+            public List<Description> create() {
+                return Arrays.asList(descriptions.move, descriptions.melee);
+            }
+        }
     }
 }

@@ -11,8 +11,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import dagger.assisted.Assisted;
 import dagger.assisted.AssistedFactory;
 import dagger.assisted.AssistedInject;
-import io.github.fourlastor.game.demo.round.ability.Abilities;
-import io.github.fourlastor.game.demo.round.monster.MonsterAbilities;
 import io.github.fourlastor.game.demo.state.GameState;
 import io.github.fourlastor.game.demo.state.unit.Unit;
 import io.github.fourlastor.game.demo.state.unit.UnitType;
@@ -24,8 +22,8 @@ public class Turn extends RoundState {
 
     private final UnitInRound unitInRound;
     private final StateRouter router;
-    private final MonsterAbilities.DefaultAbilities defaultAbilities;
-    private final Map<UnitType, MonsterAbilities> abilitiesMap;
+    private final Unit.Abilities.Defaults defaults;
+    private final Map<UnitType, Unit.Abilities> abilitiesMap;
     private final TextureAtlas atlas;
 
     private final Queue<Actor> addedImages = new LinkedList<>();
@@ -36,12 +34,12 @@ public class Turn extends RoundState {
     public Turn(
             @Assisted UnitInRound unitInRound,
             StateRouter router,
-            MonsterAbilities.DefaultAbilities defaultAbilities,
-            Map<UnitType, MonsterAbilities> abilitiesMap,
+            Unit.Abilities.Defaults defaults,
+            Map<UnitType, Unit.Abilities> abilitiesMap,
             TextureAtlas atlas) {
         this.unitInRound = unitInRound;
         this.router = router;
-        this.defaultAbilities = defaultAbilities;
+        this.defaults = defaults;
         this.abilitiesMap = abilitiesMap;
         this.atlas = atlas;
     }
@@ -52,8 +50,8 @@ public class Turn extends RoundState {
         state.tileAt(unit.hex).actor.setColor(Color.PINK);
 
         if (!acted) {
-            MonsterAbilities monsterAbilities = abilitiesMap.getOrDefault(unit.type, defaultAbilities);
-            for (Abilities.Description description : monsterAbilities.create()) {
+            Unit.Abilities monsterAbilities = abilitiesMap.getOrDefault(unit.type, defaults);
+            for (Unit.Abilities.Description description : monsterAbilities.create()) {
                 Image image = new Image(atlas.findRegion(description.icon));
                 image.addListener(
                         new PickMoveListener(() -> router.startAbility(description.factory.apply(unitInRound))));
