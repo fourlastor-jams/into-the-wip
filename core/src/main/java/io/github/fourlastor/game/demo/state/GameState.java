@@ -62,11 +62,11 @@ public class GameState {
 
     @Null
     public Unit unitAt(Hex hex) {
-        return this.unitAt(hex, (Unit unit) -> unit.hex.equals(hex));
+        return this.unitAt((Unit unit) -> unit.hex.equals(hex));
     }
 
     @Null
-    public Unit unitAt(Hex hex, Predicate<Unit> filter) {
+    public Unit unitAt(Predicate<Unit> filter) {
         return units.stream().filter(filter).findFirst().orElse(null);
     }
 

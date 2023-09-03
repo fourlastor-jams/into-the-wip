@@ -41,7 +41,7 @@ public class BlobToss extends SimpleStep {
         return target.cpy().sub(source).angleDeg();
     }
 
-    public Action setupAttackAnimation(float distance, float rotationDegrees) {
+    public Action setupAttackAnimation(GameState state, float distance, float rotationDegrees) {
         // Base animation goes left-to-right.
         Vector3[] positions = {
             new Vector3(1f, 0f, -.5f),
@@ -58,22 +58,36 @@ public class BlobToss extends SimpleStep {
             new Vector3(1f, 0f, -.5f),
         };
         Runnable[] runnables = new Runnable[] {
-            null, null, null, null, null, null, null, null, null, null, null, null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            // Damage all mons on that tile.
+            () -> state.units.forEach(unit -> unit.changeHp(-2)),
         };
         Vector3 scale = SCALE.cpy().scl(distance, 1f, 1f);
         return AttackAnimation.makeSequence(
                 targetUnit.group, runnables, positions, MOVE_DURATION, rotationDegrees, scale);
     }
 
-    public void doAttackAnimation(Vector2 originalPosition, Vector2 targetPosition, Runnable continuation) {
+    public void doAttackAnimation(
+            GameState state, Vector2 originalPosition, Vector2 targetPosition, Runnable continuation) {
         // Distance between source and target is used to scale the animation if needed.
         float distance = source.getActorPosition().dst(targetPosition);
         // Angle offset of target from source.
         float rotationDegrees = calculateAngle(originalPosition, targetPosition);
         SequenceAction attackAnimation = Actions.sequence(
-                setupAttackAnimation(distance, rotationDegrees),
+                setupAttackAnimation(state, distance, rotationDegrees),
                 // Move the target unit to the source's Tile.
-                Actions.run(() -> targetUnit.setActorPosition(originalPosition)),
+                Actions.run(() -> targetUnit.hex.set(targetTile.hex)),
+                Actions.run(() -> targetUnit.setActorPosition(targetPosition)),
                 Actions.run(continuation));
         targetUnit.group.addAction(attackAnimation);
     }
@@ -82,7 +96,7 @@ public class BlobToss extends SimpleStep {
     public void enter(GameState state, Runnable continuation) {
         Vector2 originalPosition = source.getActorPosition();
         Vector2 targetPosition = targetUnit.getActorPosition();
-        doAttackAnimation(originalPosition, targetPosition, continuation);
+        doAttackAnimation(state, originalPosition, targetPosition, continuation);
     }
 
     @Override

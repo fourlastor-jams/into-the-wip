@@ -80,9 +80,6 @@ public class BlobAbsorb extends SimpleStep {
     }
 
     public void doAttackAnimation(Vector2 originalPosition, Vector2 targetPosition, Runnable continuation) {
-
-        System.out.println(source.hex);
-        System.out.println(targetUnit.hex);
         // Distance between source and target is used to scale the animation if needed.
         float distance = source.getActorPosition().dst(targetPosition);
         // Angle offset of target from source.
@@ -92,10 +89,6 @@ public class BlobAbsorb extends SimpleStep {
                 // Move the target unit to the source's Tile.
                 Actions.run(() -> targetUnit.hex.set(source.hex)),
                 Actions.run(() -> targetUnit.setActorPosition(originalPosition)),
-                Actions.run(() -> {
-                    System.out.println(source.hex);
-                    System.out.println(targetUnit.hex);
-                }),
                 Actions.run(continuation));
         targetUnit.group.addAction(attackAnimation);
     }

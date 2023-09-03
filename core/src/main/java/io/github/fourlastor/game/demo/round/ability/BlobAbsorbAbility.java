@@ -39,7 +39,6 @@ public class BlobAbsorbAbility extends Ability {
                 Filter.hasUnit(),
                 (ignored, tile) -> !unit.hex.equals(tile.hex));
         return start(steps.searchUnit(searchLogic)).sequence(hex -> {
-            System.out.println(unit.hex.offset);
             ObjectList<Tile> path =
                     new ObjectList<>(state.graph.path(state.tileAt(unit.hex), state.tileAt(hex), movementLogic));
             if (path.size() >= 2) {

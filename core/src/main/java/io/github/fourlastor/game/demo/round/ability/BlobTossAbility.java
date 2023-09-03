@@ -39,7 +39,8 @@ public class BlobTossAbility extends Ability {
                 Filter.ofType(TileType.WATER).negate());
 
         return start(steps.searchTile(searchLogic))
-                .then(hex -> steps.blobToss(unit, state.unitAt(unit.hex, it -> it != unit), state.tileAt(hex)));
+                .then(hex -> steps.blobToss(
+                        unit, state.unitAt(it -> unit.hex.equals(hex) && it != unit), state.tileAt(hex)));
     }
 
     @AssistedFactory
