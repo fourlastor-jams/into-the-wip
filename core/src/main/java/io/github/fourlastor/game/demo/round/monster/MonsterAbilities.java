@@ -5,6 +5,7 @@ import dagger.MapKey;
 import dagger.Module;
 import dagger.multibindings.IntoMap;
 import io.github.fourlastor.game.demo.round.ability.MeleeAttackAbility;
+import io.github.fourlastor.game.demo.round.ability.PoisonAbility;
 import io.github.fourlastor.game.demo.round.ability.RangedAttackAbility;
 import io.github.fourlastor.game.demo.round.ability.SummonMountainAbility;
 import io.github.fourlastor.game.demo.round.ability.TileSmashAbility;
@@ -49,7 +50,7 @@ public interface MonsterAbilities {
 
         @Override
         public List<Unit.Abilities.Description> create() {
-            return Arrays.asList(descriptions.ranged, descriptions.move);
+            return Arrays.asList(descriptions.ranged, descriptions.poison, descriptions.move);
         }
     }
 
@@ -89,6 +90,7 @@ public interface MonsterAbilities {
         public final Unit.Abilities.Description move;
         public final Unit.Abilities.Description smash;
         public final Unit.Abilities.Description summonMountain;
+        private final Unit.Abilities.Description poison;
 
         @Inject
         public Descriptions(
@@ -96,7 +98,8 @@ public interface MonsterAbilities {
                 RangedAttackAbility.Factory rangedFactory,
                 MeleeAttackAbility.Factory moveFactory,
                 TileSmashAbility.Factory smashFactory,
-                SummonMountainAbility.Factory summonMountainFactory) {
+                SummonMountainAbility.Factory summonMountainFactory,
+                PoisonAbility.Factory poisonFactory) {
             this.melee = new Unit.Abilities.Description(
                     "Melee attack", "abilities/buffs/attack_boost", meleeFactory::create);
             this.ranged = new Unit.Abilities.Description(
@@ -106,6 +109,7 @@ public interface MonsterAbilities {
                     new Unit.Abilities.Description("Smash tile", "abilities/spells/tile_smash", smashFactory::create);
             this.summonMountain = new Unit.Abilities.Description(
                     "Summon mountain", "abilities/spells/summon_mountain", summonMountainFactory::create);
+            this.poison = new Unit.Abilities.Description("Poison", "abilities/debuffs/poisoned", poisonFactory::create);
         }
     }
 }

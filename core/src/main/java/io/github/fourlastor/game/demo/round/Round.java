@@ -1,7 +1,10 @@
 package io.github.fourlastor.game.demo.round;
 
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.github.tommyettinger.ds.ObjectList;
 import io.github.fourlastor.game.demo.round.faction.Faction;
@@ -16,24 +19,33 @@ import javax.inject.Inject;
 public class Round extends RoundState {
 
     private final StateRouter router;
+    private final Stage stage;
     private List<CurrentFaction> factions = null;
     private int factionCounter = 0;
 
     @Inject
-    public Round(StateRouter router) {
+    public Round(StateRouter router, Stage stage) {
         this.router = router;
+        this.stage = stage;
     }
 
     @Override
     public void enter(GameState state) {
         if (factions == null) {
-            factions = Arrays.stream(Faction.values())
-                    .map(faction -> new CurrentFaction(state.byFaction(faction)))
-                    .collect(Collectors.toCollection(ObjectList::new));
-            startFirstTurn(state);
+            stage.addAction(Actions.sequence(startOfRound(state), Actions.run(() -> startFirstTurn(state))));
         } else {
             advanceToNextTurn(state);
         }
+    }
+
+    private Action startOfRound(GameState state) {
+        factions = Arrays.stream(Faction.values())
+                .map(faction -> new CurrentFaction(state.byFaction(faction)))
+                .collect(Collectors.toCollection(ObjectList::new));
+        List<Action> actions = factions.stream()
+                .flatMap(faction -> faction.units.stream().map(unitInRound -> unitInRound.unit.onRoundStart()))
+                .collect(Collectors.toList());
+        return Actions.sequence(actions.toArray(new Action[] {}));
     }
 
     @Override
@@ -56,6 +68,7 @@ public class Round extends RoundState {
             factionCounter += 1;
         }
         if (factionCounter >= factions.size()) {
+            factions.forEach(faction -> faction.units.forEach(unitInRound -> unitInRound.unit.onRoundEnd()));
             router.round();
             return;
         }
