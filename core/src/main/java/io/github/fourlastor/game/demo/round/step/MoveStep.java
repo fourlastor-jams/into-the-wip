@@ -36,6 +36,7 @@ public class MoveStep extends SimpleStep {
 
     @Override
     public void enter(GameState state, Runnable continuation) {
+
         List<Action> actions = new ArrayList<>();
         for (Tile pathTile : path) {
             Vector2 position = unit.coordinates.toWorldAtCenter(pathTile.hex, new Vector2());

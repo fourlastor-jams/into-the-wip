@@ -11,6 +11,7 @@ import io.github.fourlastor.game.demo.state.unit.Unit;
 import io.github.fourlastor.game.ui.UiLayer;
 import java.util.List;
 import java.util.function.BiPredicate;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public class GameState {
@@ -61,7 +62,12 @@ public class GameState {
 
     @Null
     public Unit unitAt(Hex hex) {
-        return units.stream().filter(it -> it.hex.equals(hex)).findFirst().orElse(null);
+        return this.unitAt((Unit unit) -> unit.hex.equals(hex));
+    }
+
+    @Null
+    public Unit unitAt(Predicate<Unit> filter) {
+        return units.stream().filter(filter).findFirst().orElse(null);
     }
 
     private void connectTiles(Tile tile, @Null Tile adjacent) {

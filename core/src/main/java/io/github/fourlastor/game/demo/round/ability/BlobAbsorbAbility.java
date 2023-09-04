@@ -17,13 +17,13 @@ import java.util.function.BiPredicate;
 import java.util.function.Predicate;
 import space.earlygrey.simplegraphs.algorithms.SearchStep;
 
-public class MeleeAttackAbility extends Ability {
+public class BlobAbsorbAbility extends Ability {
 
     private final Unit unit;
     private final Steps steps;
 
     @AssistedInject
-    public MeleeAttackAbility(
+    public BlobAbsorbAbility(
             @Assisted UnitInRound unitInRound, StateRouter router, StepState.Factory stateFactory, Steps steps) {
         super(unitInRound, router, stateFactory);
         this.unit = unitInRound.unit;
@@ -44,15 +44,15 @@ public class MeleeAttackAbility extends Ability {
             if (path.size() >= 2) {
                 int tileIndex = path.size() - 2;
                 return start(steps.move(unit, path.get(tileIndex), path.subList(0, tileIndex + 1)))
-                        .then(steps.attackMelee(unit, state.unitAt(hex)));
+                        .then(steps.blobAbsorb(unit, state.unitAt(hex)));
             } else {
-                return start(steps.attackMelee(unit, state.unitAt(hex)));
+                return start(steps.blobAbsorb(unit, state.unitAt(hex)));
             }
         });
     }
 
     @AssistedFactory
     public interface Factory {
-        MeleeAttackAbility create(UnitInRound unitInRound);
+        BlobAbsorbAbility create(UnitInRound unitInRound);
     }
 }

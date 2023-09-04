@@ -18,6 +18,8 @@ public class Steps {
     private final Poison.Factory poisonFactory;
     private final SummonMountain.Factory summonMountainFactory;
     private final TileSmash.Factory tileSmashFactory;
+    private final BlobAbsorb.Factory blobAbsorbFactory;
+    private final BlobToss.Factory blobTossFactory;
 
     @Inject
     public Steps(
@@ -28,7 +30,9 @@ public class Steps {
             AttackRanged.Factory attackRangedFactory,
             Poison.Factory poisonFactory,
             SummonMountain.Factory summonMountainFactory,
-            TileSmash.Factory tileSmashFactory) {
+            TileSmash.Factory tileSmashFactory,
+            BlobAbsorb.Factory blobAbsorbFactory,
+            BlobToss.Factory blobTossFactory) {
         this.searchTileFactory = searchTileFactory;
         this.searchUnitFactory = searchUnitFactory;
         this.moveFactory = moveFactory;
@@ -37,6 +41,8 @@ public class Steps {
         this.poisonFactory = poisonFactory;
         this.summonMountainFactory = summonMountainFactory;
         this.tileSmashFactory = tileSmashFactory;
+        this.blobAbsorbFactory = blobAbsorbFactory;
+        this.blobTossFactory = blobTossFactory;
     }
 
     public SearchTile searchTile(BiPredicate<GameState, Tile> filter) {
@@ -73,5 +79,13 @@ public class Steps {
 
     public TileSmash tileSmash(Unit source, Tile target) {
         return tileSmashFactory.create(source, target);
+    }
+
+    public BlobAbsorb blobAbsorb(Unit source, Unit target) {
+        return blobAbsorbFactory.create(source, target);
+    }
+
+    public BlobToss blobToss(Unit source, Unit targetUnit, Tile targetTile) {
+        return blobTossFactory.create(source, targetUnit, targetTile);
     }
 }

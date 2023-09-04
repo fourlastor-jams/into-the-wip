@@ -1,6 +1,5 @@
 package io.github.fourlastor.game.demo.round.ability;
 
-import com.github.tommyettinger.ds.ObjectList;
 import dagger.assisted.Assisted;
 import dagger.assisted.AssistedFactory;
 import dagger.assisted.AssistedInject;
@@ -12,18 +11,19 @@ import io.github.fourlastor.game.demo.round.step.Steps;
 import io.github.fourlastor.game.demo.state.Filter;
 import io.github.fourlastor.game.demo.state.GameState;
 import io.github.fourlastor.game.demo.state.map.Tile;
+import io.github.fourlastor.game.demo.state.map.TileType;
 import io.github.fourlastor.game.demo.state.unit.Unit;
 import java.util.function.BiPredicate;
 import java.util.function.Predicate;
 import space.earlygrey.simplegraphs.algorithms.SearchStep;
 
-public class MeleeAttackAbility extends Ability {
+public class BlobTossAbility extends Ability {
 
     private final Unit unit;
     private final Steps steps;
 
     @AssistedInject
-    public MeleeAttackAbility(
+    public BlobTossAbility(
             @Assisted UnitInRound unitInRound, StateRouter router, StepState.Factory stateFactory, Steps steps) {
         super(unitInRound, router, stateFactory);
         this.unit = unitInRound.unit;
@@ -32,27 +32,19 @@ public class MeleeAttackAbility extends Ability {
 
     @Override
     protected Builder<?> createSteps(GameState state) {
-        Predicate<SearchStep<Tile>> movementLogic =
-                Filter.all(Filter.maxDistance(unit.type.speed), Filter.canTravel(unit));
+        Predicate<SearchStep<Tile>> movementLogic = Filter.maxDistance(unit.type.speed);
         BiPredicate<GameState, Tile> searchLogic = Filter.all(
                 Filter.canReach(state.tileAt(unit.hex), movementLogic),
-                Filter.hasUnit(),
-                (ignored, tile) -> !unit.hex.equals(tile.hex));
-        return start(steps.searchUnit(searchLogic)).sequence(hex -> {
-            ObjectList<Tile> path =
-                    new ObjectList<>(state.graph.path(state.tileAt(unit.hex), state.tileAt(hex), movementLogic));
-            if (path.size() >= 2) {
-                int tileIndex = path.size() - 2;
-                return start(steps.move(unit, path.get(tileIndex), path.subList(0, tileIndex + 1)))
-                        .then(steps.attackMelee(unit, state.unitAt(hex)));
-            } else {
-                return start(steps.attackMelee(unit, state.unitAt(hex)));
-            }
-        });
+                Filter.ofType(TileType.SOLID).negate(),
+                Filter.ofType(TileType.WATER).negate());
+
+        return start(steps.searchTile(searchLogic))
+                .then(hex -> steps.blobToss(
+                        unit, state.unitAt(it -> unit.hex.equals(hex) && it != unit), state.tileAt(hex)));
     }
 
     @AssistedFactory
     public interface Factory {
-        MeleeAttackAbility create(UnitInRound unitInRound);
+        BlobTossAbility create(UnitInRound unitInRound);
     }
 }

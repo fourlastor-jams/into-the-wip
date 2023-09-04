@@ -58,7 +58,7 @@ public class DemoScreen extends ScreenAdapter {
         int hexSideLength = map.getProperties().get("hexsidelength", Integer.class);
         ObjectList<Unit> units = new ObjectList<>();
         ObjectList<Tile> tiles = new ObjectList<>();
-        int factionIndex = 0;
+        int factionIndex = 1;
         for (MapLayer mapLayer : map.getLayers()) {
 
             if (!(mapLayer instanceof TiledMapTileLayer)) {

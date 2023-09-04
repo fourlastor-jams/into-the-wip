@@ -4,6 +4,8 @@ import dagger.Binds;
 import dagger.MapKey;
 import dagger.Module;
 import dagger.multibindings.IntoMap;
+import io.github.fourlastor.game.demo.round.ability.BlobAbsorbAbility;
+import io.github.fourlastor.game.demo.round.ability.BlobTossAbility;
 import io.github.fourlastor.game.demo.round.ability.MeleeAttackAbility;
 import io.github.fourlastor.game.demo.round.ability.PoisonAbility;
 import io.github.fourlastor.game.demo.round.ability.RangedAttackAbility;
@@ -32,7 +34,7 @@ public interface MonsterAbilities {
     @Binds
     @IntoMap
     @MonsterKey(UnitType.BLOBHOT)
-    Unit.Abilities blobhot(Blobhot blobhot);
+    Unit.Abilities blobhot(Blobanero blobanero);
 
     @MapKey
     @interface MonsterKey {
@@ -69,18 +71,18 @@ public interface MonsterAbilities {
         }
     }
 
-    class Blobhot implements Unit.Abilities {
+    class Blobanero implements Unit.Abilities {
 
         private final Descriptions descriptions;
 
         @Inject
-        public Blobhot(Descriptions descriptions) {
+        public Blobanero(Descriptions descriptions) {
             this.descriptions = descriptions;
         }
 
         @Override
         public List<Unit.Abilities.Description> create() {
-            return Arrays.asList(descriptions.move, descriptions.ranged);
+            return Arrays.asList(descriptions.move, descriptions.blobAbsorb, descriptions.blobToss);
         }
     }
 
@@ -90,7 +92,9 @@ public interface MonsterAbilities {
         public final Unit.Abilities.Description move;
         public final Unit.Abilities.Description smash;
         public final Unit.Abilities.Description summonMountain;
-        private final Unit.Abilities.Description poison;
+        public final Unit.Abilities.Description poison;
+        public final Unit.Abilities.Description blobAbsorb;
+        public final Unit.Abilities.Description blobToss;
 
         @Inject
         public Descriptions(
@@ -99,7 +103,9 @@ public interface MonsterAbilities {
                 MeleeAttackAbility.Factory moveFactory,
                 TileSmashAbility.Factory smashFactory,
                 SummonMountainAbility.Factory summonMountainFactory,
-                PoisonAbility.Factory poisonFactory) {
+                PoisonAbility.Factory poisonFactory,
+                BlobAbsorbAbility.Factory blobAbsorbFactory,
+                BlobTossAbility.Factory blobTossFactory) {
             this.melee = new Unit.Abilities.Description(
                     "Melee attack", "abilities/buffs/attack_boost", meleeFactory::create);
             this.ranged = new Unit.Abilities.Description(
@@ -110,6 +116,10 @@ public interface MonsterAbilities {
             this.summonMountain = new Unit.Abilities.Description(
                     "Summon mountain", "abilities/spells/summon_mountain", summonMountainFactory::create);
             this.poison = new Unit.Abilities.Description("Poison", "abilities/debuffs/poisoned", poisonFactory::create);
+            this.blobAbsorb = new Unit.Abilities.Description(
+                    "Absorb unit", "abilities/spells/healing_spell", blobAbsorbFactory::create);
+            this.blobToss = new Unit.Abilities.Description(
+                    "Toss the absorbed unit", "abilities/spells/healing_spell", blobTossFactory::create);
         }
     }
 }
