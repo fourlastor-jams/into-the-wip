@@ -105,7 +105,7 @@ public interface MonsterAbilities {
             this.smash =
                     new Unit.Abilities.Description("Smash tile", "abilities/spells/tile_smash", smashFactory::create);
             this.summonMountain = new Unit.Abilities.Description(
-                    "Summon mountain", "abilities/spells/summon_mountain", moveFactory::create);
+                    "Summon mountain", "abilities/spells/summon_mountain", summonMountainFactory::create);
         }
     }
 }
