@@ -1,4 +1,6 @@
 import com.badlogic.gdx.tools.texturepacker.TexturePacker
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 @Suppress(
     // known false positive: https://youtrack.jetbrains.com/issue/KTIJ-19369
@@ -8,10 +10,16 @@ plugins {
     `java-library`
     idea
     alias(libs.plugins.spotless)
+    alias(libs.plugins.kotlin.jvm)
+    alias(libs.plugins.kotlin.kapt)
 }
 
-java.sourceCompatibility = JavaVersion.VERSION_1_8
-java.targetCompatibility = JavaVersion.VERSION_1_8
+java.sourceCompatibility = JavaVersion.VERSION_11
+java.targetCompatibility = JavaVersion.VERSION_11
+
+tasks.withType<KotlinCompile>().configureEach {
+    compilerOptions { jvmTarget.set(JvmTarget.JVM_11) }
+}
 
 val assetsDir = rootProject.files("assets")
 
@@ -19,12 +27,13 @@ sourceSets.main.configure {
     resources.srcDir(assetsDir)
 }
 
-idea.module { excludeDirs.add(file("src/gwtCompat")) }
-
 spotless {
     isEnforceCheck = false
     java {
         palantirJavaFormat()
+    }
+    kotlin {
+        ktlint()
     }
 }
 
@@ -50,7 +59,7 @@ dependencies {
     implementation(libs.harlequin.core)
     implementation(libs.harlequin.ashley)
     implementation(libs.perceptual)
-    implementation(libs.gdx.core)
+    api(libs.gdx.core)
     implementation(libs.gdx.ai)
     implementation(libs.gdx.controllers.core)
     implementation(libs.ashley)
@@ -60,5 +69,5 @@ dependencies {
     implementation(libs.textratypist)
     implementation(libs.dagger.core)
     api(libs.dagger.gwt)
-    annotationProcessor(libs.dagger.compiler)
+    kapt(libs.dagger.compiler)
 }
