@@ -33,7 +33,7 @@ spotless {
         palantirJavaFormat()
     }
     kotlin {
-        ktfmt("0.37")
+        ktlint()
     }
 }
 
