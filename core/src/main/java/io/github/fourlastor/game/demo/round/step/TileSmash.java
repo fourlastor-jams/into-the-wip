@@ -104,6 +104,8 @@ public class TileSmash extends SimpleStep {
         float rotationDegrees = calculateAngle(originalPosition, targetPosition);
         SequenceAction attackAnimation = Actions.sequence(
                 setupAttackAnimation(distance, rotationDegrees),
+                Actions.run(
+                        () -> source.hex.set(target.hex)), // (sheerst) Note: model code, likely shouldn't happen here?
                 Actions.run(() -> source.setActorPosition(originalPosition)),
                 Actions.run(continuation));
         source.group.addAction(attackAnimation);

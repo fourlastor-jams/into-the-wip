@@ -4,99 +4,122 @@ import dagger.Binds;
 import dagger.MapKey;
 import dagger.Module;
 import dagger.multibindings.IntoMap;
-import io.github.fourlastor.game.demo.round.ability.Abilities;
+import io.github.fourlastor.game.demo.round.ability.BlobAbsorbAbility;
+import io.github.fourlastor.game.demo.round.ability.BlobTossAbility;
+import io.github.fourlastor.game.demo.round.ability.MeleeAttackAbility;
+import io.github.fourlastor.game.demo.round.ability.PoisonAbility;
+import io.github.fourlastor.game.demo.round.ability.RangedAttackAbility;
+import io.github.fourlastor.game.demo.round.ability.SummonMountainAbility;
+import io.github.fourlastor.game.demo.round.ability.TileSmashAbility;
+import io.github.fourlastor.game.demo.state.unit.Unit;
 import io.github.fourlastor.game.demo.state.unit.UnitType;
 import java.util.Arrays;
 import java.util.List;
 import javax.inject.Inject;
 
+/** Register abilities by monster type here. */
+@Module
 public interface MonsterAbilities {
 
-    /** Register abilities by monster type here. */
-    @Module
-    interface Bindings {
+    @Binds
+    @IntoMap
+    @MonsterKey(UnitType.CEREBRY)
+    Unit.Abilities cerebry(Cerebry cerebry);
 
-        @Binds
-        @IntoMap
-        @MonsterKey(UnitType.CEREBRY)
-        MonsterAbilities cerebry(Cerebry cerebry);
+    @Binds
+    @IntoMap
+    @MonsterKey(UnitType.TECTONNE)
+    Unit.Abilities tectonne(Tectonne tectonne);
 
-        @Binds
-        @IntoMap
-        @MonsterKey(UnitType.TECTONNE)
-        MonsterAbilities tectonne(Tectonne tectonne);
+    @Binds
+    @IntoMap
+    @MonsterKey(UnitType.BLOBHOT)
+    Unit.Abilities blobhot(Blobanero blobanero);
 
-        @Binds
-        @IntoMap
-        @MonsterKey(UnitType.BLOBHOT)
-        MonsterAbilities blobhot(Blobanero blobhot);
-
-        @MapKey
-        @interface MonsterKey {
-            UnitType value();
-        }
+    @MapKey
+    @interface MonsterKey {
+        UnitType value();
     }
 
-    List<Abilities.Description> create();
+    class Cerebry implements Unit.Abilities {
 
-    class Cerebry implements MonsterAbilities {
-
-        private final Abilities abilities;
+        private final Descriptions descriptions;
 
         @Inject
-        public Cerebry(Abilities abilities) {
-            this.abilities = abilities;
+        public Cerebry(Descriptions descriptions) {
+            this.descriptions = descriptions;
         }
 
         @Override
-        public List<Abilities.Description> create() {
-            return Arrays.asList(abilities.ranged, abilities.move);
+        public List<Unit.Abilities.Description> create() {
+            return Arrays.asList(descriptions.ranged, descriptions.poison, descriptions.move);
         }
     }
 
-    class Tectonne implements MonsterAbilities {
+    class Tectonne implements Unit.Abilities {
 
-        private final Abilities abilities;
+        private final Descriptions descriptions;
 
         @Inject
-        public Tectonne(Abilities abilities) {
-            this.abilities = abilities;
+        public Tectonne(Descriptions descriptions) {
+            this.descriptions = descriptions;
         }
 
         @Override
-        public List<Abilities.Description> create() {
-            return Arrays.asList(abilities.move, abilities.smash);
+        public List<Unit.Abilities.Description> create() {
+            return Arrays.asList(descriptions.move, descriptions.smash, descriptions.summonMountain);
         }
     }
 
-    class Blobanero implements MonsterAbilities {
+    class Blobanero implements Unit.Abilities {
 
-        private final Abilities abilities;
+        private final Descriptions descriptions;
 
         @Inject
-        public Blobanero(Abilities abilities) {
-            this.abilities = abilities;
+        public Blobanero(Descriptions descriptions) {
+            this.descriptions = descriptions;
         }
 
         @Override
-        public List<Abilities.Description> create() {
-            return Arrays.asList(abilities.move, abilities.blobAbsorb, abilities.blobToss);
+        public List<Unit.Abilities.Description> create() {
+            return Arrays.asList(descriptions.move, descriptions.blobAbsorb, descriptions.blobToss);
         }
     }
 
-    /** Default fallback if monster abilities are not found. */
-    class DefaultAbilities implements MonsterAbilities {
-
-        private final Abilities abilities;
+    class Descriptions {
+        public final Unit.Abilities.Description melee;
+        public final Unit.Abilities.Description ranged;
+        public final Unit.Abilities.Description move;
+        public final Unit.Abilities.Description smash;
+        public final Unit.Abilities.Description summonMountain;
+        public final Unit.Abilities.Description poison;
+        public final Unit.Abilities.Description blobAbsorb;
+        public final Unit.Abilities.Description blobToss;
 
         @Inject
-        public DefaultAbilities(Abilities abilities) {
-            this.abilities = abilities;
-        }
-
-        @Override
-        public List<Abilities.Description> create() {
-            return Arrays.asList(abilities.move, abilities.melee);
+        public Descriptions(
+                MeleeAttackAbility.Factory meleeFactory,
+                RangedAttackAbility.Factory rangedFactory,
+                MeleeAttackAbility.Factory moveFactory,
+                TileSmashAbility.Factory smashFactory,
+                SummonMountainAbility.Factory summonMountainFactory,
+                PoisonAbility.Factory poisonFactory,
+                BlobAbsorbAbility.Factory blobAbsorbFactory,
+                BlobTossAbility.Factory blobTossFactory) {
+            this.melee = new Unit.Abilities.Description(
+                    "Melee attack", "abilities/buffs/attack_boost", meleeFactory::create);
+            this.ranged = new Unit.Abilities.Description(
+                    "Ranged attack", "abilities/spells/ranged_attack", rangedFactory::create);
+            this.move = new Unit.Abilities.Description("Move", "abilities/buffs/swiftness", moveFactory::create);
+            this.smash =
+                    new Unit.Abilities.Description("Smash tile", "abilities/spells/tile_smash", smashFactory::create);
+            this.summonMountain = new Unit.Abilities.Description(
+                    "Summon mountain", "abilities/spells/summon_mountain", summonMountainFactory::create);
+            this.poison = new Unit.Abilities.Description("Poison", "abilities/debuffs/poisoned", poisonFactory::create);
+            this.blobAbsorb = new Unit.Abilities.Description(
+                    "Absorb unit", "abilities/spells/healing_spell", blobAbsorbFactory::create);
+            this.blobToss = new Unit.Abilities.Description(
+                    "Toss the absorbed unit", "abilities/spells/healing_spell", blobTossFactory::create);
         }
     }
 }

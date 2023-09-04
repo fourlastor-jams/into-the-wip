@@ -8,7 +8,7 @@ import io.github.fourlastor.game.di.ScreenScoped;
 import io.github.fourlastor.game.route.Router;
 
 @ScreenScoped
-@Subcomponent(modules = {DemoModule.class, MonsterAbilities.Bindings.class})
+@Subcomponent(modules = {DemoModule.class, MonsterAbilities.class})
 public interface DemoComponent {
 
     @ScreenScoped
