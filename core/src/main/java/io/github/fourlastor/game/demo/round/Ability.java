@@ -36,7 +36,7 @@ public abstract class Ability extends RoundState {
         createSteps(state)
                 .run(
                         ignored -> {
-                            // unitInRound.hasActed = true;  // TODO: debug, remove
+                            unitInRound.hasActed = true;
                             router.endOfAbility();
                         },
                         router::endOfAbility);
