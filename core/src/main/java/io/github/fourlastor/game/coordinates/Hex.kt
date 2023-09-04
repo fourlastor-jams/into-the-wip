@@ -1,7 +1,9 @@
 package io.github.fourlastor.game.coordinates
 
 import com.badlogic.gdx.math.GridPoint2
-import com.badlogic.gdxplus.math.GridPoint3
+import com.badlogic.gdx.math.GridPoint3
+import io.github.fourlastor.game.extensions.GridPoint3s.inverse
+import io.github.fourlastor.game.extensions.GridPoint3s.scl
 import java.util.*
 import kotlin.math.abs
 

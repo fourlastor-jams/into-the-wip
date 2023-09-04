@@ -1,12 +1,12 @@
 package io.github.fourlastor.game.demo
 
 import com.badlogic.gdx.math.Interpolation
+import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.math.Vector3
 import com.badlogic.gdx.scenes.scene2d.Action
 import com.badlogic.gdx.scenes.scene2d.Actor
 import com.badlogic.gdx.scenes.scene2d.actions.Actions
 import com.badlogic.gdx.utils.Align
-import com.badlogic.gdxplus.math.Vector2
 import kotlin.math.max
 
 object AttackAnimation {
