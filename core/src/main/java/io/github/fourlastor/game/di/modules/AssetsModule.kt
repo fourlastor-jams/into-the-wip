@@ -16,7 +16,7 @@ import javax.inject.Singleton
 
 @Module
 class AssetsModule {
-    @Provides fun dragonBonesLoader(json: JsonReader): DragonBonesLoader = DragonBonesLoader()
+    @Provides fun dragonBonesLoader(): DragonBonesLoader = DragonBonesLoader()
 
     @Provides fun spineLoader(json: JsonReader): SpineLoader = SpineLoader(json)
 

@@ -36,8 +36,7 @@ class PoisonAbility @AssistedInject constructor(
         )
         return start(steps.searchTile(searchLogic)).then { hex ->
             steps.poison(
-                unit,
-                state.unitAt(hex)
+                state.unitAt(hex)!!
             )
         }
     }

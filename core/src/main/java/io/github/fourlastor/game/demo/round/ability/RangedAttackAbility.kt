@@ -35,7 +35,7 @@ class RangedAttackAbility @AssistedInject constructor(
             BiPredicate { _, tile -> state.unitAt(tile.hex) != null }
         )
         return start(steps.searchTile(searchLogic)).then { hex ->
-            steps.attackRanged(unit, state.unitAt(hex))
+            steps.attackRanged(unit, state.unitAt(hex)!!)
         }
     }
 

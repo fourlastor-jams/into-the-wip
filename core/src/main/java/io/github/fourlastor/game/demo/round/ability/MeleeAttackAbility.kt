@@ -47,9 +47,9 @@ class MeleeAttackAbility @AssistedInject constructor(
             if (path.size >= 2) {
                 val tileIndex = path.size - 2
                 start(steps.move(unit, path[tileIndex], path.subList(0, tileIndex + 1)))
-                    .then(steps.attackMelee(unit, state.unitAt(hex)))
+                    .then(steps.attackMelee(unit, state.unitAt(hex)!!))
             } else {
-                start(steps.attackMelee(unit, state.unitAt(hex)))
+                start(steps.attackMelee(unit, state.unitAt(hex)!!))
             }
         }
     }

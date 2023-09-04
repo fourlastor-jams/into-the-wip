@@ -50,9 +50,9 @@ class BlobAbsorbAbility @AssistedInject constructor(
             if (path.size >= 2) {
                 val tileIndex = path.size - 2
                 start(steps.move(unit, path[tileIndex], path.subList(0, tileIndex + 1)))
-                    .then(steps.blobAbsorb(unit, state.unitAt(hex)))
+                    .then(steps.blobAbsorb(unit, state.unitAt(hex)!!))
             } else {
-                start(steps.blobAbsorb(unit, state.unitAt(hex)))
+                start(steps.blobAbsorb(unit, state.unitAt(hex)!!))
             }
         }
     }
