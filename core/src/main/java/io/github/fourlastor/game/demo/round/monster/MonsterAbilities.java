@@ -6,6 +6,7 @@ import dagger.Module;
 import dagger.multibindings.IntoMap;
 import io.github.fourlastor.game.demo.round.ability.MeleeAttackAbility;
 import io.github.fourlastor.game.demo.round.ability.RangedAttackAbility;
+import io.github.fourlastor.game.demo.round.ability.SummonMountainAbility;
 import io.github.fourlastor.game.demo.round.ability.TileSmashAbility;
 import io.github.fourlastor.game.demo.state.unit.Unit;
 import io.github.fourlastor.game.demo.state.unit.UnitType;
@@ -63,7 +64,7 @@ public interface MonsterAbilities {
 
         @Override
         public List<Unit.Abilities.Description> create() {
-            return Arrays.asList(descriptions.move, descriptions.smash);
+            return Arrays.asList(descriptions.move, descriptions.smash, descriptions.summonMountain);
         }
     }
 
@@ -87,13 +88,15 @@ public interface MonsterAbilities {
         public final Unit.Abilities.Description ranged;
         public final Unit.Abilities.Description move;
         public final Unit.Abilities.Description smash;
+        public final Unit.Abilities.Description summonMountain;
 
         @Inject
         public Descriptions(
                 MeleeAttackAbility.Factory meleeFactory,
                 RangedAttackAbility.Factory rangedFactory,
                 MeleeAttackAbility.Factory moveFactory,
-                TileSmashAbility.Factory smashFactory) {
+                TileSmashAbility.Factory smashFactory,
+                SummonMountainAbility.Factory summonMountainFactory) {
             this.melee = new Unit.Abilities.Description(
                     "Melee attack", "abilities/buffs/attack_boost", meleeFactory::create);
             this.ranged = new Unit.Abilities.Description(
@@ -101,6 +104,8 @@ public interface MonsterAbilities {
             this.move = new Unit.Abilities.Description("Move", "abilities/buffs/swiftness", moveFactory::create);
             this.smash =
                     new Unit.Abilities.Description("Smash tile", "abilities/spells/tile_smash", smashFactory::create);
+            this.summonMountain = new Unit.Abilities.Description(
+                    "Summon mountain", "abilities/spells/summon_mountain", moveFactory::create);
         }
     }
 }
