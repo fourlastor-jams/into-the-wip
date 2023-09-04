@@ -26,7 +26,7 @@ object Filter {
         filters.reduce { acc, predicate -> acc.or(predicate) }
 
     @JvmStatic
-    fun canReach(origin: Tile?, filter: Predicate<SearchStep<Tile?>?>?): BiPredicate<GameState, Tile> {
+    fun canReach(origin: Tile, filter: Predicate<SearchStep<Tile>>): BiPredicate<GameState, Tile> {
         return BiPredicate { state, tile -> !state.graph.path(origin, tile, filter).isEmpty() }
     }
 
