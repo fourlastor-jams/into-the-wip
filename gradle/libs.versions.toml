@@ -8,6 +8,7 @@ digital = "0.3.7"
 javax = "1"
 jdkgdxds = "1.4.0"
 kotlin = "1.8.21"
+ktx = "1.11.0-rc6"
 gdx = "1.11.0"
 gdx-teavm = "1.0.0-b4"
 gdxAi = "1.8.2"
@@ -34,6 +35,19 @@ funderby = {module = "com.github.tommyettinger:funderby", version.ref = "funderb
 digital = {module = "com.github.tommyettinger:digital", version.ref = "digital" }
 java-inject = { module = "javax.inject:javax.inject", version.ref = "javax" }
 jdkgdxds = { module = "com.github.tommyettinger:jdkgdxds", version.ref = "jdkgdxds"}
+ktx-actors = { module = "io.github.libktx:ktx-actors", version.ref = "ktx" }
+ktx-ai = { module = "io.github.libktx:ktx-ai", version.ref = "ktx" }
+ktx-app = { module = "io.github.libktx:ktx-app", version.ref = "ktx" }
+ktx-collections = { module = "io.github.libktx:ktx-collections", version.ref = "ktx" }
+ktx-graphics = { module = "io.github.libktx:ktx-graphics", version.ref = "ktx" }
+ktx-i18n = { module = "io.github.libktx:ktx-i18n", version.ref = "ktx" }
+ktx-json = { module = "io.github.libktx:ktx-json", version.ref = "ktx" }
+ktx-log = { module = "io.github.libktx:ktx-log", version.ref = "ktx" }
+ktx-math = { module = "io.github.libktx:ktx-math", version.ref = "ktx" }
+ktx-preferences = { module = "io.github.libktx:ktx-preferences", version.ref = "ktx" }
+ktx-scene2d = { module = "io.github.libktx:ktx-scene2d", version.ref = "ktx" }
+ktx-style = { module = "io.github.libktx:ktx-style", version.ref = "ktx" }
+ktx-tiled = { module = "io.github.libktx:ktx-tiled", version.ref = "ktx" }
 gdx-core = { module = "com.badlogicgames.gdx:gdx", version.ref = "gdx" }
 gdx-platform = { module = "com.badlogicgames.gdx:gdx-platform", version.ref = "gdx" }
 gdx-ai = { module = "com.badlogicgames.gdx:gdx-ai", version.ref = "gdxAi" }
