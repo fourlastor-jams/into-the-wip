@@ -14,7 +14,7 @@ import io.github.fourlastor.game.demo.state.Filter.canReach
 import io.github.fourlastor.game.demo.state.Filter.canTravel
 import io.github.fourlastor.game.demo.state.Filter.maxDistance
 import io.github.fourlastor.game.demo.state.GameState
-import io.github.fourlastor.game.demo.state.unit.Unit
+import io.github.fourlastor.game.demo.state.unit.Mon
 
 class MoveAbility @AssistedInject constructor(
     @Assisted unitInRound: UnitInRound,
@@ -22,23 +22,23 @@ class MoveAbility @AssistedInject constructor(
     stateFactory: StepState.Factory,
     private val steps: Steps
 ) : Ability(unitInRound, router, stateFactory) {
-    private val unit: Unit
+    private val mon: Mon
 
     init {
-        unit = unitInRound.unit
+        mon = unitInRound.mon
     }
 
     override fun createSteps(state: GameState): Builder<*> {
-        val movementLogic = all(maxDistance(unit.type.speed), canTravel(unit))
-        val searchLogic = canReach(state.tileAt(unit.hex), movementLogic)
+        val movementLogic = all(maxDistance(mon.type.speed), canTravel(mon))
+        val searchLogic = canReach(state.tileAt(mon.hex), movementLogic)
         return start(steps.searchTile(searchLogic))
             .then { hex ->
                 steps.move(
-                    unit,
+                    mon,
                     state.tileAt(hex),
                     ObjectList(
                         state.graph.path(
-                            state.tileAt(unit.hex),
+                            state.tileAt(mon.hex),
                             state.tileAt(
                                 hex
                             ),

@@ -20,7 +20,7 @@ import io.github.fourlastor.game.demo.round.faction.Faction
 import io.github.fourlastor.game.demo.state.GameState
 import io.github.fourlastor.game.demo.state.map.Tile
 import io.github.fourlastor.game.demo.state.map.TileType
-import io.github.fourlastor.game.demo.state.unit.Unit
+import io.github.fourlastor.game.demo.state.unit.Mon
 import io.github.fourlastor.game.demo.state.unit.UnitType
 import io.github.fourlastor.game.ui.TileOnMap
 import io.github.fourlastor.game.ui.UiLayer
@@ -42,7 +42,7 @@ class DemoScreen @Inject constructor(
         val hpLabelStyle = Label.LabelStyle(assetManager.get("fonts/quan-pixel-16.fnt"), Color.RED)
         val map = AtlasTmxMapLoader().load("maps/demo.tmx")
         val hexSideLength = map.properties.get("hexsidelength", Int::class.java)
-        val units = ObjectList<Unit>()
+        val mons = ObjectList<Mon>()
         val tiles = ObjectList<Tile>()
         var factionIndex = 1
         for (mapLayer in map.layers) {
@@ -73,7 +73,7 @@ class DemoScreen @Inject constructor(
                         val faction = Faction.values()[factionIndex]
                         factionIndex += 1
                         factionIndex %= Faction.values().size
-                        val unit = Unit(
+                        val mon = Mon(
                             faction,
                             unitOnMap,
                             hpLabel,
@@ -83,7 +83,7 @@ class DemoScreen @Inject constructor(
                         )
                         ySort.addActor(unitOnMap)
                         ySort.addActor(hpLabel)
-                        units.add(unit)
+                        mons.add(mon)
                     }
                     if (mapLayerName == TILES_LAYER_NAME) {
                         val position = coordinates.toWorldAtOrigin(x, y, Vector2())
@@ -101,7 +101,7 @@ class DemoScreen @Inject constructor(
         }
         val ui = UiLayer()
         stage.addActor(ui)
-        state = GameState(units, tiles, ui)
+        state = GameState(mons, tiles, ui)
         stateMachine = stateMachineFactory.create(state)
     }
 

@@ -9,11 +9,11 @@ import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import io.github.fourlastor.game.demo.AttackAnimation.makeSequence
 import io.github.fourlastor.game.demo.state.GameState
-import io.github.fourlastor.game.demo.state.unit.Unit
+import io.github.fourlastor.game.demo.state.unit.Mon
 
 class AttackMelee @AssistedInject constructor(
-    @Assisted("source") private val source: Unit,
-    @Assisted("target") private val targetUnit: Unit
+    @Assisted("source") private val source: Mon,
+    @Assisted("target") private val targetMon: Mon
 ) : SimpleStep() {
     private fun setupAttackAnimation(distance: Float, rotationDegrees: Float): Action {
         // Base animation goes left-to-right.
@@ -43,7 +43,7 @@ class AttackMelee @AssistedInject constructor(
             null,
             null,
             null,
-            null, Runnable { targetUnit.refreshHpLabel() },
+            null, Runnable { targetMon.refreshHpLabel() },
             null,
             null,
             null,
@@ -68,9 +68,9 @@ class AttackMelee @AssistedInject constructor(
     }
 
     override fun enter(state: GameState, continuation: Runnable) {
-        targetUnit.changeHp(-DAMAGE)
+        targetMon.changeHp(-DAMAGE)
         val originalPosition = Vector2(source.actorPosition)
-        val targetPosition = targetUnit.actorPosition
+        val targetPosition = targetMon.actorPosition
         doAttackAnimation(originalPosition, targetPosition, continuation)
     }
 
@@ -83,7 +83,7 @@ class AttackMelee @AssistedInject constructor(
      */
     @AssistedFactory
     interface Factory {
-        fun create(@Assisted("source") source: Unit, @Assisted("target") target: Unit): AttackMelee
+        fun create(@Assisted("source") source: Mon, @Assisted("target") target: Mon): AttackMelee
     }
 
     companion object {

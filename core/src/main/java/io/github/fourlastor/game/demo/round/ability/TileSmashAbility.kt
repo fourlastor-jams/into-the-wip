@@ -17,7 +17,7 @@ import io.github.fourlastor.game.demo.state.Filter.sameAxisAs
 import io.github.fourlastor.game.demo.state.GameState
 import io.github.fourlastor.game.demo.state.map.Tile
 import io.github.fourlastor.game.demo.state.map.TileType
-import io.github.fourlastor.game.demo.state.unit.Unit
+import io.github.fourlastor.game.demo.state.unit.Mon
 import java.util.function.Predicate
 
 class TileSmashAbility @AssistedInject constructor(
@@ -26,31 +26,31 @@ class TileSmashAbility @AssistedInject constructor(
     stateFactory: StepState.Factory,
     private val steps: Steps
 ) : Ability(unitInRound, router, stateFactory) {
-    private val unit: Unit
+    private val mon: Mon
 
     init {
-        unit = unitInRound.unit
+        mon = unitInRound.mon
     }
 
     override fun createSteps(state: GameState): Builder<*> {
         val movementLogic = all(
-            sameAxisAs(unit.hex),
-            Predicate { step -> unit.canTravel(step.previous()) && step.vertex().type === TileType.SOLID }
+            sameAxisAs(mon.hex),
+            Predicate { step -> mon.canTravel(step.previous()) && step.vertex().type === TileType.SOLID }
         )
-        val searchLogic = all(canReach(state.tileAt(unit.hex), movementLogic), ofType(TileType.SOLID))
+        val searchLogic = all(canReach(state.tileAt(mon.hex), movementLogic), ofType(TileType.SOLID))
         return start(steps.searchTile(searchLogic)).sequence { hex ->
             val path: List<Tile> = ObjectList(
                 state.graph.path(
-                    state.tileAt(unit.hex),
+                    state.tileAt(mon.hex),
                     state.tileAt(hex),
                     movementLogic
                 )
             )
             if (path.size >= 2) {
-                start(steps.move(unit, path[path.size - 2], path, Interpolation.linear))
-                    .then(steps.tileSmash(unit, state.tileAt(hex)))
+                start(steps.move(mon, path[path.size - 2], path, Interpolation.linear))
+                    .then(steps.tileSmash(mon, state.tileAt(hex)))
             } else {
-                start(steps.tileSmash(unit, state.tileAt(hex)))
+                start(steps.tileSmash(mon, state.tileAt(hex)))
             }
         }
     }

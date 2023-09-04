@@ -14,7 +14,7 @@ import io.github.fourlastor.game.demo.state.Filter.canTravel
 import io.github.fourlastor.game.demo.state.Filter.hasUnit
 import io.github.fourlastor.game.demo.state.Filter.maxDistance
 import io.github.fourlastor.game.demo.state.GameState
-import io.github.fourlastor.game.demo.state.unit.Unit
+import io.github.fourlastor.game.demo.state.unit.Mon
 import java.util.function.BiPredicate
 
 class MeleeAttackAbility @AssistedInject constructor(
@@ -23,22 +23,22 @@ class MeleeAttackAbility @AssistedInject constructor(
     stateFactory: StepState.Factory,
     private val steps: Steps
 ) : Ability(unitInRound, router, stateFactory) {
-    private val unit: Unit
+    private val mon: Mon
 
     init {
-        unit = unitInRound.unit
+        mon = unitInRound.mon
     }
 
     override fun createSteps(state: GameState): Builder<*> {
-        val movementLogic = all(maxDistance(unit.type.speed), canTravel(unit))
+        val movementLogic = all(maxDistance(mon.type.speed), canTravel(mon))
         val searchLogic = all(
-            canReach(state.tileAt(unit.hex), movementLogic),
+            canReach(state.tileAt(mon.hex), movementLogic),
             hasUnit(),
-            BiPredicate { _, tile -> unit.hex != tile.hex }
+            BiPredicate { _, tile -> mon.hex != tile.hex }
         )
         return start(steps.searchUnit(searchLogic)).sequence { hex ->
             val path = state.graph.path(
-                state.tileAt(unit.hex),
+                state.tileAt(mon.hex),
                 state.tileAt(
                     hex
                 ),
@@ -46,10 +46,10 @@ class MeleeAttackAbility @AssistedInject constructor(
             ).toList()
             if (path.size >= 2) {
                 val tileIndex = path.size - 2
-                start(steps.move(unit, path[tileIndex], path.subList(0, tileIndex + 1)))
-                    .then(steps.attackMelee(unit, state.unitAt(hex)!!))
+                start(steps.move(mon, path[tileIndex], path.subList(0, tileIndex + 1)))
+                    .then(steps.attackMelee(mon, state.unitAt(hex)!!))
             } else {
-                start(steps.attackMelee(unit, state.unitAt(hex)!!))
+                start(steps.attackMelee(mon, state.unitAt(hex)!!))
             }
         }
     }

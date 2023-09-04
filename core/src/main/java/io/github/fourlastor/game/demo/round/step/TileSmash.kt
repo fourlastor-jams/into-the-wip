@@ -14,10 +14,10 @@ import io.github.fourlastor.game.demo.AttackAnimation.makeSequence
 import io.github.fourlastor.game.demo.state.GameState
 import io.github.fourlastor.game.demo.state.map.Tile
 import io.github.fourlastor.game.demo.state.map.TileType
-import io.github.fourlastor.game.demo.state.unit.Unit
+import io.github.fourlastor.game.demo.state.unit.Mon
 
 class TileSmash @AssistedInject constructor(
-    @Assisted("source") private val source: Unit,
+    @Assisted("source") private val source: Mon,
     @Assisted("target") private val target: Tile?,
     private val textureAtlas: TextureAtlas
 ) : SimpleStep() {
@@ -90,7 +90,7 @@ class TileSmash @AssistedInject constructor(
 
     @AssistedFactory
     interface Factory {
-        fun create(@Assisted("source") source: Unit, @Assisted("target") target: Tile): TileSmash
+        fun create(@Assisted("source") source: Mon, @Assisted("target") target: Tile): TileSmash
     }
 
     companion object {

@@ -10,10 +10,10 @@ import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import io.github.fourlastor.game.demo.state.GameState
 import io.github.fourlastor.game.demo.state.map.Tile
-import io.github.fourlastor.game.demo.state.unit.Unit
+import io.github.fourlastor.game.demo.state.unit.Mon
 
 class MoveStep @AssistedInject constructor(
-    @Assisted private val unit: Unit,
+    @Assisted private val mon: Mon,
     @Assisted private val tile: Tile,
     @Assisted private val path: List<Tile>,
     @Assisted private val interpolation: Interpolation
@@ -21,18 +21,18 @@ class MoveStep @AssistedInject constructor(
     override fun enter(state: GameState, continuation: Runnable) {
         val actions: MutableList<Action> = ArrayList()
         for (pathTile in path) {
-            val position = unit.coordinates.toWorldAtCenter(pathTile.hex, Vector2())
+            val position = mon.coordinates.toWorldAtCenter(pathTile.hex, Vector2())
             actions.add(Actions.moveToAligned(position.x, position.y, Align.bottom, 0.25f, interpolation))
         }
         val finalTile = path[path.size - 1]
-        val finalPosition = unit.coordinates.toWorldAtCenter(finalTile.hex, Vector2())
-        finalPosition.x -= unit.group.width / 2f
+        val finalPosition = mon.coordinates.toWorldAtCenter(finalTile.hex, Vector2())
+        finalPosition.x -= mon.group.width / 2f
         val steps = Actions.sequence(*actions.toTypedArray<Action>())
-        unit.group.addAction(
+        mon.group.addAction(
             Actions.sequence(
                 steps,
-                Actions.run { unit.hex.set(tile.hex) }, // (sheerst) Note: model code, likely shouldn't happen here?
-                Actions.run { unit.actorPosition = finalPosition },
+                Actions.run { mon.hex.set(tile.hex) }, // (sheerst) Note: model code, likely shouldn't happen here?
+                Actions.run { mon.actorPosition = finalPosition },
                 Actions.run(continuation)
             )
         )
@@ -40,6 +40,6 @@ class MoveStep @AssistedInject constructor(
 
     @AssistedFactory
     interface Factory {
-        fun create(unit: Unit, tile: Tile, path: List<Tile>, interpolation: Interpolation): MoveStep
+        fun create(mon: Mon, tile: Tile, path: List<Tile>, interpolation: Interpolation): MoveStep
     }
 }

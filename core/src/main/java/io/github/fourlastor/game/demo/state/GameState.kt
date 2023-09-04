@@ -4,12 +4,12 @@ import io.github.fourlastor.game.coordinates.Hex
 import io.github.fourlastor.game.demo.round.faction.Faction
 import io.github.fourlastor.game.demo.state.map.GraphMap
 import io.github.fourlastor.game.demo.state.map.Tile
-import io.github.fourlastor.game.demo.state.unit.Unit
+import io.github.fourlastor.game.demo.state.unit.Mon
 import io.github.fourlastor.game.ui.UiLayer
 import java.util.function.BiPredicate
 import java.util.function.Predicate
 
-class GameState(val units: List<Unit>, val tiles: List<Tile>, val ui: UiLayer) {
+class GameState(val mons: List<Mon>, val tiles: List<Tile>, val ui: UiLayer) {
     val graph: GraphMap = GraphMap()
 
     init {
@@ -30,18 +30,18 @@ class GameState(val units: List<Unit>, val tiles: List<Tile>, val ui: UiLayer) {
         tiles.filter { filter.test(this, it) }
 
     fun alignAllHpBars() {
-        for (unit in units) {
+        for (unit in mons) {
             unit.alignHpBar()
         }
     }
 
-    fun byFaction(faction: Faction): List<Unit> = units.filter { it.faction == faction }
+    fun byFaction(faction: Faction): List<Mon> = mons.filter { it.faction == faction }
 
     fun tileAt(hex: Hex): Tile = tiles.first { it.hex == hex }
 
-    fun unitAt(hex: Hex): Unit? = unitAt { it.hex == hex }
+    fun unitAt(hex: Hex): Mon? = unitAt { it.hex == hex }
 
-    fun unitAt(filter: Predicate<Unit>): Unit? = units.firstOrNull { filter.test(it) }
+    fun unitAt(filter: Predicate<Mon>): Mon? = mons.firstOrNull { filter.test(it) }
 
     private fun connectTiles(tile: Tile, adjacent: Tile?) {
         if (adjacent == null) {

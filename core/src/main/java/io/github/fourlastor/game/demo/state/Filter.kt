@@ -3,7 +3,7 @@ package io.github.fourlastor.game.demo.state
 import io.github.fourlastor.game.coordinates.Hex
 import io.github.fourlastor.game.demo.state.map.Tile
 import io.github.fourlastor.game.demo.state.map.TileType
-import io.github.fourlastor.game.demo.state.unit.Unit
+import io.github.fourlastor.game.demo.state.unit.Mon
 import space.earlygrey.simplegraphs.algorithms.SearchStep
 import java.util.function.BiPredicate
 import java.util.function.Predicate
@@ -41,8 +41,8 @@ object Filter {
     }
 
     @JvmStatic
-    fun canTravel(unit: Unit): Predicate<SearchStep<Tile>> {
-        return Predicate { unit.canTravel(it.vertex()) }
+    fun canTravel(mon: Mon): Predicate<SearchStep<Tile>> {
+        return Predicate { mon.canTravel(it.vertex()) }
     }
 
     @JvmStatic

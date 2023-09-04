@@ -15,7 +15,7 @@ import io.github.fourlastor.game.demo.state.Filter.maxDistance
 import io.github.fourlastor.game.demo.state.Filter.ofType
 import io.github.fourlastor.game.demo.state.GameState
 import io.github.fourlastor.game.demo.state.map.TileType
-import io.github.fourlastor.game.demo.state.unit.Unit
+import io.github.fourlastor.game.demo.state.unit.Mon
 
 class BlobTossAbility @AssistedInject constructor(
     @Assisted unitInRound: UnitInRound,
@@ -23,24 +23,24 @@ class BlobTossAbility @AssistedInject constructor(
     stateFactory: StepState.Factory,
     private val steps: Steps
 ) : Ability(unitInRound, router, stateFactory) {
-    private val unit: Unit
+    private val mon: Mon
 
     init {
-        unit = unitInRound.unit
+        mon = unitInRound.mon
     }
 
     override fun createSteps(state: GameState): Builder<*> {
-        val movementLogic = maxDistance(unit.type.speed)
+        val movementLogic = maxDistance(mon.type.speed)
         val searchLogic = all(
-            canReach(state.tileAt(unit.hex), movementLogic),
+            canReach(state.tileAt(mon.hex), movementLogic),
             ofType(TileType.SOLID).negate(),
             ofType(TileType.WATER).negate()
         )
         return start(steps.searchTile(searchLogic))
             .then { hex: Hex ->
                 steps.blobToss(
-                    unit,
-                    state.unitAt { unit.hex == hex && it != unit }!!,
+                    mon,
+                    state.unitAt { mon.hex == hex && it != mon }!!,
                     state.tileAt(hex)
                 )
             }

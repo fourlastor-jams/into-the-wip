@@ -7,11 +7,12 @@ import dagger.multibindings.IntoMap
 import io.github.fourlastor.game.demo.round.ability.BlobAbsorbAbility
 import io.github.fourlastor.game.demo.round.ability.BlobTossAbility
 import io.github.fourlastor.game.demo.round.ability.MeleeAttackAbility
+import io.github.fourlastor.game.demo.round.ability.MoveAbility
 import io.github.fourlastor.game.demo.round.ability.PoisonAbility
 import io.github.fourlastor.game.demo.round.ability.RangedAttackAbility
 import io.github.fourlastor.game.demo.round.ability.SummonMountainAbility
 import io.github.fourlastor.game.demo.round.ability.TileSmashAbility
-import io.github.fourlastor.game.demo.state.unit.Unit.Abilities
+import io.github.fourlastor.game.demo.state.unit.Mon.Abilities
 import io.github.fourlastor.game.demo.state.unit.UnitType
 import javax.inject.Inject
 
@@ -68,7 +69,7 @@ interface MonsterAbilities {
     class Descriptions @Inject constructor(
         meleeFactory: MeleeAttackAbility.Factory,
         rangedFactory: RangedAttackAbility.Factory,
-        moveFactory: MeleeAttackAbility.Factory,
+        moveFactory: MoveAbility.Factory,
         smashFactory: TileSmashAbility.Factory,
         summonMountainFactory: SummonMountainAbility.Factory,
         poisonFactory: PoisonAbility.Factory,

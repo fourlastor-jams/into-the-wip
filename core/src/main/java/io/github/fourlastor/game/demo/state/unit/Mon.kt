@@ -15,11 +15,10 @@ import io.github.fourlastor.game.demo.state.map.TileType
 import io.github.fourlastor.game.demo.state.unit.effect.Effect
 import io.github.fourlastor.game.demo.state.unit.effect.EffectStacks
 import io.github.fourlastor.game.ui.UnitOnMap
-import java.util.*
 import java.util.function.Function
 import javax.inject.Inject
 
-class Unit(
+class Mon(
     val faction: Faction,
     val group: UnitOnMap,
     private val hpLabel: Label,

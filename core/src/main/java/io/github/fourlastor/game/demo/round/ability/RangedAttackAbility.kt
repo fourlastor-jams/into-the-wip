@@ -13,7 +13,7 @@ import io.github.fourlastor.game.demo.state.Filter.canReach
 import io.github.fourlastor.game.demo.state.Filter.canTravel
 import io.github.fourlastor.game.demo.state.Filter.maxDistance
 import io.github.fourlastor.game.demo.state.GameState
-import io.github.fourlastor.game.demo.state.unit.Unit
+import io.github.fourlastor.game.demo.state.unit.Mon
 import java.util.function.BiPredicate
 
 class RangedAttackAbility @AssistedInject constructor(
@@ -22,20 +22,20 @@ class RangedAttackAbility @AssistedInject constructor(
     stateFactory: StepState.Factory,
     private val steps: Steps
 ) : Ability(unitInRound, router, stateFactory) {
-    private val unit: Unit
+    private val mon: Mon
 
     init {
-        unit = unitInRound.unit
+        mon = unitInRound.mon
     }
 
     override fun createSteps(state: GameState): Builder<*> {
-        val movementLogic = all(maxDistance(unit.type.speed + 1), canTravel(unit))
+        val movementLogic = all(maxDistance(mon.type.speed + 1), canTravel(mon))
         val searchLogic = all(
-            canReach(state.tileAt(unit.hex), movementLogic),
+            canReach(state.tileAt(mon.hex), movementLogic),
             BiPredicate { _, tile -> state.unitAt(tile.hex) != null }
         )
         return start(steps.searchTile(searchLogic)).then { hex ->
-            steps.attackRanged(unit, state.unitAt(hex)!!)
+            steps.attackRanged(mon, state.unitAt(hex)!!)
         }
     }
 

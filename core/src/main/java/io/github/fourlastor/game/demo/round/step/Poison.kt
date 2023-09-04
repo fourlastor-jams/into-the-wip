@@ -6,11 +6,11 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import io.github.fourlastor.game.demo.state.GameState
-import io.github.fourlastor.game.demo.state.unit.Unit
+import io.github.fourlastor.game.demo.state.unit.Mon
 import io.github.fourlastor.game.demo.state.unit.effect.PoisonEffect
 
 class Poison @AssistedInject constructor(
-    @Assisted private val target: Unit,
+    @Assisted private val target: Mon,
     private val poisonEffect: PoisonEffect
 ) : SimpleStep() {
     override fun enter(state: GameState, continuation: Runnable) {
@@ -30,6 +30,6 @@ class Poison @AssistedInject constructor(
      */
     @AssistedFactory
     interface Factory {
-        fun create(@Assisted target: Unit): Poison
+        fun create(@Assisted target: Mon): Poison
     }
 }

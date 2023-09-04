@@ -1,7 +1,7 @@
 package io.github.fourlastor.game.demo.round
 
-import io.github.fourlastor.game.demo.state.unit.Unit
+import io.github.fourlastor.game.demo.state.unit.Mon
 
-class UnitInRound(val unit: Unit) {
+class UnitInRound(val mon: Mon) {
     var hasActed = false
 }

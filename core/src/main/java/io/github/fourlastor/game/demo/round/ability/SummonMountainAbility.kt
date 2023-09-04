@@ -13,7 +13,7 @@ import io.github.fourlastor.game.demo.state.Filter.canReach
 import io.github.fourlastor.game.demo.state.Filter.maxDistance
 import io.github.fourlastor.game.demo.state.Filter.sameAxisAs
 import io.github.fourlastor.game.demo.state.GameState
-import io.github.fourlastor.game.demo.state.unit.Unit
+import io.github.fourlastor.game.demo.state.unit.Mon
 import java.util.function.BiPredicate
 
 class SummonMountainAbility @AssistedInject constructor(
@@ -22,20 +22,20 @@ class SummonMountainAbility @AssistedInject constructor(
     stateFactory: StepState.Factory,
     private val steps: Steps
 ) : Ability(unitInRound, router, stateFactory) {
-    private val unit: Unit
+    private val mon: Mon
 
     init {
-        unit = unitInRound.unit
+        mon = unitInRound.mon
     }
 
     override fun createSteps(state: GameState): Builder<*> {
-        val movementLogic = all(sameAxisAs(unit.hex), maxDistance(unit.type.speed))
+        val movementLogic = all(sameAxisAs(mon.hex), maxDistance(mon.type.speed))
         val searchLogic = all(
-            canReach(state.tileAt(unit.hex), movementLogic),
-            BiPredicate { _, tile -> unit.canTravel(tile) }
+            canReach(state.tileAt(mon.hex), movementLogic),
+            BiPredicate { _, tile -> mon.canTravel(tile) }
         )
         return start(steps.searchTile(searchLogic)).then { hex ->
-            steps.summonMountain(unit, state.tileAt(hex))
+            steps.summonMountain(mon, state.tileAt(hex))
         }
     }
 

@@ -9,7 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.actions.Actions
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 import io.github.fourlastor.game.demo.round.faction.Faction
 import io.github.fourlastor.game.demo.state.GameState
-import io.github.fourlastor.game.demo.state.unit.Unit
+import io.github.fourlastor.game.demo.state.unit.Mon
 import io.github.fourlastor.game.ui.ActorSupport.removeListeners
 import java.util.function.Consumer
 import javax.inject.Inject
@@ -28,7 +28,7 @@ class Round @Inject constructor(private val router: StateRouter, private val sta
     private fun startOfRound(state: GameState): Action {
         factions = Faction.values().map { CurrentFaction(state.byFaction(it)) }
         val actions = factions!!
-            .flatMap { it.units.map { unitInRound -> unitInRound.unit.onRoundStart() } }
+            .flatMap { it.units.map { unitInRound -> unitInRound.mon.onRoundStart() } }
         return Actions.sequence(*actions.toTypedArray())
     }
 
@@ -54,7 +54,7 @@ class Round @Inject constructor(private val router: StateRouter, private val sta
             factions!!.forEach(
                 Consumer { faction: CurrentFaction ->
                     faction.units.forEach(
-                        Consumer { unitInRound: UnitInRound -> unitInRound.unit.onRoundEnd() }
+                        Consumer { unitInRound: UnitInRound -> unitInRound.mon.onRoundEnd() }
                     )
                 }
             )
@@ -69,17 +69,17 @@ class Round @Inject constructor(private val router: StateRouter, private val sta
         currentFaction.units.asSequence()
             .filter { unitInTurn: UnitInRound -> !unitInTurn.hasActed }
             .forEach { unitInTurn: UnitInRound ->
-                val unitTile = state.tileAt(unitInTurn.unit.hex)
+                val unitTile = state.tileAt(unitInTurn.mon.hex)
                 unitTile.actor.color = Color.PINK
                 unitTile.actor.addListener(TurnListener(unitInTurn))
             }
     }
 
-    private class CurrentFaction(units: List<Unit>) {
+    private class CurrentFaction(mons: List<Mon>) {
         val units: List<UnitInRound>
 
         init {
-            this.units = units.map { UnitInRound(it) }
+            this.units = mons.map { UnitInRound(it) }
         }
 
         fun allUnitsActed(): Boolean = units.all { it.hasActed }

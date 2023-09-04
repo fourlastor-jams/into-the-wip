@@ -3,7 +3,7 @@ package io.github.fourlastor.game.demo.state.unit.effect
 import com.badlogic.gdx.scenes.scene2d.Action
 import com.badlogic.gdx.scenes.scene2d.actions.Actions
 import com.badlogic.gdx.utils.ObjectIntMap
-import io.github.fourlastor.game.demo.state.unit.Unit
+import io.github.fourlastor.game.demo.state.unit.Mon
 import io.github.fourlastor.game.demo.state.unit.effect.Effect.OnRoundStart
 
 class EffectStacks {
@@ -26,11 +26,11 @@ class EffectStacks {
 
     private fun getStack(effect: Effect): Int = stacks[effect, 0]
 
-    fun onRoundStart(unit: Unit): Action {
+    fun onRoundStart(mon: Mon): Action {
         val sequence = Actions.sequence()
         for (effect in stacks.keys()) {
             if (effect is OnRoundStart) {
-                sequence.addAction(effect.onRoundStart(unit, getStack(effect)))
+                sequence.addAction(effect.onRoundStart(mon, getStack(effect)))
             }
         }
         return sequence

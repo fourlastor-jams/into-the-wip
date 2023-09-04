@@ -10,12 +10,12 @@ import dagger.assisted.AssistedInject
 import io.github.fourlastor.game.demo.AttackAnimation.makeSequence
 import io.github.fourlastor.game.demo.state.GameState
 import io.github.fourlastor.game.demo.state.map.Tile
-import io.github.fourlastor.game.demo.state.unit.Unit
+import io.github.fourlastor.game.demo.state.unit.Mon
 import java.util.function.Consumer
 
 class BlobToss @AssistedInject constructor(
-    @Assisted("source") private val source: Unit,
-    @Assisted("target") private val targetUnit: Unit,
+    @Assisted("source") private val source: Mon,
+    @Assisted("target") private val targetMon: Mon,
     @Assisted("tile") private val targetTile: Tile
 ) : SimpleStep() {
     private fun setupAttackAnimation(state: GameState, distance: Float, rotationDegrees: Float): Action {
@@ -46,11 +46,11 @@ class BlobToss @AssistedInject constructor(
             null,
             null,
             null, // Damage all mons on that tile.
-            Runnable { state.units.forEach(Consumer { unit: Unit -> unit.changeHp(-2) }) }
+            Runnable { state.mons.forEach(Consumer { mon: Mon -> mon.changeHp(-2) }) }
         )
         val scale = SCALE.cpy().scl(distance, 1f, 1f)
         return makeSequence(
-            targetUnit.group,
+            targetMon.group,
             runnables,
             positions,
             MOVE_DURATION,
@@ -71,16 +71,16 @@ class BlobToss @AssistedInject constructor(
         val rotationDegrees = calculateAngle(originalPosition, targetPosition)
         val attackAnimation = Actions.sequence(
             setupAttackAnimation(state, distance, rotationDegrees), // Move the target unit to the source's Tile.
-            Actions.run { targetUnit.hex.set(targetTile.hex) },
-            Actions.run { targetUnit.actorPosition = targetPosition },
+            Actions.run { targetMon.hex.set(targetTile.hex) },
+            Actions.run { targetMon.actorPosition = targetPosition },
             Actions.run(continuation)
         )
-        targetUnit.group.addAction(attackAnimation)
+        targetMon.group.addAction(attackAnimation)
     }
 
     override fun enter(state: GameState, continuation: Runnable) {
         val originalPosition = source.actorPosition
-        val targetPosition = targetUnit.actorPosition
+        val targetPosition = targetMon.actorPosition
         doAttackAnimation(state, originalPosition, targetPosition, continuation)
     }
 
@@ -94,8 +94,8 @@ class BlobToss @AssistedInject constructor(
     @AssistedFactory
     interface Factory {
         fun create(
-            @Assisted("source") source: Unit,
-            @Assisted("target") targetUnit: Unit,
+            @Assisted("source") source: Mon,
+            @Assisted("target") targetMon: Mon,
             @Assisted("tile") targetTile: Tile
         ): BlobToss
     }

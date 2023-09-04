@@ -12,7 +12,7 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import io.github.fourlastor.game.demo.state.GameState
-import io.github.fourlastor.game.demo.state.unit.Unit.Abilities
+import io.github.fourlastor.game.demo.state.unit.Mon.Abilities
 import io.github.fourlastor.game.demo.state.unit.UnitType
 import java.util.*
 
@@ -26,7 +26,7 @@ class Turn @AssistedInject constructor(
     private val addedImages: Queue<Actor> = LinkedList()
     private var acted = false
     override fun enter(state: GameState) {
-        val unit = unitInRound.unit
+        val unit = unitInRound.mon
         state.tileAt(unit.hex).actor.color = Color.PINK
         if (!acted) {
             val monsterAbilities = abilitiesMap[unit.type] ?: defaults
@@ -50,7 +50,7 @@ class Turn @AssistedInject constructor(
     }
 
     override fun exit(state: GameState) {
-        state.tileAt(unitInRound.unit.hex).actor.color = Color.WHITE
+        state.tileAt(unitInRound.mon.hex).actor.color = Color.WHITE
         while (!addedImages.isEmpty()) {
             addedImages.remove().remove()
         }

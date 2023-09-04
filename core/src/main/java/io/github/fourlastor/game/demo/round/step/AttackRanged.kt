@@ -8,11 +8,11 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import io.github.fourlastor.game.demo.state.GameState
-import io.github.fourlastor.game.demo.state.unit.Unit
+import io.github.fourlastor.game.demo.state.unit.Mon
 
 class AttackRanged @AssistedInject constructor(
-    @Assisted("source") private val source: Unit,
-    @Assisted("target") private val target: Unit,
+    @Assisted("source") private val source: Mon,
+    @Assisted("target") private val target: Mon,
     private val textureAtlas: TextureAtlas,
     private val stage: Stage
 ) : SimpleStep() {
@@ -44,6 +44,6 @@ class AttackRanged @AssistedInject constructor(
      */
     @AssistedFactory
     interface Factory {
-        fun create(@Assisted("source") source: Unit, @Assisted("target") target: Unit): AttackRanged
+        fun create(@Assisted("source") source: Mon, @Assisted("target") target: Mon): AttackRanged
     }
 }

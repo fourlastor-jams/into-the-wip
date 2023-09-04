@@ -17,10 +17,10 @@ import io.github.fourlastor.game.demo.AttackAnimation.makeSequence
 import io.github.fourlastor.game.demo.state.GameState
 import io.github.fourlastor.game.demo.state.map.Tile
 import io.github.fourlastor.game.demo.state.map.TileType
-import io.github.fourlastor.game.demo.state.unit.Unit
+import io.github.fourlastor.game.demo.state.unit.Mon
 
 class SummonMountain @AssistedInject constructor(
-    @Assisted("source") private val source: Unit,
+    @Assisted("source") private val source: Mon,
     @Assisted("target") private val target: Tile,
     var textureAtlas: TextureAtlas
 ) : SimpleStep() {
@@ -29,7 +29,7 @@ class SummonMountain @AssistedInject constructor(
     // Amount to scale the animation by.
     private val scale = Vector3(1 / 8f, 1f, 1f)
     private var facingDirection: Hex.Direction? = null
-    private var hitUnit: Unit? = null
+    private var hitMon: Mon? = null
     private fun setupAttackAnimation(rotationDegrees: Float): Action {
         // Base animation goes left-to-right.
         val positions = arrayOf(
@@ -77,11 +77,11 @@ class SummonMountain @AssistedInject constructor(
                 target.actor.setSize(target.actor.getPrefWidth(), target.actor.getPrefHeight())
 
                 // Visually move the Unit to a new Tile.
-                if (hitUnit != null) {
+                if (hitMon != null) {
                     // (sheerst) Note: I could see us wanting to trigger animations the visual part of other
                     // abilities here.
-                    val position = hitUnit!!.coordinates.toWorldAtCenter(hitUnit!!.hex, Vector2())
-                    hitUnit!!.group.addAction(
+                    val position = hitMon!!.coordinates.toWorldAtCenter(hitMon!!.hex, Vector2())
+                    hitMon!!.group.addAction(
                         Actions.moveToAligned(position.x, position.y, Align.bottom, 0.25f, Interpolation.sineOut)
                     )
                 }
@@ -100,9 +100,9 @@ class SummonMountain @AssistedInject constructor(
         println(facingDirection)
 
         // Move units on target tile off of it.
-        hitUnit = state.unitAt(target.hex) // Model code
-        if (hitUnit != null) {
-            hitUnit!!.hex.set(hitUnit!!.hex.offset(facingDirection!!, 1)) // Model code
+        hitMon = state.unitAt(target.hex) // Model code
+        if (hitMon != null) {
+            hitMon!!.hex.set(hitMon!!.hex.offset(facingDirection!!, 1)) // Model code
         }
         val attackAnimation = Actions.sequence(
             setupAttackAnimation(rotationDegrees),
@@ -114,6 +114,6 @@ class SummonMountain @AssistedInject constructor(
 
     @AssistedFactory
     interface Factory {
-        fun create(@Assisted("source") source: Unit, @Assisted("target") target: Tile): SummonMountain
+        fun create(@Assisted("source") source: Mon, @Assisted("target") target: Tile): SummonMountain
     }
 }

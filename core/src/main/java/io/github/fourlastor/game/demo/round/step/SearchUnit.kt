@@ -12,7 +12,7 @@ import dagger.assisted.AssistedInject
 import io.github.fourlastor.game.coordinates.Hex
 import io.github.fourlastor.game.demo.state.GameState
 import io.github.fourlastor.game.demo.state.map.Tile
-import io.github.fourlastor.game.demo.state.unit.Unit
+import io.github.fourlastor.game.demo.state.unit.Mon
 import io.github.fourlastor.game.ui.ActorSupport.removeListeners
 import java.util.function.BiPredicate
 import java.util.function.Consumer
@@ -52,10 +52,10 @@ class SearchUnit @AssistedInject constructor(@Assisted private val filter: BiPre
         fun create(filter: BiPredicate<GameState, Tile>): SearchUnit
     }
 
-    private class SearchListener(private val unit: Unit, private val continuation: Consumer<Hex>) :
+    private class SearchListener(private val mon: Mon, private val continuation: Consumer<Hex>) :
         ClickListener() {
         override fun clicked(event: InputEvent, x: Float, y: Float) {
-            continuation.accept(unit.hex)
+            continuation.accept(mon.hex)
         }
     }
 }
