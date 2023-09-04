@@ -13,7 +13,7 @@ import javax.inject.Singleton
     modules = [GameModule::class, AssetsModule::class, GdxModule::class, ScreensModule::class]
 )
 interface GameComponent {
-    fun game(): GdxGame?
+    fun game(): GdxGame
 
     companion object {
         fun component(): GameComponent = DaggerGameComponent.create()

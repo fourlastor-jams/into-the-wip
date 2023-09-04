@@ -43,7 +43,7 @@ class Unit(
         stacks.tickStacks()
     }
 
-    fun addEffect(effect: Effect?) {
+    fun addEffect(effect: Effect) {
         stacks.addStack(effect, 3)
     }
 
