@@ -47,7 +47,7 @@ public class MoveStep extends SimpleStep {
         SequenceAction steps = Actions.sequence(actions.toArray(new Action[0]));
         unit.group.addAction(Actions.sequence(
                 steps,
-                Actions.run(() -> unit.hex.set(tile.hex)),
+                Actions.run(() -> unit.hex.set(tile.hex)), // (sheerst) Note: model code, likely shouldn't happen here?
                 Actions.run(() -> unit.setActorPosition(finalPosition)),
                 Actions.run(continuation)));
     }

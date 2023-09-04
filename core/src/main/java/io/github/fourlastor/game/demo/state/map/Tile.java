@@ -2,7 +2,7 @@ package io.github.fourlastor.game.demo.state.map;
 
 import com.badlogic.gdx.ai.pfa.Connection;
 import com.badlogic.gdx.math.GridPoint2;
-import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdxplus.math.Vector2;
 import io.github.fourlastor.game.coordinates.Hex;
 import io.github.fourlastor.game.ui.TileOnMap;
 
@@ -15,6 +15,9 @@ public class Tile {
         this.actor = image;
         this.hex = new Hex(position);
         this.type = type;
+        if (type == TileType.WATER) {
+            actor.setColor(1f, 1f, 1f, .9f);
+        }
     }
 
     public static class Link implements Connection<Tile> {
