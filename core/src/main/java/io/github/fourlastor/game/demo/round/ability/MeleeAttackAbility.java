@@ -6,6 +6,7 @@ import dagger.assisted.AssistedFactory;
 import dagger.assisted.AssistedInject;
 import io.github.fourlastor.game.demo.round.Ability;
 import io.github.fourlastor.game.demo.round.StateRouter;
+import io.github.fourlastor.game.demo.round.UnitInRound;
 import io.github.fourlastor.game.demo.round.step.StepState;
 import io.github.fourlastor.game.demo.round.step.Steps;
 import io.github.fourlastor.game.demo.state.Filter;
@@ -23,13 +24,9 @@ public class MeleeAttackAbility extends Ability {
 
     @AssistedInject
     public MeleeAttackAbility(
-            @Assisted Unit unit,
-            @Assisted Runnable cancel,
-            StateRouter router,
-            StepState.Factory stateFactory,
-            Steps steps) {
-        super(router, stateFactory, cancel);
-        this.unit = unit;
+            @Assisted UnitInRound unitInRound, StateRouter router, StepState.Factory stateFactory, Steps steps) {
+        super(unitInRound, router, stateFactory);
+        this.unit = unitInRound.unit;
         this.steps = steps;
     }
 
@@ -56,6 +53,6 @@ public class MeleeAttackAbility extends Ability {
 
     @AssistedFactory
     public interface Factory {
-        MeleeAttackAbility create(Unit unit, Runnable cancel);
+        MeleeAttackAbility create(UnitInRound unitInRound);
     }
 }

@@ -10,15 +10,16 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 
 public abstract class Ability extends RoundState {
+
+    private final UnitInRound unitInRound;
     private final StateRouter router;
     private StateMachine stateMachine;
     private final StepState.Factory stateFactory;
-    private final Runnable cancel;
 
-    public Ability(StateRouter router, StepState.Factory stateFactory, Runnable cancel) {
+    public Ability(UnitInRound unitInRound, StateRouter router, StepState.Factory stateFactory) {
+        this.unitInRound = unitInRound;
         this.router = router;
         this.stateFactory = stateFactory;
-        this.cancel = cancel;
     }
 
     protected <T> Builder<T> start(Step<T> initial) {
@@ -32,10 +33,13 @@ public abstract class Ability extends RoundState {
     @Override
     public void enter(GameState state) {
         stateMachine = new StateMachine(state, new InitialState());
-        createSteps(state).run(ignored -> router.endOfAbility(), () -> {
-            cancel.run();
-            router.endOfAbility();
-        });
+        createSteps(state)
+                .run(
+                        ignored -> {
+                            unitInRound.hasActed = true;
+                            router.endOfAbility();
+                        },
+                        router::endOfAbility);
     }
 
     protected abstract Builder<?> createSteps(GameState state);

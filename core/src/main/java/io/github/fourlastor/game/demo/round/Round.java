@@ -8,24 +8,20 @@ import io.github.fourlastor.game.demo.round.faction.Faction;
 import io.github.fourlastor.game.demo.state.GameState;
 import io.github.fourlastor.game.demo.state.unit.Unit;
 import io.github.fourlastor.game.ui.ActorSupport;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 import javax.inject.Inject;
-import squidpony.squidmath.IRNG;
 
 public class Round extends RoundState {
 
     private final StateRouter router;
-    private final IRNG rng;
     private List<CurrentFaction> factions = null;
     private int factionCounter = 0;
 
     @Inject
-    public Round(StateRouter router, IRNG rng) {
+    public Round(StateRouter router) {
         this.router = router;
-        this.rng = rng;
     }
 
     @Override
@@ -56,7 +52,7 @@ public class Round extends RoundState {
 
     private void advanceToNextTurn(GameState state) {
         CurrentFaction currentFaction = factions.get(factionCounter);
-        if (currentFaction.alreadyDidTurn.size() >= currentFaction.units.size()) {
+        if (currentFaction.allUnitsActed()) {
             factionCounter += 1;
         }
         if (factionCounter >= factions.size()) {
@@ -68,36 +64,34 @@ public class Round extends RoundState {
 
     private void startTurn(GameState state) {
         CurrentFaction currentFaction = factions.get(factionCounter);
-        currentFaction.units.stream()
-                .filter(unit -> !currentFaction.alreadyDidTurn.contains(unit))
-                .forEach(unit -> {
-                    state.tileAt(unit.hex).actor.setColor(Color.PINK);
-                    unit.group.image.addListener(new TurnListener(unit, currentFaction));
-                });
+        currentFaction.units.stream().filter(unitInTurn -> !unitInTurn.hasActed).forEach(unitInTurn -> {
+            state.tileAt(unitInTurn.unit.hex).actor.setColor(Color.PINK);
+            unitInTurn.unit.group.image.addListener(new TurnListener(unitInTurn));
+        });
     }
 
     private static class CurrentFaction {
-        final List<Unit> units;
-        final List<Unit> alreadyDidTurn = new ArrayList<>();
+        final List<UnitInRound> units;
 
         private CurrentFaction(List<Unit> units) {
-            this.units = units;
+            this.units = units.stream().map(UnitInRound::new).collect(Collectors.toList());
+        }
+
+        boolean allUnitsActed() {
+            return units.stream().allMatch(it -> it.hasActed);
         }
     }
 
     private class TurnListener extends ClickListener {
 
-        private final Unit unit;
-        private final CurrentFaction currentFaction;
+        private final UnitInRound unit;
 
-        public TurnListener(Unit unit, CurrentFaction currentFaction) {
+        public TurnListener(UnitInRound unit) {
             this.unit = unit;
-            this.currentFaction = currentFaction;
         }
 
         @Override
         public void clicked(InputEvent event, float x, float y) {
-            currentFaction.alreadyDidTurn.add(unit);
             router.turn(unit);
         }
     }

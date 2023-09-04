@@ -1,85 +1,81 @@
 package io.github.fourlastor.game.demo.round;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import dagger.assisted.Assisted;
 import dagger.assisted.AssistedFactory;
 import dagger.assisted.AssistedInject;
-import io.github.fourlastor.game.demo.round.ability.MeleeAttackAbility;
-import io.github.fourlastor.game.demo.round.ability.MoveAbility;
-import io.github.fourlastor.game.demo.round.ability.RangedAttackAbility;
-import io.github.fourlastor.game.demo.round.ability.SummonMountainAbility;
-import io.github.fourlastor.game.demo.round.ability.TileSmashAbility;
 import io.github.fourlastor.game.demo.state.GameState;
 import io.github.fourlastor.game.demo.state.unit.Unit;
-import io.github.fourlastor.game.ui.ActorSupport;
+import io.github.fourlastor.game.demo.state.unit.UnitType;
+import java.util.LinkedList;
+import java.util.Map;
+import java.util.Queue;
 
 public class Turn extends RoundState {
 
-    private final Unit unit;
+    private final UnitInRound unitInRound;
     private final StateRouter router;
-    private final MoveAbility.Factory moveFactory;
-    private final MeleeAttackAbility.Factory meleeAttackFactory;
-    private final RangedAttackAbility.Factory rangedAttackFactory;
-    private final SummonMountainAbility.Factory summonMountainFactory;
-    private final TileSmashAbility.Factory tileSmashFactory;
+    private final Unit.Abilities.Defaults defaults;
+    private final Map<UnitType, Unit.Abilities> abilitiesMap;
+    private final TextureAtlas atlas;
+
+    private final Queue<Actor> addedImages = new LinkedList<>();
 
     private boolean acted = false;
 
     @AssistedInject
     public Turn(
-            @Assisted Unit unit,
+            @Assisted UnitInRound unitInRound,
             StateRouter router,
-            MeleeAttackAbility.Factory meleeAttackFactory,
-            RangedAttackAbility.Factory rangedAttackFactory,
-            MoveAbility.Factory moveFactory,
-            SummonMountainAbility.Factory summonMountainFactory,
-            TileSmashAbility.Factory tileSmashFactory) {
-        this.unit = unit;
+            Unit.Abilities.Defaults defaults,
+            Map<UnitType, Unit.Abilities> abilitiesMap,
+            TextureAtlas atlas) {
+        this.unitInRound = unitInRound;
         this.router = router;
-        this.meleeAttackFactory = meleeAttackFactory;
-        this.rangedAttackFactory = rangedAttackFactory;
-        this.moveFactory = moveFactory;
-        this.summonMountainFactory = summonMountainFactory;
-        this.tileSmashFactory = tileSmashFactory;
+        this.defaults = defaults;
+        this.abilitiesMap = abilitiesMap;
+        this.atlas = atlas;
     }
 
     @Override
     public void enter(GameState state) {
-
+        Unit unit = unitInRound.unit;
         state.tileAt(unit.hex).actor.setColor(Color.PINK);
 
         if (!acted) {
-            // Move unit button.
-            state.ui.move.addListener(
-                    new PickMoveListener(() -> router.startAbility(moveFactory.create(unit, () -> acted = false))));
-
-            // Melee attack button.
-            state.ui.meleeAttack.addListener(new PickMoveListener(
-                    () -> router.startAbility(meleeAttackFactory.create(unit, () -> acted = false))));
-
-            // Ranged attack button.
-            state.ui.rangedAttack.addListener(new PickMoveListener(
-                    () -> router.startAbility(rangedAttackFactory.create(unit, () -> acted = false))));
-
-            // Tile smash ability button.
-            state.ui.tileSmash.addListener(new PickMoveListener(
-                    () -> router.startAbility(tileSmashFactory.create(unit, () -> acted = false))));
-
-            // Summon Mountain ability button.
-            state.ui.summonMountain.addListener(new PickMoveListener(
-                    () -> router.startAbility(summonMountainFactory.create(unit, () -> acted = false))));
+            Unit.Abilities monsterAbilities = abilitiesMap.getOrDefault(unit.type, defaults);
+            for (Unit.Abilities.Description description : monsterAbilities.create()) {
+                Image image = new Image(atlas.findRegion(description.icon));
+                image.addListener(
+                        new PickMoveListener(() -> router.startAbility(description.factory.apply(unitInRound))));
+                state.ui.add(image);
+                addedImages.add(image);
+            }
         } else {
             router.endOfTurn();
         }
     }
 
     @Override
+    public void update(GameState state) {
+        if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
+            router.endOfTurn();
+        }
+    }
+
+    @Override
     public void exit(GameState state) {
-        state.tileAt(unit.hex).actor.setColor(Color.WHITE);
-        ActorSupport.removeListeners(state.ui.meleeAttack, it -> it instanceof PickMoveListener);
-        ActorSupport.removeListeners(state.ui.move, it -> it instanceof PickMoveListener);
+        state.tileAt(unitInRound.unit.hex).actor.setColor(Color.WHITE);
+        while (!addedImages.isEmpty()) {
+            addedImages.remove().remove();
+        }
     }
 
     private class PickMoveListener extends ClickListener {
@@ -99,6 +95,6 @@ public class Turn extends RoundState {
 
     @AssistedFactory
     public interface Factory {
-        Turn create(Unit unit);
+        Turn create(UnitInRound unit);
     }
 }

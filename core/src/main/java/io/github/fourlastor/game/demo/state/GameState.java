@@ -52,9 +52,11 @@ public class GameState {
         return units.stream().filter(it -> it.faction == faction).collect(Collectors.toCollection(ObjectList::new));
     }
 
-    @Null
     public Tile tileAt(Hex hex) {
-        return tiles.stream().filter(it -> it.hex.equals(hex)).findFirst().orElse(null);
+        return tiles.stream()
+                .filter(it -> it.hex.equals(hex))
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("Hex does not contain a tile"));
     }
 
     @Null
