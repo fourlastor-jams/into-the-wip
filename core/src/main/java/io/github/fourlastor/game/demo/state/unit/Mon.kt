@@ -46,10 +46,18 @@ class Mon(
     }
 
     fun addEffect(effect: Effect) {
-        stacks.addStack(effect, 3)
+        addEffect(effect, 3)
+    }
+
+    fun addEffect(effect: Effect, numberStacks: Int) {
+        stacks.addStack(effect, numberStacks)
     }
     
     fun getEffects(): ObjectIntMap<Effect> = stacks.getEffects()
+    
+    fun getEffect(type: Class<out Effect>): Effect? {
+        return stacks.byType(type)
+    }
 
     fun canTravel(tile: Tile): Boolean = if (tile.type === TileType.WATER && (type.canSwim || type.canFly)) {
         true

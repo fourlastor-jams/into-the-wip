@@ -77,8 +77,8 @@ class BlobAbsorb @AssistedInject constructor(
             Actions.run { targetMon.actorPosition = originalPosition }!!,
             Actions.run { 
                 // Apply the Blob Absorb effects on the source and target mons.
-                source.addEffect(BlobAbsorbSourceEffect(targetMon)) 
-                targetMon.addEffect(BlobAbsorbTargetEffect(source)) 
+                source.addEffect(BlobAbsorbSourceEffect(targetMon), -1)
+                targetMon.addEffect(BlobAbsorbTargetEffect(source), -1)
             },
             Actions.run(continuation)
         )

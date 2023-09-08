@@ -42,8 +42,6 @@ class MoveStep @AssistedInject constructor(
         // Move the source or target Mon if true.
         for (effect in mon.getEffects().keys()) {
             if (effect is BlobAbsorbSourceEffect) {
-                println("hi")
-                println("hi")
                 effect.targetMon.group.addAction(moveAction)
             }
             if (effect is BlobAbsorbTargetEffect) {
