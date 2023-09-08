@@ -9,9 +9,9 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class BlobAbsorbSourceEffect(private val mon: Mon) : OnTurnStart {  //  @Inject constructor()
+class BlobAbsorbSourceEffect(private val mon: Mon) : OnTurnStart {
 
-    private val targetMon: Mon
+    val targetMon: Mon
 
     init {
         targetMon = mon;

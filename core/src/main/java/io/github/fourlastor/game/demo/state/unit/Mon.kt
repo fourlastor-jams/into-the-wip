@@ -3,6 +3,7 @@ package io.github.fourlastor.game.demo.state.unit
 import com.badlogic.gdx.math.GridPoint2
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.scenes.scene2d.Action
+import com.badlogic.gdx.utils.ObjectIntMap
 import com.badlogic.gdx.scenes.scene2d.ui.Label
 import io.github.fourlastor.game.coordinates.Hex
 import io.github.fourlastor.game.coordinates.HexCoordinates
@@ -47,6 +48,8 @@ class Mon(
     fun addEffect(effect: Effect) {
         stacks.addStack(effect, 3)
     }
+    
+    fun getEffects(): ObjectIntMap<Effect> = stacks.getEffects()
 
     fun canTravel(tile: Tile): Boolean = if (tile.type === TileType.WATER && (type.canSwim || type.canFly)) {
         true

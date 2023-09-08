@@ -13,6 +13,8 @@ class EffectStacks {
         val current = getStack(effect)
         stacks.put(effect, current + quantity)
     }
+    
+    fun getEffects(): ObjectIntMap<Effect> = stacks
 
     fun tickStacks() {
         for (effect in stacks.keys()) {
@@ -45,5 +47,14 @@ class EffectStacks {
             }
         }
         return sequence
+    }
+
+    fun byType(type: Class<out Effect>): Effect? {
+        for (effect in stacks.keys()) {
+            if (type.isInstance(effect)) {
+                return effect
+            }
+        }
+        return null
     }
 }

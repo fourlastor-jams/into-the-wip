@@ -11,6 +11,8 @@ import dagger.assisted.AssistedInject
 import io.github.fourlastor.game.demo.state.GameState
 import io.github.fourlastor.game.demo.state.map.Tile
 import io.github.fourlastor.game.demo.state.unit.Mon
+import io.github.fourlastor.game.demo.state.unit.effect.BlobAbsorbSourceEffect
+import io.github.fourlastor.game.demo.state.unit.effect.BlobAbsorbTargetEffect
 
 class MoveStep @AssistedInject constructor(
     @Assisted private val mon: Mon,
@@ -28,14 +30,26 @@ class MoveStep @AssistedInject constructor(
         val finalPosition = mon.coordinates.toWorldAtCenter(finalTile.hex, Vector2())
         finalPosition.x -= mon.group.width / 2f
         val steps = Actions.sequence(*actions.toTypedArray<Action>())
-        mon.group.addAction(
-            Actions.sequence(
-                steps,
-                Actions.run { mon.hex.set(tile.hex) }, // (sheerst) Note: model code, likely shouldn't happen here?
-                Actions.run { mon.actorPosition = finalPosition },
-                Actions.run(continuation)
-            )
+        val moveAction = Actions.sequence(
+            steps,
+            Actions.run { mon.hex.set(tile.hex) }, // (sheerst) Note: model code, likely shouldn't happen here?
+            Actions.run { mon.actorPosition = finalPosition },
+            Actions.run(continuation)
         )
+        mon.group.addAction(moveAction)
+
+        // Check if this mon is involved with a Blob Absorb effect.
+        // Move the source or target Mon if true.
+        for (effect in mon.getEffects().keys()) {
+            if (effect is BlobAbsorbSourceEffect) {
+                println("hi")
+                println("hi")
+                effect.targetMon.group.addAction(moveAction)
+            }
+            if (effect is BlobAbsorbTargetEffect) {
+                effect.targetMon.group.addAction(moveAction)
+            }
+        }
     }
 
     @AssistedFactory
