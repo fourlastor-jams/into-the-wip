@@ -47,7 +47,7 @@ class BlobToss @AssistedInject constructor(
             Vector3(0f, 0f, -4f),
             Vector3(0f, 0f, -4f),
             Vector3(0f, 0f, -4f),
-            Vector3(0f, 0f, -4f),
+            Vector3(0f, 0f, -4f)
         )
         val runnables = arrayOf(
             null,
@@ -75,7 +75,7 @@ class BlobToss @AssistedInject constructor(
             null,
             null,
             null,
-            null,
+            null
         )
         val scale = SCALE.cpy().scl(distance, 1f, 1f)
         return makeSequence(

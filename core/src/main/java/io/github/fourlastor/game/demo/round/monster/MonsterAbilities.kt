@@ -76,7 +76,7 @@ interface MonsterAbilities {
         override fun create(): List<Abilities.Description> {
             return listOf(
                 descriptions.move,
-                descriptions.chargeBeam,
+                descriptions.chargeBeam
             )
         }
     }
