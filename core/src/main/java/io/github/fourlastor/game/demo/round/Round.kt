@@ -69,6 +69,7 @@ class Round @Inject constructor(private val router: StateRouter, private val sta
         currentFaction.units.asSequence()
             .filter { unitInTurn: UnitInRound -> !unitInTurn.hasActed }
             .forEach { unitInTurn: UnitInRound ->
+                Consumer { unitInRound: UnitInRound -> unitInRound.mon.onTurnStart() }
                 val unitTile = state.tileAt(unitInTurn.mon.hex)
                 unitTile.actor.color = Color.PINK
                 unitTile.actor.addListener(TurnListener(unitInTurn))

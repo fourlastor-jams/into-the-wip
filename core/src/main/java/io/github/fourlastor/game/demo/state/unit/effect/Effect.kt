@@ -7,4 +7,7 @@ interface Effect {
     interface OnRoundStart : Effect {
         fun onRoundStart(mon: Mon, stackAmount: Int): Action
     }
+    interface OnTurnStart : Effect {
+        fun onTurnStart(mon: Mon, stackAmount: Int): Action
+    }
 }

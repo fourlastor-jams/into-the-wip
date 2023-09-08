@@ -38,6 +38,8 @@ class Mon(
 
     fun onRoundStart(): Action = stacks.onRoundStart(this)
 
+    fun onTurnStart(): Action = stacks.onTurnStart(this)
+
     fun onRoundEnd() {
         stacks.tickStacks()
     }
