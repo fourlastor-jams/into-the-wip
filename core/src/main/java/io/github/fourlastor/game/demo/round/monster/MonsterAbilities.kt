@@ -4,7 +4,15 @@ import dagger.Binds
 import dagger.MapKey
 import dagger.Module
 import dagger.multibindings.IntoMap
-import io.github.fourlastor.game.demo.round.ability.*
+import io.github.fourlastor.game.demo.round.ability.BlobAbsorbAbility
+import io.github.fourlastor.game.demo.round.ability.BlobTossAbility
+import io.github.fourlastor.game.demo.round.ability.ChargeBeamAbility
+import io.github.fourlastor.game.demo.round.ability.MeleeAttackAbility
+import io.github.fourlastor.game.demo.round.ability.MoveAbility
+import io.github.fourlastor.game.demo.round.ability.PoisonAbility
+import io.github.fourlastor.game.demo.round.ability.RangedAttackAbility
+import io.github.fourlastor.game.demo.round.ability.SummonMountainAbility
+import io.github.fourlastor.game.demo.round.ability.TileSmashAbility
 import io.github.fourlastor.game.demo.state.unit.Mon.Abilities
 import io.github.fourlastor.game.demo.state.unit.UnitType
 import javax.inject.Inject
