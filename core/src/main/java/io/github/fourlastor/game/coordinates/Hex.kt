@@ -4,7 +4,6 @@ import com.badlogic.gdx.math.GridPoint2
 import com.badlogic.gdx.math.GridPoint3
 import io.github.fourlastor.game.extensions.GridPoint3s.inverse
 import io.github.fourlastor.game.extensions.GridPoint3s.scl
-import java.util.*
 import kotlin.math.abs
 
 /**

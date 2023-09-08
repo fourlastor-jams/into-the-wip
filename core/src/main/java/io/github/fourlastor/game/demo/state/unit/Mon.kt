@@ -3,8 +3,8 @@ package io.github.fourlastor.game.demo.state.unit
 import com.badlogic.gdx.math.GridPoint2
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.scenes.scene2d.Action
-import com.badlogic.gdx.utils.ObjectIntMap
 import com.badlogic.gdx.scenes.scene2d.ui.Label
+import com.badlogic.gdx.utils.ObjectIntMap
 import io.github.fourlastor.game.coordinates.Hex
 import io.github.fourlastor.game.coordinates.HexCoordinates
 import io.github.fourlastor.game.demo.round.Ability
@@ -52,9 +52,9 @@ class Mon(
     fun addEffect(effect: Effect, numberStacks: Int) {
         stacks.addStack(effect, numberStacks)
     }
-    
+
     fun getEffects(): ObjectIntMap<Effect> = stacks.getEffects()
-    
+
     fun getEffect(type: Class<out Effect>): Effect? {
         return stacks.byType(type)
     }

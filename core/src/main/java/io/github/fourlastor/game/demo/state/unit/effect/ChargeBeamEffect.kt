@@ -4,21 +4,22 @@ import com.badlogic.gdx.assets.AssetManager
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.scenes.scene2d.Action
 import com.badlogic.gdx.scenes.scene2d.actions.Actions
-import io.github.fourlastor.game.demo.state.unit.Mon
-import io.github.fourlastor.game.demo.state.unit.effect.Effect.Triggered
 import com.badlogic.gdx.scenes.scene2d.ui.Label
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import io.github.fourlastor.game.demo.state.unit.Mon
+import io.github.fourlastor.game.demo.state.unit.effect.Effect.Triggered
 
 class ChargeBeamEffect @AssistedInject constructor(
-        @Assisted mon: Mon,
+    @Assisted mon: Mon,
     assetManager: AssetManager
 ) : Triggered {
 
     private var chargeTier: Int = 1
     val targetMon: Mon
     private val label: Label
+
     init {
         targetMon = mon
         val labelStyle = Label.LabelStyle(assetManager.get("fonts/quan-pixel-16.fnt"), Color.BLUE)

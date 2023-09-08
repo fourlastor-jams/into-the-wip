@@ -24,11 +24,10 @@ class ChargeBeam @AssistedInject constructor(
 
         if (effect == null) {
             source.addEffect(chargeBeamFactory.create(source), -1)
-        }
-        else {
+        } else {
             source.group.addAction((effect as ChargeBeamEffect).triggerEffect(source))
         }
-        
+
         source.group.addAction(Actions.run(continuation))
     }
 

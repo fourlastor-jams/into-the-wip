@@ -11,8 +11,8 @@ import io.github.fourlastor.game.demo.AttackAnimation.makeSequence
 import io.github.fourlastor.game.demo.state.GameState
 import io.github.fourlastor.game.demo.state.map.Tile
 import io.github.fourlastor.game.demo.state.unit.Mon
-import java.util.function.Consumer
 import io.github.fourlastor.game.extensions.Vector2s.calculateAngle
+import java.util.function.Consumer
 
 class BlobToss @AssistedInject constructor(
     @Assisted("source") private val source: Mon,
@@ -109,7 +109,7 @@ class BlobToss @AssistedInject constructor(
 
     override fun enter(state: GameState, continuation: Runnable) {
         val originalPosition = source.actorPosition
-        val targetPosition = targetMon.coordinates.toWorldAtCenter(targetTile.hex);
+        val targetPosition = targetMon.coordinates.toWorldAtCenter(targetTile.hex)
         doAttackAnimation(state, originalPosition, targetPosition, continuation)
     }
 

@@ -75,7 +75,7 @@ class BlobAbsorb @AssistedInject constructor(
             setupAttackAnimation(distance, rotationDegrees), // Move the target unit to the source's Tile.
             Actions.run { targetMon.hex.set(source.hex) },
             Actions.run { targetMon.actorPosition = originalPosition }!!,
-            Actions.run { 
+            Actions.run {
                 // Apply the Blob Absorb effects on the source and target mons.
                 source.addEffect(BlobAbsorbSourceEffect(targetMon), -1)
                 targetMon.addEffect(BlobAbsorbTargetEffect(source), -1)
