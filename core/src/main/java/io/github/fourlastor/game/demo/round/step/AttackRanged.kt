@@ -1,5 +1,6 @@
 package io.github.fourlastor.game.demo.round.step
 
+import com.badlogic.gdx.assets.AssetManager
 import com.badlogic.gdx.graphics.g2d.TextureAtlas
 import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.scenes.scene2d.actions.Actions
@@ -14,11 +15,14 @@ class AttackRanged @AssistedInject constructor(
     @Assisted("source") private val source: Mon,
     @Assisted("target") private val target: Mon,
     private val textureAtlas: TextureAtlas,
+    private val assetManager: AssetManager,
     private val stage: Stage
 ) : SimpleStep() {
     override fun enter(state: GameState, continuation: Runnable) {
+        val damageAmount = 1
+
         // (sheerst) Note: this is model code, does it go here?
-        target.changeHp(-1)
+        target.changeHp(-damageAmount)
 
         // Distance between source and target is used to scale the animation if needed.
         val distance = source.actorPosition.dst(target.actorPosition)
@@ -35,6 +39,7 @@ class AttackRanged @AssistedInject constructor(
         moveAnimation.addAction(Actions.run { target.refreshHpLabel() })
         moveAnimation.addAction(Actions.run(continuation))
         moveAnimation.addAction(Actions.run { projectile.remove() })
+        moveAnimation.addAction(healthDeplete(stage, assetManager, targetPos.x, targetPos.y + target.group.image.imageHeight + 8f, damageAmount))
         projectile.addAction(moveAnimation)
         stage.addActor(projectile)
     }
