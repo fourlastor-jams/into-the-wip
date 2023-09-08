@@ -19,7 +19,6 @@ open class AttackRanged @AssistedInject constructor(
 ) : SimpleStep() {
 
     fun getAnimatedProjectile(continuation: Runnable, damageAmount: Int): Actor {
-
         // Distance between source and target is used to scale the animation if needed.
         val distance = source.actorPosition.dst(target.actorPosition)
 
