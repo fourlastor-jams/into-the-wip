@@ -13,7 +13,9 @@ enum class UnitType(
     TECTONNE("tectonne", 3, false),
     MON6("MON6", 3, false),
     MON7("MON7", 3, false),
-    MON8("MON8", 3, false);
+    MON8("MON8", 3, false),
+    LASERDOGE("LASERDOGE", 4, false),
+    ;
 
     companion object {
         fun fromMap(mapName: String): UnitType = values().first { it.mapName.equals(mapName, ignoreCase = true) }

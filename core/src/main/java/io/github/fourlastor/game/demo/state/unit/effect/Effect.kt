@@ -10,4 +10,8 @@ interface Effect {
     interface OnTurnStart : Effect {
         fun onTurnStart(mon: Mon, stackAmount: Int): Action
     }
+    interface Triggered : Effect {
+        fun triggerEffect(mon: Mon): Action
+        fun cleanup()
+    }
 }
