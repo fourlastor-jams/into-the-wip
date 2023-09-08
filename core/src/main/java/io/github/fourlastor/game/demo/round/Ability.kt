@@ -25,7 +25,7 @@ abstract class Ability(
         createSteps(state)
             .run(
                 {
-                    unitInRound.hasActed = true
+//                    unitInRound.hasActed = true
                     router.endOfAbility()
                 },
                 { router.endOfAbility() }

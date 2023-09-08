@@ -1,6 +1,7 @@
 package io.github.fourlastor.game.demo.round.step
 
 import com.badlogic.gdx.graphics.g2d.TextureAtlas
+import com.badlogic.gdx.scenes.scene2d.Actor
 import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.scenes.scene2d.actions.Actions
 import com.badlogic.gdx.scenes.scene2d.ui.Image
@@ -10,15 +11,14 @@ import dagger.assisted.AssistedInject
 import io.github.fourlastor.game.demo.state.GameState
 import io.github.fourlastor.game.demo.state.unit.Mon
 
-class AttackRanged @AssistedInject constructor(
+open class AttackRanged @AssistedInject constructor(
     @Assisted("source") private val source: Mon,
     @Assisted("target") private val target: Mon,
     private val textureAtlas: TextureAtlas,
     private val stage: Stage
 ) : SimpleStep() {
-    override fun enter(state: GameState, continuation: Runnable) {
-        // (sheerst) Note: this is model code, does it go here?
-        target.changeHp(-1)
+
+    fun getAnimatedProjectile(continuation: Runnable, damageAmount: Int): Actor {
 
         // Distance between source and target is used to scale the animation if needed.
         val distance = source.actorPosition.dst(target.actorPosition)
@@ -32,11 +32,15 @@ class AttackRanged @AssistedInject constructor(
         projectile.setPosition(sourcePos.x, sourcePos.y)
         val moveAnimation = Actions.sequence()
         moveAnimation.addAction(Actions.moveTo(targetPos.x, targetPos.y, distance / 400))
-        moveAnimation.addAction(Actions.run { target.refreshHpLabel() })
+        moveAnimation.addAction(Actions.run { target.changeHp(-damageAmount) })
         moveAnimation.addAction(Actions.run(continuation))
         moveAnimation.addAction(Actions.run { projectile.remove() })
         projectile.addAction(moveAnimation)
-        stage.addActor(projectile)
+        return projectile
+    }
+
+    override fun enter(state: GameState, continuation: Runnable) {
+        stage.addActor(getAnimatedProjectile(continuation, 1))
     }
 
     /**

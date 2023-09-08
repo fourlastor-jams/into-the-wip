@@ -7,6 +7,7 @@ import dagger.multibindings.IntoMap
 import io.github.fourlastor.game.demo.round.ability.BlobAbsorbAbility
 import io.github.fourlastor.game.demo.round.ability.BlobTossAbility
 import io.github.fourlastor.game.demo.round.ability.ChargeBeamAbility
+import io.github.fourlastor.game.demo.round.ability.ChargeBeamAttackAbility
 import io.github.fourlastor.game.demo.round.ability.MeleeAttackAbility
 import io.github.fourlastor.game.demo.round.ability.MoveAbility
 import io.github.fourlastor.game.demo.round.ability.PoisonAbility
@@ -76,7 +77,8 @@ interface MonsterAbilities {
         override fun create(): List<Abilities.Description> {
             return listOf(
                 descriptions.move,
-                descriptions.chargeBeam
+                descriptions.chargeBeam,
+                descriptions.chargeBeamAttack
             )
         }
     }
@@ -90,7 +92,8 @@ interface MonsterAbilities {
         poisonFactory: PoisonAbility.Factory,
         blobAbsorbFactory: BlobAbsorbAbility.Factory,
         blobTossFactory: BlobTossAbility.Factory,
-        chargeBeamFactory: ChargeBeamAbility.Factory
+        chargeBeamFactory: ChargeBeamAbility.Factory,
+        chargeBeamAttackFactory: ChargeBeamAttackAbility.Factory
     ) {
         val melee: Abilities.Description
         val ranged: Abilities.Description
@@ -101,6 +104,7 @@ interface MonsterAbilities {
         val blobAbsorb: Abilities.Description
         val blobToss: Abilities.Description
         val chargeBeam: Abilities.Description
+        val chargeBeamAttack: Abilities.Description
 
         init {
             melee = Abilities.Description("Melee attack", "abilities/buffs/attack_boost", meleeFactory::create)
@@ -116,6 +120,7 @@ interface MonsterAbilities {
             blobAbsorb = Abilities.Description("Absorb unit", "abilities/spells/healing_spell", blobAbsorbFactory::create)
             blobToss = Abilities.Description("Toss the absorbed unit", "abilities/spells/healing_spell", blobTossFactory::create)
             chargeBeam = Abilities.Description("Increase the charge beam tier by 1", "abilities/spells/mana_replenish", chargeBeamFactory::create)
+            chargeBeamAttack = Abilities.Description("Shoot charge beam", "abilities/spells/mana_replenish", chargeBeamAttackFactory::create)
         }
     }
 }

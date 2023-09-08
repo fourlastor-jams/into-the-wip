@@ -16,7 +16,7 @@ class ChargeBeamEffect @AssistedInject constructor(
     assetManager: AssetManager
 ) : Triggered {
 
-    private var chargeTier: Int = 1
+    var chargeTier: Int = 1
     val targetMon: Mon
     private val label: Label
 
