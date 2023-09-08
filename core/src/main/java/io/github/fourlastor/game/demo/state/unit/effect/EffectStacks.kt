@@ -13,7 +13,7 @@ class EffectStacks {
         val current = getStack(effect)
         stacks.put(effect, current + quantity)
     }
-    
+
     fun getEffects(): ObjectIntMap<Effect> = stacks
 
     fun tickStacks() {
