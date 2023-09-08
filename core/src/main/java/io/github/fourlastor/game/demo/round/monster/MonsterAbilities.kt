@@ -61,8 +61,7 @@ interface MonsterAbilities {
             return listOf(
                 descriptions.move,
                 descriptions.blobAbsorb,
-                descriptions.blobToss,
-                descriptions.ranged
+                descriptions.blobToss
             )
         }
     }
