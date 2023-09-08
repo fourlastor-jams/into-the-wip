@@ -10,6 +10,7 @@ import dagger.assisted.AssistedInject
 import io.github.fourlastor.game.demo.AttackAnimation.makeSequence
 import io.github.fourlastor.game.demo.state.GameState
 import io.github.fourlastor.game.demo.state.unit.Mon
+import io.github.fourlastor.game.extensions.Vector2s.calculateAngle
 
 /**
  * Ideas/notes:
@@ -63,11 +64,11 @@ class BlobAbsorb @AssistedInject constructor(
         )
     }
 
-    private fun doAttackAnimation(originalPosition: Vector2?, targetPosition: Vector2, continuation: Runnable?) {
+    private fun doAttackAnimation(originalPosition: Vector2, targetPosition: Vector2, continuation: Runnable?) {
         // Distance between source and target is used to scale the animation if needed.
         val distance = source.actorPosition.dst(targetPosition)
         // Angle offset of target from source.
-        val rotationDegrees = calculateAngle(originalPosition, targetPosition)
+        val rotationDegrees = originalPosition.calculateAngle(targetPosition)
         val attackAnimation = Actions.sequence(
             setupAttackAnimation(distance, rotationDegrees), // Move the target unit to the source's Tile.
             Actions.run { targetMon.hex.set(source.hex) },
@@ -98,16 +99,5 @@ class BlobAbsorb @AssistedInject constructor(
     companion object {
         private const val MOVE_DURATION = 0.05f
         private val SCALE = Vector3(1f / 16f, 1f, 1f)
-
-        /**
-         * Calculate the angle in degrees between two 2D vectors.
-         *
-         * @param source The source vector.
-         * @param target The target vector.
-         * @return The angle in degrees between the vectors.
-         */
-        fun calculateAngle(source: Vector2?, target: Vector2): Float {
-            return target.cpy().sub(source).angleDeg()
-        }
     }
 }

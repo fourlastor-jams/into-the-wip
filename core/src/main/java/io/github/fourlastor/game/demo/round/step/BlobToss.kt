@@ -12,6 +12,7 @@ import io.github.fourlastor.game.demo.state.GameState
 import io.github.fourlastor.game.demo.state.map.Tile
 import io.github.fourlastor.game.demo.state.unit.Mon
 import java.util.function.Consumer
+import io.github.fourlastor.game.extensions.Vector2s.calculateAngle
 
 class BlobToss @AssistedInject constructor(
     @Assisted("source") private val source: Mon,
@@ -21,18 +22,32 @@ class BlobToss @AssistedInject constructor(
     private fun setupAttackAnimation(state: GameState, distance: Float, rotationDegrees: Float): Action {
         // Base animation goes left-to-right.
         val positions = arrayOf(
-            Vector3(1f, 0f, -.5f),
-            Vector3(1f, 0f, -.4f),
-            Vector3(1f, 0f, -.3f),
-            Vector3(1f, 0f, -.2f),
-            Vector3(1f, 0f, -.1f),
+            Vector3(1f, 0f, .5f * 20f),
+            Vector3(1f, 0f, .4f * 20f),
+            Vector3(1f, 0f, .3f * 20f),
+            Vector3(1f, 0f, .2f * 20f),
+            Vector3(1f, 0f, .1f * 20f),
             Vector3(1f, 0f, 0f),
             Vector3(1f, 0f, 0f),
-            Vector3(1f, 0f, -.1f),
-            Vector3(1f, 0f, -.2f),
-            Vector3(1f, 0f, -.3f),
-            Vector3(1f, 0f, -.4f),
-            Vector3(1f, 0f, -.5f)
+            Vector3(1f, 0f, -.1f * 20f),
+            Vector3(1f, 0f, -.2f * 20f),
+            Vector3(1f, 0f, -.3f * 20f),
+            Vector3(1f, 0f, -.4f * 20f),
+            Vector3(1f, 0f, -.5f * 20f),
+            Vector3(0f, 0f, -2f),
+            Vector3(0f, 0f, 4f),
+            Vector3(0f, 0f, 4f),
+            Vector3(0f, 0f, 4f),
+            Vector3(0f, 0f, 4f),
+            Vector3(0f, 0f, 2f),
+            Vector3(0f, 0f, 1f),
+            Vector3(0f, 0f, 0f),
+            Vector3(0f, 0f, -1f),
+            Vector3(0f, 0f, -2f),
+            Vector3(0f, 0f, -4f),
+            Vector3(0f, 0f, -4f),
+            Vector3(0f, 0f, -4f),
+            Vector3(0f, 0f, -4f),
         )
         val runnables = arrayOf(
             null,
@@ -45,8 +60,22 @@ class BlobToss @AssistedInject constructor(
             null,
             null,
             null,
-            null, // Damage all mons on that tile.
-            Runnable { state.mons.forEach(Consumer { mon: Mon -> mon.changeHp(-2) }) }
+            null,
+            Runnable { state.mons.forEach(Consumer { mon: Mon -> mon.changeHp(-2) }) }, // Damage all mons on that tile.
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
         )
         val scale = SCALE.cpy().scl(distance, 1f, 1f)
         return makeSequence(
@@ -68,7 +97,7 @@ class BlobToss @AssistedInject constructor(
         // Distance between source and target is used to scale the animation if needed.
         val distance = source.actorPosition.dst(targetPosition)
         // Angle offset of target from source.
-        val rotationDegrees = calculateAngle(originalPosition, targetPosition)
+        val rotationDegrees = originalPosition.calculateAngle(targetPosition)
         val attackAnimation = Actions.sequence(
             setupAttackAnimation(state, distance, rotationDegrees), // Move the target unit to the source's Tile.
             Actions.run { targetMon.hex.set(targetTile.hex) },
@@ -80,7 +109,7 @@ class BlobToss @AssistedInject constructor(
 
     override fun enter(state: GameState, continuation: Runnable) {
         val originalPosition = source.actorPosition
-        val targetPosition = targetMon.actorPosition
+        val targetPosition = targetMon.coordinates.toWorldAtCenter(targetTile.hex);
         doAttackAnimation(state, originalPosition, targetPosition, continuation)
     }
 
@@ -101,18 +130,7 @@ class BlobToss @AssistedInject constructor(
     }
 
     companion object {
-        private const val MOVE_DURATION = 0.05f
-        private val SCALE = Vector3(1f / 16f, 1f, 1f)
-
-        /**
-         * Calculate the angle in degrees between two 2D vectors.
-         *
-         * @param source The source vector.
-         * @param target The target vector.
-         * @return The angle in degrees between the vectors.
-         */
-        fun calculateAngle(source: Vector2, target: Vector2): Float {
-            return target.cpy().sub(source).angleDeg()
-        }
+        private const val MOVE_DURATION = 0.018f
+        private val SCALE = Vector3(1f / 12f, 1f, 1f)
     }
 }

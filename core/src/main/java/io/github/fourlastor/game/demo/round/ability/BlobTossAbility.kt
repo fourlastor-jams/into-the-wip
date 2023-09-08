@@ -40,7 +40,7 @@ class BlobTossAbility @AssistedInject constructor(
             .then { hex: Hex ->
                 steps.blobToss(
                     mon,
-                    state.unitAt { mon.hex == hex && it != mon }!!,
+                    state.unitAt { it.hex.equals(mon.hex) && it != mon }!!,
                     state.tileAt(hex)
                 )
             }
