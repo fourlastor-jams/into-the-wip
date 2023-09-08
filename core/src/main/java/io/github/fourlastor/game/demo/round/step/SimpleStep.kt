@@ -22,8 +22,9 @@ abstract class SimpleStep : Step<Unit>() {
             val labelStyle = Label.LabelStyle(assetManager.get("fonts/quan-pixel-16.fnt"), Color.RED)
             val healthDeplete = Label((-damageAmount).toString(), labelStyle)
             healthDeplete.setPosition(x, y)
-            healthDeplete.addAction(Actions.moveTo(x, y + 6, 2f, Interpolation.sineOut))
-            healthDeplete.addAction(Actions.fadeOut(2f, Interpolation.sineOut))
+            val duration = 0.5f
+            healthDeplete.addAction(Actions.moveTo(x, y + 18, duration, Interpolation.linear))
+            healthDeplete.addAction(Actions.fadeOut(duration, Interpolation.linear))
             stage.addActor(healthDeplete)
         }
     }

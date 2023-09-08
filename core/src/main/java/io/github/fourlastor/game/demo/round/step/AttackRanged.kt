@@ -38,8 +38,8 @@ class AttackRanged @AssistedInject constructor(
         moveAnimation.addAction(Actions.moveTo(targetPos.x, targetPos.y, distance / 400))
         moveAnimation.addAction(Actions.run { target.refreshHpLabel() })
         moveAnimation.addAction(Actions.run(continuation))
+        moveAnimation.addAction(healthDeplete(stage, assetManager, targetPos.x, targetPos.y + target.group.image.imageHeight + 12f, damageAmount))
         moveAnimation.addAction(Actions.run { projectile.remove() })
-        moveAnimation.addAction(healthDeplete(stage, assetManager, targetPos.x, targetPos.y + target.group.image.imageHeight + 8f, damageAmount))
         projectile.addAction(moveAnimation)
         stage.addActor(projectile)
     }
