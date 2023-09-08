@@ -10,7 +10,7 @@ import io.github.fourlastor.game.demo.state.unit.effect.ChargeBeamEffect
 
 class ChargeBeam @AssistedInject constructor(
     @Assisted("source") private val source: Mon,
-    chargeBeamFactory_: ChargeBeamEffect.Factory,
+    chargeBeamFactory_: ChargeBeamEffect.Factory
 ) : SimpleStep() {
 
     private val chargeBeamFactory: ChargeBeamEffect.Factory
