@@ -12,7 +12,6 @@ import io.github.fourlastor.game.demo.state.GameState
 import io.github.fourlastor.game.demo.state.map.Tile
 import io.github.fourlastor.game.demo.state.unit.Mon
 import io.github.fourlastor.game.extensions.Vector2s.calculateAngle
-import java.util.function.Consumer
 
 class BlobToss @AssistedInject constructor(
     @Assisted("source") private val source: Mon,
@@ -61,7 +60,7 @@ class BlobToss @AssistedInject constructor(
             null,
             null,
             null,
-            Runnable { state.mons.forEach(Consumer { mon: Mon -> mon.changeHp(-2) }) }, // Damage all mons on that tile.
+            Runnable { state.mons.forEach { mon: Mon -> mon.changeHp(-2) } }, // Damage all mons on that tile.
             null,
             null,
             null,

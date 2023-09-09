@@ -55,7 +55,7 @@ class AttackMelee @AssistedInject constructor(
         return makeSequence(source.group, runnables, positions, MOVE_DURATION, rotationDegrees, scale)
     }
 
-    private fun doAttackAnimation(originalPosition: Vector2, targetPosition: Vector2, continuation: Runnable?) {
+    private fun doAttackAnimation(originalPosition: Vector2, targetPosition: Vector2, continuation: Runnable) {
         // Distance between source and target is used to scale the animation if needed.
         val distance = source.actorPosition.dst(targetPosition)
         // Angle offset of target from source.

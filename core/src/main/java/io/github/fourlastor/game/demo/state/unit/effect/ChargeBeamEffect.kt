@@ -9,19 +9,16 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import io.github.fourlastor.game.demo.state.unit.Mon
-import io.github.fourlastor.game.demo.state.unit.effect.Effect.Triggered
 
 class ChargeBeamEffect @AssistedInject constructor(
-    @Assisted mon: Mon,
+    @Assisted private val targetMon: Mon,
     assetManager: AssetManager
-) : Triggered {
+) : Effect.Triggered {
 
     private var chargeTier: Int = 1
-    val targetMon: Mon
     private val label: Label
 
     init {
-        targetMon = mon
         val labelStyle = Label.LabelStyle(assetManager.get("fonts/quan-pixel-16.fnt"), Color.BLUE)
         label = Label(chargeTier.toString(), labelStyle)
         label.setPosition(0f, targetMon.group.image.imageHeight + 8)

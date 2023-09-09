@@ -10,29 +10,19 @@ import io.github.fourlastor.game.demo.state.unit.effect.ChargeBeamEffect
 
 class ChargeBeam @AssistedInject constructor(
     @Assisted("source") private val source: Mon,
-    chargeBeamFactory_: ChargeBeamEffect.Factory
-) : SimpleStep() {
-
     private val chargeBeamFactory: ChargeBeamEffect.Factory
-
-    init {
-        chargeBeamFactory = chargeBeamFactory_
-    }
+) : SimpleStep() {
 
     override fun enter(state: GameState, continuation: Runnable) {
         val effect = source.getEffect(ChargeBeamEffect::class.java)
 
         if (effect == null) {
-            source.addEffect(chargeBeamFactory.create(source), -1)
+            source.stacks.addStack(chargeBeamFactory.create(source), -1)
         } else {
             source.group.addAction((effect as ChargeBeamEffect).triggerEffect(source))
         }
 
         source.group.addAction(Actions.run(continuation))
-    }
-
-    override fun exit(state: GameState) {
-        // optional cleanup
     }
 
     /**
