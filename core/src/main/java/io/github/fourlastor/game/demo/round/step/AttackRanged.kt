@@ -2,12 +2,14 @@ package io.github.fourlastor.game.demo.round.step
 
 import com.badlogic.gdx.assets.AssetManager
 import com.badlogic.gdx.graphics.g2d.TextureAtlas
+import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.scenes.scene2d.actions.Actions
 import com.badlogic.gdx.scenes.scene2d.ui.Image
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import io.github.fourlastor.game.demo.actions.IndicateDamage
 import io.github.fourlastor.game.demo.state.GameState
 import io.github.fourlastor.game.demo.state.unit.Mon
 
@@ -38,7 +40,7 @@ class AttackRanged @AssistedInject constructor(
         moveAnimation.addAction(Actions.moveTo(targetPos.x, targetPos.y, distance / 400))
         moveAnimation.addAction(Actions.run { target.refreshHpLabel() })
         moveAnimation.addAction(Actions.run(continuation))
-        moveAnimation.addAction(healthDeplete(stage, assetManager, targetPos.x, targetPos.y + target.group.image.imageHeight + 12f, damageAmount))
+        moveAnimation.addAction(IndicateDamage.get(Vector2(targetPos.x, targetPos.y + target.group.image.imageHeight + 12f), damageAmount))
         moveAnimation.addAction(Actions.run { projectile.remove() })
         projectile.addAction(moveAnimation)
         stage.addActor(projectile)

@@ -8,6 +8,7 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import io.github.fourlastor.game.demo.AttackAnimation.makeSequence
+import io.github.fourlastor.game.demo.actions.IndicateDamage
 import io.github.fourlastor.game.demo.state.GameState
 import io.github.fourlastor.game.demo.state.map.Tile
 import io.github.fourlastor.game.demo.state.unit.Mon
@@ -73,6 +74,7 @@ class BlobToss @AssistedInject constructor(
             setupAttackAnimation(state, distance, rotationDegrees), // Move the target unit to the source's Tile.
             Actions.run { targetMon.hex.set(targetTile.hex) },
             Actions.run { targetMon.actorPosition = targetPosition },
+            IndicateDamage.get(Vector2(targetPosition.x, targetPosition.y + targetMon.group.image.imageHeight + 12f), DAMAGE),
             Actions.run(continuation)
         )
         targetMon.group.addAction(attackAnimation)
@@ -103,6 +105,7 @@ class BlobToss @AssistedInject constructor(
     companion object {
         private const val MOVE_DURATION = 0.05f
         private val SCALE = Vector3(1f / 16f, 1f, 1f)
+        private const val DAMAGE = 2
 
         /**
          * Calculate the angle in degrees between two 2D vectors.

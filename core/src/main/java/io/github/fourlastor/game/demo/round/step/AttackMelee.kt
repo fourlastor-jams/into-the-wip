@@ -8,6 +8,7 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import io.github.fourlastor.game.demo.AttackAnimation.makeSequence
+import io.github.fourlastor.game.demo.actions.IndicateDamage
 import io.github.fourlastor.game.demo.state.GameState
 import io.github.fourlastor.game.demo.state.unit.Mon
 
@@ -62,6 +63,7 @@ class AttackMelee @AssistedInject constructor(
         val attackAnimation = Actions.sequence(
             setupAttackAnimation(distance, rotationDegrees),
             Actions.run { source.actorPosition = originalPosition },
+            IndicateDamage.get(Vector2(targetPosition.x, targetPosition.y + targetMon.group.image.imageHeight + 12f), DAMAGE),
             Actions.run(continuation)
         )
         source.group.addAction(attackAnimation)
