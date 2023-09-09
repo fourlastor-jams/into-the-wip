@@ -12,7 +12,7 @@ import javax.inject.Provider
 class GameStateMachine @AssistedInject constructor(
     @Assisted gameState: GameState,
     roundProvider: Provider<Round>,
-    dispatcher: MessageDispatcher
+    dispatcher: MessageDispatcher,
 ) : StackStateMachine<GameState, RoundState>(gameState, roundProvider.get()) {
     init {
         for (message in GameMessage.values()) {

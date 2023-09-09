@@ -22,7 +22,7 @@ import io.github.fourlastor.game.extensions.Vector2s.calculateAngle
  */
 class BlobAbsorb @AssistedInject constructor(
     @Assisted("source") private val source: Mon,
-    @Assisted("target") private val targetMon: Mon
+    @Assisted("target") private val targetMon: Mon,
 ) : SimpleStep() {
     private fun setupAttackAnimation(distance: Float, rotationDegrees: Float): Action {
         // Base animation goes left-to-right.

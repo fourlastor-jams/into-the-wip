@@ -25,7 +25,7 @@ class Mon(
     private val hpLabel: Label,
     position: GridPoint2,
     val coordinates: HexCoordinates,
-    val type: UnitType
+    val type: UnitType,
 ) {
     val hex: Hex
     private val maxHp = 20

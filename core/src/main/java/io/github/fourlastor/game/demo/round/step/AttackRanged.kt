@@ -14,7 +14,7 @@ class AttackRanged @AssistedInject constructor(
     @Assisted("source") private val source: Mon,
     @Assisted("target") private val target: Mon,
     private val textureAtlas: TextureAtlas,
-    private val stage: Stage
+    private val stage: Stage,
 ) : SimpleStep() {
     override fun enter(state: GameState, continuation: Runnable) {
         // (sheerst) Note: this is model code, does it go here?
