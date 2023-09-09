@@ -22,11 +22,7 @@ class GraphMap {
                 origin,
                 destination,
                 { u, tile -> u.hex.offset.dst(tile.hex.offset) },
-                {
-                    if (!filter.test(it)) {
-                        it.ignore()
-                    }
-                }
+                { if (!filter.test(it)) it.ignore() }
             )
         search.finish()
         return search.getPath()

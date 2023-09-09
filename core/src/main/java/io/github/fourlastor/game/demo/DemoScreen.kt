@@ -33,7 +33,7 @@ class DemoScreen @Inject constructor(
     assetManager: AssetManager,
     private val viewport: Viewport,
     private val stage: Stage,
-    private val multiplexer: InputMultiplexer
+    private val multiplexer: InputMultiplexer,
 ) : ScreenAdapter() {
     private val stateMachine: GameStateMachine
     private val state: GameState

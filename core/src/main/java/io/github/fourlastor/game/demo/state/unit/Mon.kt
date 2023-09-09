@@ -25,11 +25,11 @@ class Mon(
     private val hpLabel: Label,
     position: GridPoint2,
     val coordinates: HexCoordinates,
-    val type: UnitType
+    val type: UnitType,
 ) {
     val hex: Hex
     private val maxHp = 20
-    private val stacks = EffectStacks()
+    val stacks = EffectStacks()
     private var currentHp = 0
 
     init {
@@ -46,11 +46,7 @@ class Mon(
     }
 
     fun addEffect(effect: Effect) {
-        addEffect(effect, 3)
-    }
-
-    fun addEffect(effect: Effect, numberStacks: Int) {
-        stacks.addStack(effect, numberStacks)
+        stacks.addStack(effect, 3)
     }
 
     fun removeEffect(effect: Effect) {

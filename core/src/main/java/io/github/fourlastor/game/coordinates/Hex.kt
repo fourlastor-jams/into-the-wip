@@ -14,7 +14,7 @@ import kotlin.math.abs
 
 data class Hex @JvmOverloads constructor(
     val offset: GridPoint2,
-    val cube: GridPoint3 = toCube(offset)
+    val cube: GridPoint3 = toCube(offset),
 ) {
 
     fun set(other: Hex) {

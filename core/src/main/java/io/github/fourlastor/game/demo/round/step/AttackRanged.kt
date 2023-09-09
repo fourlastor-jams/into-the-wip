@@ -15,7 +15,7 @@ open class AttackRanged @AssistedInject constructor(
     @Assisted("source") private val source: Mon,
     @Assisted("target") private val target: Mon,
     private val textureAtlas: TextureAtlas,
-    private val stage: Stage
+    private val stage: Stage,
 ) : SimpleStep() {
 
     fun getAnimatedProjectile(continuation: Runnable, damageAmount: Int): Actor {

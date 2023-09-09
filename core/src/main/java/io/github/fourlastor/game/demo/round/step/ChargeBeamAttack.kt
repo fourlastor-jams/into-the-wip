@@ -13,20 +13,12 @@ class ChargeBeamAttack @AssistedInject constructor(
     @Assisted("source") private val source: Mon,
     @Assisted("target") private val target: Mon,
     private val textureAtlas: TextureAtlas,
-    private val stage: Stage
+    private val stage: Stage,
 ) : AttackRanged(source, target, textureAtlas, stage) {
 
     override fun enter(state: GameState, continuation: Runnable) {
-        println("Hi")
-        println("Hi")
-        println("Hi")
-        println("Hi")
         val effect = source.getEffect(ChargeBeamEffect::class.java)
         var damageAmount = 1
-        println(effect)
-        println(effect)
-        println(effect)
-        println(effect)
         if (effect != null) {
             source.removeEffect(effect)
             damageAmount = (effect as ChargeBeamEffect).chargeTier

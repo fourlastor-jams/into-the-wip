@@ -16,10 +16,6 @@ class BlobAbsorbSourceEffect(private val mon: Mon) : OnTurnStart {
     }
 
     override fun onTurnStart(mon: Mon, stackAmount: Int): Action {
-        val sequence = Actions.sequence(
-            Actions.run({ println("BlobAbsorbSourceEffect::onRoundStart") })
-        )
-        sequence.setActor(mon.group.image)
-        return sequence
+        return Actions.sequence(Actions.run({ println("BlobAbsorbSourceEffect::onRoundStart") })).apply { setActor(mon.group.image) }
     }
 }

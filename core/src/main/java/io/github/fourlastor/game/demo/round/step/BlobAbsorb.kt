@@ -22,7 +22,7 @@ import io.github.fourlastor.game.extensions.Vector2s.calculateAngle
  */
 class BlobAbsorb @AssistedInject constructor(
     @Assisted("source") private val source: Mon,
-    @Assisted("target") private val targetMon: Mon
+    @Assisted("target") private val targetMon: Mon,
 ) : SimpleStep() {
     private fun setupAttackAnimation(distance: Float, rotationDegrees: Float): Action {
         // Base animation goes left-to-right.
@@ -66,7 +66,7 @@ class BlobAbsorb @AssistedInject constructor(
         )
     }
 
-    private fun doAttackAnimation(originalPosition: Vector2, targetPosition: Vector2, continuation: Runnable?) {
+    private fun doAttackAnimation(originalPosition: Vector2, targetPosition: Vector2, continuation: Runnable) {
         // Distance between source and target is used to scale the animation if needed.
         val distance = source.actorPosition.dst(targetPosition)
         // Angle offset of target from source.
@@ -74,11 +74,11 @@ class BlobAbsorb @AssistedInject constructor(
         val attackAnimation = Actions.sequence(
             setupAttackAnimation(distance, rotationDegrees), // Move the target unit to the source's Tile.
             Actions.run { targetMon.hex.set(source.hex) },
-            Actions.run { targetMon.actorPosition = originalPosition }!!,
+            Actions.run { targetMon.actorPosition = originalPosition },
             Actions.run {
                 // Apply the Blob Absorb effects on the source and target mons.
-                source.addEffect(BlobAbsorbSourceEffect(targetMon), -1)
-                targetMon.addEffect(BlobAbsorbTargetEffect(source), -1)
+                source.stacks.addStack(BlobAbsorbSourceEffect(targetMon), -1)
+                targetMon.stacks.addStack(BlobAbsorbTargetEffect(source), -1)
             },
             Actions.run(continuation)
         )

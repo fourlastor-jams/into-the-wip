@@ -93,7 +93,7 @@ interface MonsterAbilities {
         blobAbsorbFactory: BlobAbsorbAbility.Factory,
         blobTossFactory: BlobTossAbility.Factory,
         chargeBeamFactory: ChargeBeamAbility.Factory,
-        chargeBeamAttackFactory: ChargeBeamAttackAbility.Factory
+        chargeBeamAttackFactory: ChargeBeamAttackAbility.Factory,
     ) {
         val melee: Abilities.Description
         val ranged: Abilities.Description

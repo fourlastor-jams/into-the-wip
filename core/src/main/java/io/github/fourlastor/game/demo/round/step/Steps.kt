@@ -19,7 +19,7 @@ class Steps @Inject constructor(
     private val blobAbsorbFactory: BlobAbsorb.Factory,
     private val blobTossFactory: BlobToss.Factory,
     private val chargeBeamFactory: ChargeBeam.Factory,
-    private val chargeBeamAttackFactory: ChargeBeamAttack.Factory
+    private val chargeBeamAttackFactory: ChargeBeamAttack.Factory,
 ) {
     fun searchTile(filter: BiPredicate<GameState, Tile>) = searchTileFactory.create(filter)
 
@@ -29,7 +29,7 @@ class Steps @Inject constructor(
         mon: Mon,
         tile: Tile,
         filter: List<Tile>,
-        interpolation: Interpolation = Interpolation.sine
+        interpolation: Interpolation = Interpolation.sine,
     ) = moveFactory.create(mon, tile, filter, interpolation)
 
     fun attackMelee(source: Mon, target: Mon) = attackMeleeFactory.create(source, target)

@@ -11,7 +11,7 @@ import io.github.fourlastor.game.demo.state.unit.effect.PoisonEffect
 
 class Poison @AssistedInject constructor(
     @Assisted private val target: Mon,
-    private val poisonEffect: PoisonEffect
+    private val poisonEffect: PoisonEffect,
 ) : SimpleStep() {
     override fun enter(state: GameState, continuation: Runnable) {
         target.group.image.addAction(
