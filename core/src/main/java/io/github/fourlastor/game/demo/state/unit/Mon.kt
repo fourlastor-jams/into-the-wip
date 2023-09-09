@@ -49,6 +49,11 @@ class Mon(
         stacks.addStack(effect, 3)
     }
 
+    fun removeEffect(effect: Effect) {
+        stacks.removeEffect(effect)
+        effect.cleanup()
+    }
+
     fun getEffects(): ObjectIntMap<Effect> = stacks.getEffects()
 
     fun getEffect(type: Class<out Effect>): Effect? {

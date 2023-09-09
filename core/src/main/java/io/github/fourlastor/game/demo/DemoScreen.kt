@@ -70,7 +70,7 @@ class DemoScreen @Inject constructor(
                         // Set up the Hp bar Label.
                         val hpLabel = Label("", hpLabelStyle)
                         hpLabel.setAlignment(Align.center)
-                        val faction = Faction.values()[factionIndex]
+                        val faction = Faction.values()[0]
                         factionIndex += 1
                         factionIndex %= Faction.values().size
                         val mon = Mon(
