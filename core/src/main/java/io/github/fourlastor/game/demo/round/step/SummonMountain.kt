@@ -14,6 +14,7 @@ import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import io.github.fourlastor.game.coordinates.Hex
 import io.github.fourlastor.game.demo.AttackAnimation.makeSequence
+import io.github.fourlastor.game.demo.actions.IndicateDamage
 import io.github.fourlastor.game.demo.state.GameState
 import io.github.fourlastor.game.demo.state.map.Tile
 import io.github.fourlastor.game.demo.state.map.TileType
@@ -23,7 +24,8 @@ import io.github.fourlastor.game.extensions.Vector2s.calculateAngle
 class SummonMountain @AssistedInject constructor(
     @Assisted("source") private val source: Mon,
     @Assisted("target") private val target: Tile,
-    var textureAtlas: TextureAtlas
+    var textureAtlas: TextureAtlas,
+    private val indicateDamage: IndicateDamage,
 ) : SimpleStep() {
     var moveDuration = 0.025f
 
@@ -78,12 +80,13 @@ class SummonMountain @AssistedInject constructor(
                 target.actor.setSize(target.actor.getPrefWidth(), target.actor.getPrefHeight())
 
                 // Visually move the Unit to a new Tile.
-                if (hitMon != null) {
-                    // (sheerst) Note: I could see us wanting to trigger animations the visual part of other
-                    // abilities here.
-                    val position = hitMon!!.coordinates.toWorldAtCenter(hitMon!!.hex, Vector2())
-                    hitMon!!.group.addAction(
-                        Actions.moveToAligned(position.x, position.y, Align.bottom, 0.25f, Interpolation.sineOut)
+                hitMon?.let { hitMon ->
+                    val position = hitMon.coordinates.toWorldAtCenter(hitMon.hex, Vector2())
+                    hitMon.group.addAction(
+                        Actions.parallel(
+                            Actions.moveToAligned(position.x, position.y, Align.bottom, 0.25f, Interpolation.sineOut),
+                            indicateDamage.create(Vector2(position.x, position.y + hitMon.group.image.imageHeight + 12f), DAMAGE)
+                        )
                     )
                 }
             }
@@ -116,5 +119,9 @@ class SummonMountain @AssistedInject constructor(
     @AssistedFactory
     interface Factory {
         fun create(@Assisted("source") source: Mon, @Assisted("target") target: Tile): SummonMountain
+    }
+
+    companion object {
+        private const val DAMAGE = 2
     }
 }

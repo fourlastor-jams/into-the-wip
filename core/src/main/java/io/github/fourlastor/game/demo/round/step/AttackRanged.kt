@@ -1,12 +1,15 @@
 package io.github.fourlastor.game.demo.round.step
 
+import com.badlogic.gdx.assets.AssetManager
 import com.badlogic.gdx.graphics.g2d.TextureAtlas
+import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.scenes.scene2d.actions.Actions
 import com.badlogic.gdx.scenes.scene2d.ui.Image
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import io.github.fourlastor.game.demo.actions.IndicateDamage
 import io.github.fourlastor.game.demo.state.GameState
 import io.github.fourlastor.game.demo.state.unit.Mon
 
@@ -14,11 +17,14 @@ class AttackRanged @AssistedInject constructor(
     @Assisted("source") private val source: Mon,
     @Assisted("target") private val target: Mon,
     private val textureAtlas: TextureAtlas,
-    private val stage: Stage
+    private val assetManager: AssetManager,
+    private val stage: Stage,
+    private val indicateDamage: IndicateDamage,
 ) : SimpleStep() {
     override fun enter(state: GameState, continuation: Runnable) {
-        // (sheerst) Note: this is model code, does it go here?
-        target.changeHp(-1)
+        val damageAmount = 1
+
+        target.changeHp(-damageAmount) // Note: move this code to animation.
 
         // Distance between source and target is used to scale the animation if needed.
         val distance = source.actorPosition.dst(target.actorPosition)
@@ -34,6 +40,7 @@ class AttackRanged @AssistedInject constructor(
         moveAnimation.addAction(Actions.moveTo(targetPos.x, targetPos.y, distance / 400))
         moveAnimation.addAction(Actions.run { target.refreshHpLabel() })
         moveAnimation.addAction(Actions.run(continuation))
+        moveAnimation.addAction(indicateDamage.create(Vector2(targetPos.x, targetPos.y + target.group.image.imageHeight + 12f), damageAmount))
         moveAnimation.addAction(Actions.run { projectile.remove() })
         projectile.addAction(moveAnimation)
         stage.addActor(projectile)
