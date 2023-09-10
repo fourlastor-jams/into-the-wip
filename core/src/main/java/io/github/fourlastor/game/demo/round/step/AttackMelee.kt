@@ -14,7 +14,8 @@ import io.github.fourlastor.game.demo.state.unit.Mon
 
 class AttackMelee @AssistedInject constructor(
     @Assisted("source") private val source: Mon,
-    @Assisted("target") private val targetMon: Mon
+    @Assisted("target") private val targetMon: Mon,
+    private val indicateDamage: IndicateDamage,
 ) : SimpleStep() {
     private fun setupAttackAnimation(distance: Float, rotationDegrees: Float): Action {
         // Base animation goes left-to-right.
@@ -63,7 +64,7 @@ class AttackMelee @AssistedInject constructor(
         val attackAnimation = Actions.sequence(
             setupAttackAnimation(distance, rotationDegrees),
             Actions.run { source.actorPosition = originalPosition },
-            IndicateDamage.get(Vector2(targetPosition.x, targetPosition.y + targetMon.group.image.imageHeight + 12f), DAMAGE),
+            indicateDamage.create(Vector2(targetPosition.x, targetPosition.y + targetMon.group.image.imageHeight + 12f), DAMAGE),
             Actions.run(continuation)
         )
         source.group.addAction(attackAnimation)

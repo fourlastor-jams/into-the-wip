@@ -18,13 +18,13 @@ class AttackRanged @AssistedInject constructor(
     @Assisted("target") private val target: Mon,
     private val textureAtlas: TextureAtlas,
     private val assetManager: AssetManager,
-    private val stage: Stage
+    private val stage: Stage,
+    private val indicateDamage: IndicateDamage,
 ) : SimpleStep() {
     override fun enter(state: GameState, continuation: Runnable) {
         val damageAmount = 1
 
-        // (sheerst) Note: this is model code, does it go here?
-        target.changeHp(-damageAmount)
+        target.changeHp(-damageAmount) // Note: move this code to animation.
 
         // Distance between source and target is used to scale the animation if needed.
         val distance = source.actorPosition.dst(target.actorPosition)
@@ -40,7 +40,7 @@ class AttackRanged @AssistedInject constructor(
         moveAnimation.addAction(Actions.moveTo(targetPos.x, targetPos.y, distance / 400))
         moveAnimation.addAction(Actions.run { target.refreshHpLabel() })
         moveAnimation.addAction(Actions.run(continuation))
-        moveAnimation.addAction(IndicateDamage.get(Vector2(targetPos.x, targetPos.y + target.group.image.imageHeight + 12f), damageAmount))
+        moveAnimation.addAction(indicateDamage.create(Vector2(targetPos.x, targetPos.y + target.group.image.imageHeight + 12f), damageAmount))
         moveAnimation.addAction(Actions.run { projectile.remove() })
         projectile.addAction(moveAnimation)
         stage.addActor(projectile)

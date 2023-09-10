@@ -24,7 +24,8 @@ import io.github.fourlastor.game.extensions.Vector2s.calculateAngle
 class SummonMountain @AssistedInject constructor(
     @Assisted("source") private val source: Mon,
     @Assisted("target") private val target: Tile,
-    var textureAtlas: TextureAtlas
+    var textureAtlas: TextureAtlas,
+    private val indicateDamage: IndicateDamage,
 ) : SimpleStep() {
     var moveDuration = 0.025f
 
@@ -84,7 +85,7 @@ class SummonMountain @AssistedInject constructor(
                     hitMon.group.addAction(
                         Actions.parallel(
                             Actions.moveToAligned(position.x, position.y, Align.bottom, 0.25f, Interpolation.sineOut),
-                            IndicateDamage.get(Vector2(position.x, position.y + hitMon.group.image.imageHeight + 12f), DAMAGE)
+                            indicateDamage.create(Vector2(position.x, position.y + hitMon.group.image.imageHeight + 12f), DAMAGE)
                         )
                     )
                 }
