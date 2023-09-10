@@ -9,7 +9,7 @@ import io.github.fourlastor.game.demo.state.GameState
 abstract class Ability(
     private val unitInRound: UnitInRound,
     private val router: StateRouter,
-    private val stateFactory: StepState.Factory,
+    private val stateFactory: StepState.Factory
 ) : RoundState() {
     private lateinit var stateMachine: StateMachine
     protected fun <T> start(initial: Step<T>): Builder<T> {

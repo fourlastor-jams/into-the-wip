@@ -12,7 +12,7 @@ import io.github.fourlastor.game.demo.state.unit.Mon
 
 class ChargeBeamEffect @AssistedInject constructor(
     @Assisted private val targetMon: Mon,
-    assetManager: AssetManager,
+    assetManager: AssetManager
 ) : Effect.Triggered {
 
     private var chargeTier: Int = 1

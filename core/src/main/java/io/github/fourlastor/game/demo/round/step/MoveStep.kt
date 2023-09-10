@@ -18,7 +18,7 @@ class MoveStep @AssistedInject constructor(
     @Assisted private val mon: Mon,
     @Assisted private val tile: Tile,
     @Assisted private val path: List<Tile>,
-    @Assisted private val interpolation: Interpolation,
+    @Assisted private val interpolation: Interpolation
 ) : SimpleStep() {
     override fun enter(state: GameState, continuation: Runnable) {
         val actions: MutableList<Action> = ArrayList()

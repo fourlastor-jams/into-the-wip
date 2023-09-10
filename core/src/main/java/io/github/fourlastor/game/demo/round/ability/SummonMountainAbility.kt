@@ -20,7 +20,7 @@ class SummonMountainAbility @AssistedInject constructor(
     @Assisted unitInRound: UnitInRound,
     router: StateRouter,
     stateFactory: StepState.Factory,
-    private val steps: Steps,
+    private val steps: Steps
 ) : Ability(unitInRound, router, stateFactory) {
     private val mon: Mon
 

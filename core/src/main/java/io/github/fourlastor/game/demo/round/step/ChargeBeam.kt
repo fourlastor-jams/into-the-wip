@@ -7,19 +7,20 @@ import dagger.assisted.AssistedInject
 import io.github.fourlastor.game.demo.state.GameState
 import io.github.fourlastor.game.demo.state.unit.Mon
 import io.github.fourlastor.game.demo.state.unit.effect.ChargeBeamEffect
+import io.github.fourlastor.game.demo.state.unit.effectByType
 
 class ChargeBeam @AssistedInject constructor(
     @Assisted("source") private val source: Mon,
-    private val chargeBeamFactory: ChargeBeamEffect.Factory,
+    private val chargeBeamFactory: ChargeBeamEffect.Factory
 ) : SimpleStep() {
 
     override fun enter(state: GameState, continuation: Runnable) {
-        val effect = source.getEffect(ChargeBeamEffect::class.java)
+        val effect = source.effectByType<ChargeBeamEffect>()
 
         if (effect == null) {
             source.stacks.addStack(chargeBeamFactory.create(source), -1)
         } else {
-            source.group.addAction((effect as ChargeBeamEffect).triggerEffect(source))
+            source.group.addAction(effect.triggerEffect(source))
         }
 
         source.group.addAction(Actions.run(continuation))
@@ -31,7 +32,7 @@ class ChargeBeam @AssistedInject constructor(
     @AssistedFactory
     interface Factory {
         fun create(
-            @Assisted("source") source: Mon,
+            @Assisted("source") source: Mon
         ): ChargeBeam
     }
 }

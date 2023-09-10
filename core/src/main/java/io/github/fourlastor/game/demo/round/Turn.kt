@@ -21,7 +21,7 @@ class Turn @AssistedInject constructor(
     private val router: StateRouter,
     private val defaults: Abilities.Defaults,
     private val abilitiesMap: Map<UnitType, @JvmSuppressWildcards Abilities>,
-    private val atlas: TextureAtlas,
+    private val atlas: TextureAtlas
 ) : RoundState() {
     private val addedImages: Queue<Actor> = LinkedList()
     private var acted = false

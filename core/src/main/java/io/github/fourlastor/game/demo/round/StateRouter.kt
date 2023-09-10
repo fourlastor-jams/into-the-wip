@@ -8,7 +8,7 @@ import javax.inject.Provider
 class StateRouter @Inject constructor(
     private val dispatcher: MessageDispatcher,
     private val roundProvider: Provider<Round>,
-    private val turnFactory: Turn.Factory,
+    private val turnFactory: Turn.Factory
 ) {
     fun startAbility(ability: Ability) {
         dispatcher.dispatchMessage(GameMessage.ABILITY_START.ordinal, ability)

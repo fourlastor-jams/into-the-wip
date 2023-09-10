@@ -20,7 +20,7 @@ object AttackAnimation {
         positionsRelative: Array<Vector3>,
         moveDuration: Float,
         rotationDegrees: Float,
-        scale: Vector3,
+        scale: Vector3
     ): Action {
         val nextUnitPosition = Vector2(actor.x, actor.y)
         val frames = frames(runnables, positionsRelative)

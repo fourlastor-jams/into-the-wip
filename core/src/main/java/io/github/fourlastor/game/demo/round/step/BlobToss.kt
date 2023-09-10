@@ -16,7 +16,7 @@ import io.github.fourlastor.game.extensions.Vector2s.calculateAngle
 class BlobToss @AssistedInject constructor(
     @Assisted("source") private val source: Mon,
     @Assisted("target") private val targetMon: Mon,
-    @Assisted("tile") private val targetTile: Tile,
+    @Assisted("tile") private val targetTile: Tile
 ) : SimpleStep() {
     private fun setupAttackAnimation(state: GameState, distance: Float, rotationDegrees: Float): Action {
         // Base animation goes left-to-right.
@@ -91,7 +91,7 @@ class BlobToss @AssistedInject constructor(
         state: GameState,
         originalPosition: Vector2,
         targetPosition: Vector2,
-        continuation: Runnable,
+        continuation: Runnable
     ) {
         // Distance between source and target is used to scale the animation if needed.
         val distance = source.actorPosition.dst(targetPosition)
@@ -124,7 +124,7 @@ class BlobToss @AssistedInject constructor(
         fun create(
             @Assisted("source") source: Mon,
             @Assisted("target") targetMon: Mon,
-            @Assisted("tile") targetTile: Tile,
+            @Assisted("tile") targetTile: Tile
         ): BlobToss
     }
 

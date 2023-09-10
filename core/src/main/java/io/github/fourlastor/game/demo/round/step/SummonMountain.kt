@@ -23,7 +23,7 @@ import io.github.fourlastor.game.extensions.Vector2s.calculateAngle
 class SummonMountain @AssistedInject constructor(
     @Assisted("source") private val source: Mon,
     @Assisted("target") private val target: Tile,
-    var textureAtlas: TextureAtlas,
+    var textureAtlas: TextureAtlas
 ) : SimpleStep() {
     var moveDuration = 0.025f
 

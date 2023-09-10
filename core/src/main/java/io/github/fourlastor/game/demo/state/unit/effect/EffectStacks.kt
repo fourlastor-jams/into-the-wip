@@ -8,7 +8,7 @@ import io.github.fourlastor.game.demo.state.unit.effect.Effect.OnRoundStart
 import io.github.fourlastor.game.demo.state.unit.effect.Effect.OnTurnStart
 
 class EffectStacks {
-    private val stacks = ObjectIntMap<Effect>()
+    val stacks = ObjectIntMap<Effect>()
     fun addStack(effect: Effect, quantity: Int) {
         val current = getStack(effect)
         stacks.put(effect, current + quantity)
@@ -48,13 +48,6 @@ class EffectStacks {
         }
         return sequence
     }
-
-    fun byType(type: Class<out Effect>): Effect? {
-        for (effect in stacks.keys()) {
-            if (type.isInstance(effect)) {
-                return effect
-            }
-        }
-        return null
-    }
 }
+
+inline fun <reified T : Effect> EffectStacks.byType(): T? = stacks.keys().filterIsInstance<T>().firstOrNull()

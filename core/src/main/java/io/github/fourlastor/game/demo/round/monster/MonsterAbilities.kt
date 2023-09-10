@@ -90,7 +90,7 @@ interface MonsterAbilities {
         poisonFactory: PoisonAbility.Factory,
         blobAbsorbFactory: BlobAbsorbAbility.Factory,
         blobTossFactory: BlobTossAbility.Factory,
-        chargeBeamFactory: ChargeBeamAbility.Factory,
+        chargeBeamFactory: ChargeBeamAbility.Factory
     ) {
         val melee: Abilities.Description
         val ranged: Abilities.Description

@@ -4,7 +4,7 @@ enum class UnitType(
     val mapName: String,
     val speed: Int,
     val canFly: Boolean,
-    val canSwim: Boolean = false,
+    val canSwim: Boolean = false
 ) {
     CEREBRY("cerebry", 2, true),
     BLOBHOT("blobhot", 3, false),

@@ -15,7 +15,7 @@ class GdxGame
 @Inject
 constructor(
     private val multiplexer: InputMultiplexer,
-    private val demoComponentBuilder: DemoComponent.Builder,
+    private val demoComponentBuilder: DemoComponent.Builder
 ) : Game(), Router {
     private var pendingScreen: Screen? = null
     override fun create() {

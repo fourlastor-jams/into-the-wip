@@ -15,6 +15,7 @@ import io.github.fourlastor.game.demo.state.map.Tile
 import io.github.fourlastor.game.demo.state.map.TileType
 import io.github.fourlastor.game.demo.state.unit.effect.Effect
 import io.github.fourlastor.game.demo.state.unit.effect.EffectStacks
+import io.github.fourlastor.game.demo.state.unit.effect.byType
 import io.github.fourlastor.game.ui.UnitOnMap
 import java.util.function.Function
 import javax.inject.Inject
@@ -25,7 +26,7 @@ class Mon(
     private val hpLabel: Label,
     position: GridPoint2,
     val coordinates: HexCoordinates,
-    val type: UnitType,
+    val type: UnitType
 ) {
     val hex: Hex
     private val maxHp = 20
@@ -50,10 +51,6 @@ class Mon(
     }
 
     fun getEffects(): ObjectIntMap<Effect> = stacks.getEffects()
-
-    fun getEffect(type: Class<out Effect>): Effect? {
-        return stacks.byType(type)
-    }
 
     fun canTravel(tile: Tile): Boolean = if (tile.type === TileType.WATER && (type.canSwim || type.canFly)) {
         true
@@ -105,3 +102,5 @@ class Mon(
         }
     }
 }
+
+inline fun <reified T : Effect> Mon.effectByType(): T? = stacks.byType<T>()

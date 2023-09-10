@@ -19,7 +19,7 @@ import io.github.fourlastor.game.demo.state.unit.Mon
 class TileSmash @AssistedInject constructor(
     @Assisted("source") private val source: Mon,
     @Assisted("target") private val target: Tile?,
-    private val textureAtlas: TextureAtlas,
+    private val textureAtlas: TextureAtlas
 ) : SimpleStep() {
     private var moveDuration = 0.05f
 
