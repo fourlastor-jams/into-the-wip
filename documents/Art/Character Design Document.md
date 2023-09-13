@@ -28,10 +28,10 @@ Want each character designed to answer questions about every item on the `checkl
 * Opposing concept?
 
 ## Pokemons
-Each pokemon is assigned _one or two_ of the five types.
+Each monster belongs to _one or two_ of the five `types` below.
 
 ### Alien
-No one knows when or where these creatures came from. They are `long and elegant` with multiple tendrils. They have `smooth` `pink` skin.
+No one knows when or where these `serene` creatures came from. They are `long and elegant` with multiple tendrils. They have `smooth` `pink` skin. They are in stark contrast to the raging Kaiju monsters.
 
 ### Ancient
 
@@ -46,15 +46,6 @@ Mechanical monsters are a race of creatures that have enhanced capabilities. The
 They are `cunning` by nature. They are `small` and have `organic lines` of that of an old-earth animal. Mechanical parts are `silver` and `rectangular shaped` with a `metallic and robotic` texture with `green` lights. They are `agile` speedy creatures. 
 
 They're quite the contrast to the `big` and `rounded` nuclear monsters.
-
-* Emotion?
-* Colour?
-* Shape?
-* Texture?
-* Line?
-* Speed?
-* Size?
-* Opposing concept?
 
 ### Nuclear
 Nuclear monsters is a race of creatures affected by nuclear fallout and devestation following the post-apocalyptic event. Their `unyielding` nature is complemented by `big` `rounded shapes`, `curved lines` and `green colour`. Their speed is `sluggish` And their texture is `oozing`. 
