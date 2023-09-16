@@ -33,7 +33,7 @@ class DemoScreen @Inject constructor(
     assetManager: AssetManager,
     private val viewport: Viewport,
     private val stage: Stage,
-    private val multiplexer: InputMultiplexer
+    private val multiplexer: InputMultiplexer,
 ) : ScreenAdapter() {
     private val stateMachine: GameStateMachine
     private val state: GameState
@@ -70,6 +70,7 @@ class DemoScreen @Inject constructor(
                         // Set up the Hp bar Label.
                         val hpLabel = Label("", hpLabelStyle)
                         hpLabel.setAlignment(Align.center)
+                        if (DEBUG_MODE) factionIndex = 0
                         val faction = Faction.values()[factionIndex]
                         factionIndex += 1
                         factionIndex %= Faction.values().size
@@ -129,5 +130,6 @@ class DemoScreen @Inject constructor(
     companion object {
         private const val UNITS_LAYER_NAME = "monsters"
         private const val TILES_LAYER_NAME = "terrain"
+        val DEBUG_MODE: Boolean = true
     }
 }

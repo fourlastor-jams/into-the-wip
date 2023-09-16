@@ -9,17 +9,9 @@ import javax.inject.Singleton
 @Singleton
 class BlobAbsorbTargetEffect(private val mon: Mon) : OnTurnStart {
 
-    val targetMon: Mon
-
-    init {
-        targetMon = mon
-    }
+    val sourceMon: Mon = mon
 
     override fun onTurnStart(mon: Mon, stackAmount: Int): Action {
-        val sequence = Actions.sequence(
-            Actions.run({ println("BlobAbsorbTargetEffect::onRoundStart") })
-        )
-        sequence.setActor(mon.group.image)
-        return sequence
+        return Actions.sequence(Actions.run({ println("BlobAbsorbSourceEffect::onTurnStart") })).apply { setActor(mon.group.image) }
     }
 }

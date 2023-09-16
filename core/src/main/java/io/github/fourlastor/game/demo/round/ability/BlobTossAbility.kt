@@ -21,7 +21,7 @@ class BlobTossAbility @AssistedInject constructor(
     @Assisted unitInRound: UnitInRound,
     router: StateRouter,
     stateFactory: StepState.Factory,
-    private val steps: Steps
+    private val steps: Steps,
 ) : Ability(unitInRound, router, stateFactory) {
     private val mon: Mon
 
@@ -40,7 +40,7 @@ class BlobTossAbility @AssistedInject constructor(
             .then { hex: Hex ->
                 steps.blobToss(
                     mon,
-                    state.unitAt { it.hex.equals(mon.hex) && it != mon }!!,
+                    state.unitAt { it.hex == mon.hex && it != mon }!!,
                     state.tileAt(hex)
                 )
             }
