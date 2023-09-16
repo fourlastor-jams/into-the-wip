@@ -7,6 +7,7 @@ import com.badlogic.gdx.scenes.scene2d.actions.Actions
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import io.github.fourlastor.game.coordinates.Hex
 import io.github.fourlastor.game.demo.AttackAnimation.makeSequence
 import io.github.fourlastor.game.demo.state.GameState
 import io.github.fourlastor.game.demo.state.map.Tile
@@ -62,7 +63,11 @@ class BlobToss @AssistedInject constructor(
             null,
             null,
             null,
-            Runnable { state.mons.forEach { mon: Mon -> mon.changeHp(-2) } }, // Damage all mons on that tile.
+            Runnable {
+                // Damage all mons on that tile.
+                // TODO: use IndicateDamage once that's merged.
+                Hex.Direction.values().asList().forEach { direction: Hex.Direction -> state.mons.filter { mon: Mon -> mon.hex == targetTile.hex.offset(direction, 1) }.forEach { mon: Mon -> mon.changeHp(-DAMAGE) } }
+            },
             null,
             null,
             null,
@@ -95,6 +100,9 @@ class BlobToss @AssistedInject constructor(
         targetPosition: Vector2,
         continuation: Runnable,
     ) {
+        // Must be set before the animation.
+        targetMon.hex.set(targetTile.hex)
+
         // Distance between source and target is used to scale the animation if needed.
         val distance = source.actorPosition.dst(targetPosition)
         // Angle offset of target from source.
@@ -102,7 +110,6 @@ class BlobToss @AssistedInject constructor(
         val attackAnimation = Actions.sequence(
             setupAttackAnimation(state, distance, rotationDegrees), // Move the target unit to the source's Tile.
             Actions.run {
-                targetMon.hex.set(targetTile.hex)
                 targetMon.actorPosition = targetPosition
                 source.removeEffect<BlobAbsorbEffect>()
                 targetMon.removeEffect<BlobAbsorbEffect>()
@@ -137,5 +144,6 @@ class BlobToss @AssistedInject constructor(
     companion object {
         private const val MOVE_DURATION = 0.018f
         private val SCALE = Vector3(1f / 12f, 1f, 1f)
+        private val DAMAGE = 2
     }
 }
