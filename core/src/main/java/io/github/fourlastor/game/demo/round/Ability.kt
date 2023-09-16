@@ -13,6 +13,7 @@ abstract class Ability(
     private val stateFactory: StepState.Factory,
 ) : RoundState() {
     private lateinit var stateMachine: StateMachine
+    open val ignoresSlow: Boolean = false
     protected fun <T> start(initial: Step<T>): Builder<T> {
         return Builder(initial)
     }

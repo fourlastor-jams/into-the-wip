@@ -24,13 +24,14 @@ class BlobTossAbility @AssistedInject constructor(
     private val steps: Steps,
 ) : Ability(unitInRound, router, stateFactory) {
     private val mon: Mon
+    override val ignoresSlow: Boolean = true
 
     init {
         mon = unitInRound.mon
     }
 
     override fun createSteps(state: GameState): Builder<*> {
-        val movementLogic = maxDistance(mon.type.speed)
+        val movementLogic = maxDistance(mon.currentSpeed(this))
         val searchLogic = all(
             canReach(state.tileAt(mon.hex), movementLogic),
             ofType(TileType.SOLID).negate(),

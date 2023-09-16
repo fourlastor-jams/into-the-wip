@@ -20,16 +20,17 @@ class SummonMountainAbility @AssistedInject constructor(
     @Assisted unitInRound: UnitInRound,
     router: StateRouter,
     stateFactory: StepState.Factory,
-    private val steps: Steps
+    private val steps: Steps,
 ) : Ability(unitInRound, router, stateFactory) {
     private val mon: Mon
+    override val ignoresSlow: Boolean = true
 
     init {
         mon = unitInRound.mon
     }
 
     override fun createSteps(state: GameState): Builder<*> {
-        val movementLogic = all(sameAxisAs(mon.hex), maxDistance(mon.type.speed))
+        val movementLogic = all(sameAxisAs(mon.hex), maxDistance(mon.currentSpeed(this)))
         val searchLogic = all(
             canReach(state.tileAt(mon.hex), movementLogic),
             BiPredicate { _, tile -> mon.canTravel(tile) }

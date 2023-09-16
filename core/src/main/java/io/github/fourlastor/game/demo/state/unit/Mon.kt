@@ -26,7 +26,7 @@ class Mon(
     private val hpLabel: Label,
     position: GridPoint2,
     val coordinates: HexCoordinates,
-    val type: UnitType
+    val type: UnitType,
 ) {
     val hex: Hex
     private val maxHp = 20
@@ -85,6 +85,16 @@ class Mon(
 
     fun alignHpBar() {
         hpLabel.setPosition(group.x + group.width / 2, group.y + 40)
+    }
+
+    fun currentSpeed(duringAbility: Ability): Int {
+
+        for (effect in getEffects().keys()) {
+            if (effect is Effect.ApplySlow) {
+                return effect.applySlow(this, duringAbility)
+            }
+        }
+        return type.speed
     }
 
     interface Abilities {

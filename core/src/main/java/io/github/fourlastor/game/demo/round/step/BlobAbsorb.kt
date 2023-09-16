@@ -10,8 +10,7 @@ import dagger.assisted.AssistedInject
 import io.github.fourlastor.game.demo.AttackAnimation.makeSequence
 import io.github.fourlastor.game.demo.state.GameState
 import io.github.fourlastor.game.demo.state.unit.Mon
-import io.github.fourlastor.game.demo.state.unit.effect.BlobAbsorbSourceEffect
-import io.github.fourlastor.game.demo.state.unit.effect.BlobAbsorbTargetEffect
+import io.github.fourlastor.game.demo.state.unit.effect.BlobAbsorbEffect
 import io.github.fourlastor.game.extensions.Vector2s.calculateAngle
 
 /**
@@ -77,10 +76,8 @@ class BlobAbsorb @AssistedInject constructor(
             Actions.run { targetMon.actorPosition = originalPosition },
             Actions.run {
                 // Apply the Blob Absorb effects on the source and target mons.
-                source.stacks.addStack(BlobAbsorbSourceEffect(targetMon), -1)
-                targetMon.stacks.addStack(BlobAbsorbTargetEffect(source), -1)
-                println(source)  // TODO: remove
-                println(targetMon)  // TODO: remove
+                source.stacks.addStack(BlobAbsorbEffect(targetMon), -1)
+                targetMon.stacks.addStack(BlobAbsorbEffect(source), -1)
             },
             Actions.run(continuation)
         )

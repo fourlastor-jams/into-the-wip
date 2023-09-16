@@ -22,7 +22,7 @@ class BlobAbsorbAbility @AssistedInject constructor(
     @Assisted unitInRound: UnitInRound,
     router: StateRouter,
     stateFactory: StepState.Factory,
-    private val steps: Steps
+    private val steps: Steps,
 ) : Ability(unitInRound, router, stateFactory) {
     private val mon: Mon
 
@@ -31,7 +31,7 @@ class BlobAbsorbAbility @AssistedInject constructor(
     }
 
     override fun createSteps(state: GameState): Builder<*> {
-        val movementLogic = all(maxDistance(mon.type.speed), canTravel(mon))
+        val movementLogic = all(maxDistance(mon.currentSpeed(this)), canTravel(mon))
         val searchLogic = all(
             canReach(state.tileAt(mon.hex), movementLogic),
             hasUnit(),

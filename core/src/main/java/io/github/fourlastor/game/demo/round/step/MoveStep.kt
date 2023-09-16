@@ -12,8 +12,7 @@ import dagger.assisted.AssistedInject
 import io.github.fourlastor.game.demo.state.GameState
 import io.github.fourlastor.game.demo.state.map.Tile
 import io.github.fourlastor.game.demo.state.unit.Mon
-import io.github.fourlastor.game.demo.state.unit.effect.BlobAbsorbSourceEffect
-import io.github.fourlastor.game.demo.state.unit.effect.BlobAbsorbTargetEffect
+import io.github.fourlastor.game.demo.state.unit.effect.BlobAbsorbEffect
 
 class MoveStep @AssistedInject constructor(
     @Assisted private val mon: Mon,
@@ -47,11 +46,8 @@ class MoveStep @AssistedInject constructor(
         // Check if this mon is involved with a Blob Absorb effect.
         // Move the source or target Mon if true.
         for (effect in mon.getEffects().keys()) {
-            if (effect is BlobAbsorbSourceEffect) {
-                effect.targetMon.group.addAction(getMoveAction(effect.targetMon))
-            }
-            if (effect is BlobAbsorbTargetEffect) {
-                effect.sourceMon.group.addAction(getMoveAction(effect.sourceMon))
+            if (effect is BlobAbsorbEffect) {
+                effect.otherMon.group.addAction(getMoveAction(effect.otherMon))
             }
         }
     }
