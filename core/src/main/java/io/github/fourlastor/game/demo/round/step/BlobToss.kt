@@ -11,12 +11,14 @@ import io.github.fourlastor.game.demo.AttackAnimation.makeSequence
 import io.github.fourlastor.game.demo.state.GameState
 import io.github.fourlastor.game.demo.state.map.Tile
 import io.github.fourlastor.game.demo.state.unit.Mon
+import io.github.fourlastor.game.demo.state.unit.effect.BlobAbsorbEffect
+import io.github.fourlastor.game.demo.state.unit.removeEffect
 import io.github.fourlastor.game.extensions.Vector2s.calculateAngle
 
 class BlobToss @AssistedInject constructor(
     @Assisted("source") private val source: Mon,
     @Assisted("target") private val targetMon: Mon,
-    @Assisted("tile") private val targetTile: Tile
+    @Assisted("tile") private val targetTile: Tile,
 ) : SimpleStep() {
     private fun setupAttackAnimation(state: GameState, distance: Float, rotationDegrees: Float): Action {
         // Base animation goes left-to-right.
@@ -91,7 +93,7 @@ class BlobToss @AssistedInject constructor(
         state: GameState,
         originalPosition: Vector2,
         targetPosition: Vector2,
-        continuation: Runnable
+        continuation: Runnable,
     ) {
         // Distance between source and target is used to scale the animation if needed.
         val distance = source.actorPosition.dst(targetPosition)
@@ -99,8 +101,12 @@ class BlobToss @AssistedInject constructor(
         val rotationDegrees = originalPosition.calculateAngle(targetPosition)
         val attackAnimation = Actions.sequence(
             setupAttackAnimation(state, distance, rotationDegrees), // Move the target unit to the source's Tile.
-            Actions.run { targetMon.hex.set(targetTile.hex) },
-            Actions.run { targetMon.actorPosition = targetPosition },
+            Actions.run {
+                targetMon.hex.set(targetTile.hex)
+                targetMon.actorPosition = targetPosition
+                source.removeEffect<BlobAbsorbEffect>()
+                targetMon.removeEffect<BlobAbsorbEffect>()
+            },
             Actions.run(continuation)
         )
         targetMon.group.addAction(attackAnimation)
@@ -124,7 +130,7 @@ class BlobToss @AssistedInject constructor(
         fun create(
             @Assisted("source") source: Mon,
             @Assisted("target") targetMon: Mon,
-            @Assisted("tile") targetTile: Tile
+            @Assisted("tile") targetTile: Tile,
         ): BlobToss
     }
 

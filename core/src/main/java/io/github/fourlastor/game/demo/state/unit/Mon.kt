@@ -114,3 +114,5 @@ class Mon(
 }
 
 inline fun <reified T : Effect> Mon.effectByType(): T? = stacks.byType<T>()
+
+inline fun <reified T : Effect> Mon.removeEffect(): Int = stacks.removeEffect(effectByType<T>())

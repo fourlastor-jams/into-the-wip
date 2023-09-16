@@ -16,6 +16,11 @@ class EffectStacks {
 
     fun getEffects(): ObjectIntMap<Effect> = stacks
 
+    fun removeEffect(effect: Effect?): Int {
+        if (effect == null) return 0
+        return stacks.remove(effect, stacks.get(effect, 0))
+    }
+
     fun tickStacks() {
         for (effect in stacks.keys()) {
             val current = getStack(effect)
