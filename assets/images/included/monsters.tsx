@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<tileset version="1.10" tiledversion="1.10.2" name="Monsters" tilewidth="36" tileheight="41" tilecount="8" columns="0">
+<tileset version="1.10" tiledversion="1.10.2" name="Monsters" tilewidth="36" tileheight="41" tilecount="10" columns="0">
  <grid orientation="orthogonal" width="1" height="1"/>
  <tile id="0">
   <properties>
@@ -47,6 +47,18 @@
   <properties>
    <property name="unit" value="MON8"/>
   </properties>
-  <image width="27" height="41" source="monsters/monster8.png"/>
+  <image width="27" height="41" source="monsters/monster-8.png"/>
+ </tile>
+ <tile id="8">
+  <properties>
+   <property name="unit" value="MON9"/>
+  </properties>
+  <image width="30" height="40" source="monsters/monster-9.png"/>
+ </tile>
+ <tile id="9">
+  <properties>
+   <property name="unit" value="MON10"/>
+  </properties>
+  <image width="33" height="41" source="monsters/monster-10.png"/>
  </tile>
 </tileset>
