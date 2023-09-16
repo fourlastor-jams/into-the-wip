@@ -6,6 +6,7 @@ import dagger.Module
 import dagger.multibindings.IntoMap
 import io.github.fourlastor.game.demo.round.ability.BlobAbsorbAbility
 import io.github.fourlastor.game.demo.round.ability.BlobTossAbility
+import io.github.fourlastor.game.demo.round.ability.ChargeBeamAbility
 import io.github.fourlastor.game.demo.round.ability.MeleeAttackAbility
 import io.github.fourlastor.game.demo.round.ability.MoveAbility
 import io.github.fourlastor.game.demo.round.ability.PoisonAbility
@@ -33,6 +34,11 @@ interface MonsterAbilities {
     @IntoMap
     @MonsterKey(UnitType.BLOBHOT)
     fun blobanero(blobanero: Blobanero): Abilities
+
+    @Binds
+    @IntoMap
+    @MonsterKey(UnitType.LASERDOGE)
+    fun laserdoge(laserdoge: Laserdoge): Abilities
 
     @MapKey
     annotation class MonsterKey(val value: UnitType)
@@ -66,6 +72,15 @@ interface MonsterAbilities {
         }
     }
 
+    class Laserdoge @Inject constructor(private val descriptions: Descriptions) : Abilities {
+        override fun create(): List<Abilities.Description> {
+            return listOf(
+                descriptions.move,
+                descriptions.chargeBeam
+            )
+        }
+    }
+
     class Descriptions @Inject constructor(
         meleeFactory: MeleeAttackAbility.Factory,
         rangedFactory: RangedAttackAbility.Factory,
@@ -74,7 +89,8 @@ interface MonsterAbilities {
         summonMountainFactory: SummonMountainAbility.Factory,
         poisonFactory: PoisonAbility.Factory,
         blobAbsorbFactory: BlobAbsorbAbility.Factory,
-        blobTossFactory: BlobTossAbility.Factory
+        blobTossFactory: BlobTossAbility.Factory,
+        chargeBeamFactory: ChargeBeamAbility.Factory
     ) {
         val melee: Abilities.Description
         val ranged: Abilities.Description
@@ -84,6 +100,7 @@ interface MonsterAbilities {
         val poison: Abilities.Description
         val blobAbsorb: Abilities.Description
         val blobToss: Abilities.Description
+        val chargeBeam: Abilities.Description
 
         init {
             melee = Abilities.Description("Melee attack", "abilities/buffs/attack_boost", meleeFactory::create)
@@ -98,6 +115,7 @@ interface MonsterAbilities {
             poison = Abilities.Description("Poison", "abilities/debuffs/poisoned", poisonFactory::create)
             blobAbsorb = Abilities.Description("Absorb unit", "abilities/spells/healing_spell", blobAbsorbFactory::create)
             blobToss = Abilities.Description("Toss the absorbed unit", "abilities/spells/healing_spell", blobTossFactory::create)
+            chargeBeam = Abilities.Description("Increase the charge beam tier by 1", "abilities/spells/mana_replenish", chargeBeamFactory::create)
         }
     }
 }

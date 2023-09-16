@@ -10,12 +10,15 @@ import javax.inject.Singleton
 
 @Module
 class GameModule {
-    @Provides @Singleton
+    @Provides
+    @Singleton
     fun random(): IRNG = SilkRNG()
 
-    @Provides @Singleton
+    @Provides
+    @Singleton
     fun messageDispatcher(): MessageDispatcher = MessageDispatcher()
 
-    @Provides @Singleton
+    @Provides
+    @Singleton
     fun batch(): SpriteBatch = SpriteBatch()
 }

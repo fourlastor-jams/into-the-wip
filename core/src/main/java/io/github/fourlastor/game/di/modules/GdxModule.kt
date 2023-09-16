@@ -8,9 +8,11 @@ import javax.inject.Singleton
 
 @Module
 class GdxModule {
-    @Provides @Singleton
+    @Provides
+    @Singleton
     fun jsonReader(): JsonReader = JsonReader()
 
-    @Provides @Singleton
+    @Provides
+    @Singleton
     fun inputMultiplexer(): InputMultiplexer = InputMultiplexer()
 }

@@ -10,7 +10,8 @@ import io.github.fourlastor.game.di.ScreenScoped
 
 @Module
 class DemoModule {
-    @Provides @ScreenScoped
+    @Provides
+    @ScreenScoped
     fun viewport(): Viewport = FitViewport(512f, 288f)
 
     @Provides

@@ -20,7 +20,7 @@ class MoveAbility @AssistedInject constructor(
     @Assisted unitInRound: UnitInRound,
     router: StateRouter,
     stateFactory: StepState.Factory,
-    private val steps: Steps
+    private val steps: Steps,
 ) : Ability(unitInRound, router, stateFactory) {
     private val mon: Mon
 
@@ -29,7 +29,7 @@ class MoveAbility @AssistedInject constructor(
     }
 
     override fun createSteps(state: GameState): Builder<*> {
-        val movementLogic = all(maxDistance(mon.type.speed), canTravel(mon))
+        val movementLogic = all(maxDistance(mon.currentSpeed(this)), canTravel(mon))
         val searchLogic = canReach(state.tileAt(mon.hex), movementLogic)
         return start(steps.searchTile(searchLogic))
             .then { hex ->

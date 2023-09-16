@@ -17,7 +17,8 @@ class Steps @Inject constructor(
     private val summonMountainFactory: SummonMountain.Factory,
     private val tileSmashFactory: TileSmash.Factory,
     private val blobAbsorbFactory: BlobAbsorb.Factory,
-    private val blobTossFactory: BlobToss.Factory
+    private val blobTossFactory: BlobToss.Factory,
+    private val chargeBeamFactory: ChargeBeam.Factory
 ) {
     fun searchTile(filter: BiPredicate<GameState, Tile>) = searchTileFactory.create(filter)
 
@@ -44,4 +45,6 @@ class Steps @Inject constructor(
 
     fun blobToss(source: Mon, targetMon: Mon, targetTile: Tile) =
         blobTossFactory.create(source, targetMon, targetTile)
+
+    fun chargeBeam(source: Mon) = chargeBeamFactory.create(source)
 }

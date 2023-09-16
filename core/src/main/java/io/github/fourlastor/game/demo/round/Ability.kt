@@ -2,6 +2,7 @@ package io.github.fourlastor.game.demo.round
 
 import com.badlogic.gdx.ai.fsm.DefaultStateMachine
 import com.badlogic.gdx.ai.msg.Telegram
+import io.github.fourlastor.game.demo.DemoScreen
 import io.github.fourlastor.game.demo.round.step.Step
 import io.github.fourlastor.game.demo.round.step.StepState
 import io.github.fourlastor.game.demo.state.GameState
@@ -9,9 +10,10 @@ import io.github.fourlastor.game.demo.state.GameState
 abstract class Ability(
     private val unitInRound: UnitInRound,
     private val router: StateRouter,
-    private val stateFactory: StepState.Factory
+    private val stateFactory: StepState.Factory,
 ) : RoundState() {
     private lateinit var stateMachine: StateMachine
+    open val ignoresSlow: Boolean = false
     protected fun <T> start(initial: Step<T>): Builder<T> {
         return Builder(initial)
     }
@@ -25,7 +27,7 @@ abstract class Ability(
         createSteps(state)
             .run(
                 {
-                    unitInRound.hasActed = true
+                    if (!DemoScreen.DEBUG_MODE) unitInRound.hasActed = true
                     router.endOfAbility()
                 },
                 { router.endOfAbility() }

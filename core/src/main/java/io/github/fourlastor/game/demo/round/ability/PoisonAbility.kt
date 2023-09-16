@@ -20,7 +20,7 @@ class PoisonAbility @AssistedInject constructor(
     @Assisted unitInRound: UnitInRound,
     router: StateRouter,
     stateFactory: StepState.Factory,
-    private val steps: Steps
+    private val steps: Steps,
 ) : Ability(unitInRound, router, stateFactory) {
     private val mon: Mon
 
@@ -29,7 +29,7 @@ class PoisonAbility @AssistedInject constructor(
     }
 
     override fun createSteps(state: GameState): Builder<*> {
-        val movementLogic = all(maxDistance(mon.type.speed + 1), canTravel(mon))
+        val movementLogic = all(maxDistance(mon.currentSpeed(this) + 1), canTravel(mon))
         val searchLogic = all(
             canReach(state.tileAt(mon.hex), movementLogic),
             BiPredicate { _, tile -> state.unitAt(tile.hex) != null }

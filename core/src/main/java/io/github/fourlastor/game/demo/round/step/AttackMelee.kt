@@ -10,6 +10,7 @@ import dagger.assisted.AssistedInject
 import io.github.fourlastor.game.demo.AttackAnimation.makeSequence
 import io.github.fourlastor.game.demo.state.GameState
 import io.github.fourlastor.game.demo.state.unit.Mon
+import io.github.fourlastor.game.extensions.Vector2s.calculateAngle
 
 class AttackMelee @AssistedInject constructor(
     @Assisted("source") private val source: Mon,
@@ -54,11 +55,11 @@ class AttackMelee @AssistedInject constructor(
         return makeSequence(source.group, runnables, positions, MOVE_DURATION, rotationDegrees, scale)
     }
 
-    private fun doAttackAnimation(originalPosition: Vector2, targetPosition: Vector2, continuation: Runnable?) {
+    private fun doAttackAnimation(originalPosition: Vector2, targetPosition: Vector2, continuation: Runnable) {
         // Distance between source and target is used to scale the animation if needed.
         val distance = source.actorPosition.dst(targetPosition)
         // Angle offset of target from source.
-        val rotationDegrees = calculateAngle(originalPosition, targetPosition)
+        val rotationDegrees = originalPosition.calculateAngle(targetPosition)
         val attackAnimation = Actions.sequence(
             setupAttackAnimation(distance, rotationDegrees),
             Actions.run { source.actorPosition = originalPosition },

@@ -18,8 +18,16 @@ class HexCoordinates(private val width: Int, tileHeight: Int, hexSideLength: Int
         return out.set(x * horizontalSpacing, stagger + y * height)
     }
 
+    fun toWorldAtCenter(hex: Hex): Vector2 {
+        return toWorldAtCenter(hex.offset.x, hex.offset.y, Vector2())
+    }
+
     fun toWorldAtCenter(hex: Hex, out: Vector2): Vector2 {
         return toWorldAtCenter(hex.offset.x, hex.offset.y, out)
+    }
+
+    fun toWorldAtCenter(x: Int, y: Int): Vector2 {
+        return toWorldAtCenter(x, y, Vector2())
     }
 
     fun toWorldAtCenter(x: Int, y: Int, out: Vector2): Vector2 {

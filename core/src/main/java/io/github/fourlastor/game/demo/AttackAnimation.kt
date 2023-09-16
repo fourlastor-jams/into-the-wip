@@ -22,12 +22,13 @@ object AttackAnimation {
         rotationDegrees: Float,
         scale: Vector3
     ): Action {
-        // TODO: this animation has an alignment issue.
         val nextUnitPosition = Vector2(actor.x, actor.y)
         val frames = frames(runnables, positionsRelative)
         val actions = ArrayList<Action>(frames.size)
         for (frame in frames) {
             val rotatedPositionRelative = frame.positionRelative.cpy()
+            // TODO: this animation has an alignment issue (likely related to below).
+            // TODO: scaling in Z-direction seems to break animations.
             // Scale the animation by a given value.
             rotatedPositionRelative.scl(scale.x, scale.y, scale.z)
             // Rotate around the z-axis so that animation points at target.

@@ -4,6 +4,7 @@ import com.badlogic.gdx.math.GridPoint2
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.scenes.scene2d.Action
 import com.badlogic.gdx.scenes.scene2d.ui.Label
+import com.badlogic.gdx.utils.ObjectIntMap
 import io.github.fourlastor.game.coordinates.Hex
 import io.github.fourlastor.game.coordinates.HexCoordinates
 import io.github.fourlastor.game.demo.round.Ability
@@ -14,6 +15,7 @@ import io.github.fourlastor.game.demo.state.map.Tile
 import io.github.fourlastor.game.demo.state.map.TileType
 import io.github.fourlastor.game.demo.state.unit.effect.Effect
 import io.github.fourlastor.game.demo.state.unit.effect.EffectStacks
+import io.github.fourlastor.game.demo.state.unit.effect.byType
 import io.github.fourlastor.game.ui.UnitOnMap
 import java.util.function.Function
 import javax.inject.Inject
@@ -24,11 +26,11 @@ class Mon(
     private val hpLabel: Label,
     position: GridPoint2,
     val coordinates: HexCoordinates,
-    val type: UnitType
+    val type: UnitType,
 ) {
     val hex: Hex
     private val maxHp = 20
-    private val stacks = EffectStacks()
+    val stacks = EffectStacks()
     private var currentHp = 0
 
     init {
@@ -38,6 +40,8 @@ class Mon(
 
     fun onRoundStart(): Action = stacks.onRoundStart(this)
 
+    fun onTurnStart(): Action = stacks.onTurnStart(this)
+
     fun onRoundEnd() {
         stacks.tickStacks()
     }
@@ -45,6 +49,8 @@ class Mon(
     fun addEffect(effect: Effect) {
         stacks.addStack(effect, 3)
     }
+
+    fun getEffects(): ObjectIntMap<Effect> = stacks.getEffects()
 
     fun canTravel(tile: Tile): Boolean = if (tile.type === TileType.WATER && (type.canSwim || type.canFly)) {
         true
@@ -81,6 +87,16 @@ class Mon(
         hpLabel.setPosition(group.x + group.width / 2, group.y + 40)
     }
 
+    fun currentSpeed(duringAbility: Ability): Int {
+
+        for (effect in getEffects().keys()) {
+            if (effect is Effect.ApplySlow) {
+                return effect.applySlow(this, duringAbility)
+            }
+        }
+        return type.speed
+    }
+
     interface Abilities {
         fun create(): List<Description>
         class Description(val name: String, val icon: String, val factory: Function<UnitInRound, Ability>)
@@ -96,3 +112,7 @@ class Mon(
         }
     }
 }
+
+inline fun <reified T : Effect> Mon.effectByType(): T? = stacks.byType<T>()
+
+inline fun <reified T : Effect> Mon.removeEffect(): Int = stacks.removeEffect(effectByType<T>())

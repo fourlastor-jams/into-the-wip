@@ -4,7 +4,6 @@ import com.badlogic.gdx.math.GridPoint2
 import com.badlogic.gdx.math.GridPoint3
 import io.github.fourlastor.game.extensions.GridPoint3s.inverse
 import io.github.fourlastor.game.extensions.GridPoint3s.scl
-import java.util.*
 import kotlin.math.abs
 
 /**
@@ -15,7 +14,7 @@ import kotlin.math.abs
 
 data class Hex @JvmOverloads constructor(
     val offset: GridPoint2,
-    val cube: GridPoint3 = toCube(offset)
+    val cube: GridPoint3 = toCube(offset),
 ) {
 
     fun set(other: Hex) {
@@ -37,7 +36,9 @@ data class Hex @JvmOverloads constructor(
         NE(1, 0, -1),
         N(0, +1, -1),
         NW(-1, 1, 0),
-        SW(-1, 0, 1);
+        SW(-1, 0, 1),
+        NONE(0, 0, 0),
+        ;
 
         val cube: GridPoint3 = GridPoint3(x, y, z)
 
