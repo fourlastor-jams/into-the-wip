@@ -66,7 +66,13 @@ class BlobToss @AssistedInject constructor(
             Runnable {
                 // Damage all mons on that tile.
                 // TODO: use IndicateDamage once that's merged.
-                Hex.Direction.values().asList().forEach { direction: Hex.Direction -> state.mons.filter { mon: Mon -> mon.hex == targetTile.hex.offset(direction, 1) }.forEach { mon: Mon -> mon.changeHp(-DAMAGE) } }
+                Hex.Direction.values().asList().forEach { direction: Hex.Direction ->
+                    state.mons.filter { mon: Mon ->
+                        mon.hex == targetTile.hex.offset(direction, 1)
+                    }.forEach { mon: Mon ->
+                        mon.changeHp(-DAMAGE)
+                    }
+                }
             },
             null,
             null,
