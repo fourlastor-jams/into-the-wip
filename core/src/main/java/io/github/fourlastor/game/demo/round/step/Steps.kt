@@ -11,7 +11,6 @@ class Steps @Inject constructor(
     private val searchTileFactory: SearchTile.Factory,
     private val searchUnitFactory: SearchUnit.Factory,
     private val moveFactory: MoveStep.Factory,
-    private val attackMeleeFactory: AttackMelee.Factory,
     private val attackRangedFactory: AttackRanged.Factory,
     private val poisonFactory: Poison.Factory,
     private val tileSmashFactory: TileSmash.Factory,
@@ -28,8 +27,6 @@ class Steps @Inject constructor(
         filter: List<Tile>,
         interpolation: Interpolation = Interpolation.sine
     ) = moveFactory.create(mon, tile, filter, interpolation)
-
-    fun attackMelee(source: Mon, target: Mon) = attackMeleeFactory.create(source, target)
 
     fun attackRanged(source: Mon, target: Mon) = attackRangedFactory.create(source, target)
 
