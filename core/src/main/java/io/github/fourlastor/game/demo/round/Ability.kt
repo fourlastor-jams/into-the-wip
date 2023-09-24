@@ -16,6 +16,12 @@ abstract class Ability(
         return Builder(initial)
     }
 
+    protected fun step(
+        onMessage: (telegram: Telegram) -> Boolean = { _ -> false },
+        onExit: () -> Unit = {},
+        onEnter: (continuation: Runnable) -> Unit
+    ) = start(Step.simple(onMessage = onMessage, onExit = onExit, onEnter = onEnter))
+
     protected fun <T> start(initial: T): Builder<T> {
         return Builder(initial)
     }
@@ -101,6 +107,18 @@ abstract class Ability(
 
         fun run(completion: (T) -> Unit, cancellation: () -> Unit) {
             current(completion, cancellation)
+        }
+
+        fun step(
+            onMessage: (result: T, telegram: Telegram) -> Boolean = { _, _ -> false },
+            onExit: () -> Unit = {},
+            onEnter: (result: T, continuation: Runnable) -> Unit
+        ) = then { result ->
+            Step.simple(
+                onMessage = { onMessage(result, it) },
+                onExit = onExit,
+                onEnter = { onEnter(result, it) }
+            )
         }
     }
 }
