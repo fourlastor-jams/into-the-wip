@@ -10,4 +10,25 @@ abstract class Step<T> {
     open fun onMessage(state: GameState, telegram: Telegram): Boolean = false
 
     open fun update(state: GameState, next: Consumer<T>, cancel: Runnable) {}
+
+    companion object {
+        fun simple(
+            onMessage: (telegram: Telegram) -> Boolean,
+            onExit: () -> Unit,
+            onEnter: (continuation: Runnable) -> Unit
+        ) = object : Step<Unit>() {
+
+            override fun enter(state: GameState, continuation: Consumer<Unit>, cancel: Runnable) {
+                onEnter { continuation.accept(Unit) }
+            }
+
+            override fun onMessage(state: GameState, telegram: Telegram): Boolean {
+                return onMessage(telegram)
+            }
+
+            override fun exit(state: GameState) {
+                onExit()
+            }
+        }
+    }
 }

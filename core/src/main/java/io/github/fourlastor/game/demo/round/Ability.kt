@@ -2,7 +2,6 @@ package io.github.fourlastor.game.demo.round
 
 import com.badlogic.gdx.ai.fsm.DefaultStateMachine
 import com.badlogic.gdx.ai.msg.Telegram
-import io.github.fourlastor.game.demo.round.step.SimpleStep
 import io.github.fourlastor.game.demo.round.step.Step
 import io.github.fourlastor.game.demo.round.step.StepState
 import io.github.fourlastor.game.demo.state.GameState
@@ -21,19 +20,7 @@ abstract class Ability(
         onMessage: (telegram: Telegram) -> Boolean = { _ -> false },
         onExit: () -> Unit = {},
         onEnter: (continuation: Runnable) -> Unit
-    ) = start(object : SimpleStep() {
-        override fun enter(state: GameState, continuation: Runnable) {
-            onEnter(continuation)
-        }
-
-        override fun onMessage(state: GameState, telegram: Telegram): Boolean {
-            return onMessage(telegram)
-        }
-
-        override fun exit(state: GameState) {
-            onExit()
-        }
-    })
+    ) = start(Step.simple(onMessage = onMessage, onExit = onExit, onEnter = onEnter))
 
     protected fun <T> start(initial: T): Builder<T> {
         return Builder(initial)
@@ -126,20 +113,12 @@ abstract class Ability(
             onMessage: (result: T, telegram: Telegram) -> Boolean = { _, _ -> false },
             onExit: () -> Unit = {},
             onEnter: (result: T, continuation: Runnable) -> Unit
-        ) = then {
-            object : SimpleStep() {
-                override fun enter(state: GameState, continuation: Runnable) {
-                    onEnter(it, continuation)
-                }
-
-                override fun onMessage(state: GameState, telegram: Telegram): Boolean {
-                    return onMessage(it, telegram)
-                }
-
-                override fun exit(state: GameState) {
-                    onExit()
-                }
-            }
+        ) = then { result ->
+            Step.simple(
+                onMessage = { onMessage(result, it) },
+                onExit = onExit,
+                onEnter = { onEnter(result, it) }
+            )
         }
     }
 }
