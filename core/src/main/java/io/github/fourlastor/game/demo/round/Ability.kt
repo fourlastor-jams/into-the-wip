@@ -21,7 +21,7 @@ abstract class Ability(
         onMessage: (telegram: Telegram) -> Boolean = { _ -> false },
         onExit: () -> Unit = {},
         onEnter: (continuation: Runnable) -> Unit
-    ) = object : SimpleStep() {
+    ) = start(object : SimpleStep() {
         override fun enter(state: GameState, continuation: Runnable) {
             onEnter(continuation)
         }
@@ -33,7 +33,7 @@ abstract class Ability(
         override fun exit(state: GameState) {
             onExit()
         }
-    }
+    })
 
     protected fun <T> start(initial: T): Builder<T> {
         return Builder(initial)
