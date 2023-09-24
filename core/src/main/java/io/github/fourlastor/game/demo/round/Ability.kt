@@ -18,11 +18,20 @@ abstract class Ability(
     }
 
     protected fun step(
-        onMessage: (state: GameState, telegram: Telegram) -> Boolean = { _, _ -> false },
-        enter: (continuation: Runnable) -> Unit
+        onMessage: (telegram: Telegram) -> Boolean = { _ -> false },
+        onExit: () -> Unit = {},
+        onEnter: (continuation: Runnable) -> Unit
     ) = object : SimpleStep() {
         override fun enter(state: GameState, continuation: Runnable) {
-            enter(state, continuation)
+            onEnter(continuation)
+        }
+
+        override fun onMessage(state: GameState, telegram: Telegram): Boolean {
+            return onMessage(telegram)
+        }
+
+        override fun exit(state: GameState) {
+            onExit()
         }
     }
 
@@ -115,15 +124,20 @@ abstract class Ability(
 
         fun step(
             onMessage: (result: T, telegram: Telegram) -> Boolean = { _, _ -> false },
-            enter: (result: T, continuation: Runnable) -> Unit
+            onExit: () -> Unit = {},
+            onEnter: (result: T, continuation: Runnable) -> Unit
         ) = then {
             object : SimpleStep() {
                 override fun enter(state: GameState, continuation: Runnable) {
-                    enter(it, continuation)
+                    onEnter(it, continuation)
                 }
 
                 override fun onMessage(state: GameState, telegram: Telegram): Boolean {
                     return onMessage(it, telegram)
+                }
+
+                override fun exit(state: GameState) {
+                    onExit()
                 }
             }
         }
