@@ -11,7 +11,6 @@ class Steps @Inject constructor(
     private val searchTileFactory: SearchTile.Factory,
     private val searchUnitFactory: SearchUnit.Factory,
     private val moveFactory: MoveStep.Factory,
-    private val tileSmashFactory: TileSmash.Factory,
     private val blobAbsorbFactory: BlobAbsorb.Factory,
     private val blobTossFactory: BlobToss.Factory
 ) {
@@ -25,8 +24,6 @@ class Steps @Inject constructor(
         filter: List<Tile>,
         interpolation: Interpolation = Interpolation.sine
     ) = moveFactory.create(mon, tile, filter, interpolation)
-
-    fun tileSmash(source: Mon, target: Tile) = tileSmashFactory.create(source, target)
 
     fun blobAbsorb(source: Mon, target: Mon) = blobAbsorbFactory.create(source, target)
 
