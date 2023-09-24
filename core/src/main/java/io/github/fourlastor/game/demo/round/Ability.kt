@@ -2,6 +2,7 @@ package io.github.fourlastor.game.demo.round
 
 import com.badlogic.gdx.ai.fsm.DefaultStateMachine
 import com.badlogic.gdx.ai.msg.Telegram
+import io.github.fourlastor.game.demo.round.step.SimpleStep
 import io.github.fourlastor.game.demo.round.step.Step
 import io.github.fourlastor.game.demo.round.step.StepState
 import io.github.fourlastor.game.demo.state.GameState
@@ -14,6 +15,15 @@ abstract class Ability(
     private lateinit var stateMachine: StateMachine
     protected fun <T> start(initial: Step<T>): Builder<T> {
         return Builder(initial)
+    }
+
+    protected fun step(
+        onMessage: (state: GameState, telegram: Telegram) -> Boolean = { _, _ -> false },
+        enter: (continuation: Runnable) -> Unit
+    ) = object : SimpleStep() {
+        override fun enter(state: GameState, continuation: Runnable) {
+            enter(state, continuation)
+        }
     }
 
     protected fun <T> start(initial: T): Builder<T> {
@@ -101,6 +111,21 @@ abstract class Ability(
 
         fun run(completion: (T) -> Unit, cancellation: () -> Unit) {
             current(completion, cancellation)
+        }
+
+        fun step(
+            onMessage: (result: T, telegram: Telegram) -> Boolean = { _, _ -> false },
+            enter: (result: T, continuation: Runnable) -> Unit
+        ) = then {
+            object : SimpleStep() {
+                override fun enter(state: GameState, continuation: Runnable) {
+                    enter(it, continuation)
+                }
+
+                override fun onMessage(state: GameState, telegram: Telegram): Boolean {
+                    return onMessage(it, telegram)
+                }
+            }
         }
     }
 }

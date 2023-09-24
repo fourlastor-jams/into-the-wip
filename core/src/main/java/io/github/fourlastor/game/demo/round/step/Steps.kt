@@ -14,7 +14,6 @@ class Steps @Inject constructor(
     private val attackMeleeFactory: AttackMelee.Factory,
     private val attackRangedFactory: AttackRanged.Factory,
     private val poisonFactory: Poison.Factory,
-    private val summonMountainFactory: SummonMountain.Factory,
     private val tileSmashFactory: TileSmash.Factory,
     private val blobAbsorbFactory: BlobAbsorb.Factory,
     private val blobTossFactory: BlobToss.Factory
@@ -35,8 +34,6 @@ class Steps @Inject constructor(
     fun attackRanged(source: Mon, target: Mon) = attackRangedFactory.create(source, target)
 
     fun poison(target: Mon) = poisonFactory.create(target)
-
-    fun summonMountain(source: Mon, target: Tile) = summonMountainFactory.create(source, target)
 
     fun tileSmash(source: Mon, target: Tile) = tileSmashFactory.create(source, target)
 
