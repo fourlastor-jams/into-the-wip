@@ -9,8 +9,11 @@ plugins {
     alias(libs.plugins.shadow)
 }
 
-java.sourceCompatibility = JavaVersion.VERSION_11
-java.targetCompatibility = JavaVersion.VERSION_11
+java {
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(11))
+    }
+}
 
 spotless {
     isEnforceCheck = false
