@@ -16,19 +16,11 @@ gretty {
   extraResourceBase("build/dist/webapp")
 }
 
-val assetsDir = rootProject.files("assets")
-sourceSets.main.configure {
-  resources.srcDir(assetsDir)
-}
 val mainClassName = "io.github.fourlastor.game.teavm.TeaVMBuilder"
 java {
-  targetCompatibility = JavaVersion.VERSION_11
-  sourceCompatibility = JavaVersion.VERSION_11
+  toolchain { languageVersion.set(JavaLanguageVersion.of(11)) }
 }
 
-tasks.withType<KotlinCompile>().configureEach {
-  compilerOptions { jvmTarget.set(JvmTarget.JVM_11) }
-}
 dependencies {
   implementation (libs.gdx.backend.teavm)
   implementation(libs.google.gson)

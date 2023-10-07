@@ -14,11 +14,10 @@ plugins {
     alias(libs.plugins.kotlin.kapt)
 }
 
-java.sourceCompatibility = JavaVersion.VERSION_11
-java.targetCompatibility = JavaVersion.VERSION_11
-
-tasks.withType<KotlinCompile>().configureEach {
-    compilerOptions { jvmTarget.set(JvmTarget.JVM_11) }
+java {
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(11))
+    }
 }
 
 val assetsDir = rootProject.files("assets")
@@ -50,8 +49,10 @@ val packTextures = tasks.register("packTextures") {
     }
 }
 
-tasks.compileJava.configure {
+tasks.processResources.configure {
     dependsOn(packTextures)
+}
+tasks.compileJava.configure {
     options.encoding = "UTF-8"
 }
 
