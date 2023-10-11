@@ -12,6 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.utils.Align
 import com.badlogic.gdx.utils.ScreenUtils
+import com.badlogic.gdx.utils.viewport.ScreenViewport
 import com.badlogic.gdx.utils.viewport.Viewport
 import com.github.tommyettinger.ds.ObjectList
 import io.github.fourlastor.game.coordinates.HexCoordinates
@@ -33,7 +34,7 @@ class DemoScreen @Inject constructor(
     assetManager: AssetManager,
     private val viewport: Viewport,
     private val stage: Stage,
-    private val multiplexer: InputMultiplexer
+    private val multiplexer: InputMultiplexer,
 ) : ScreenAdapter() {
     private val stateMachine: GameStateMachine
     private val state: GameState
@@ -101,6 +102,7 @@ class DemoScreen @Inject constructor(
         }
         val ui = UiLayer()
         stage.addActor(ui)
+        (viewport as ScreenViewport).unitsPerPixel = 1f / 2f
         state = GameState(mons, tiles, ui)
         stateMachine = stateMachineFactory.create(state)
     }

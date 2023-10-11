@@ -4,7 +4,7 @@ enum class UnitType(
     val mapName: String,
     val speed: Int,
     val canFly: Boolean,
-    val canSwim: Boolean = false
+    val canSwim: Boolean = false,
 ) {
     CEREBRY("cerebry", 2, true),
     BLOBHOT("blobhot", 3, false),
@@ -13,7 +13,10 @@ enum class UnitType(
     TECTONNE("tectonne", 3, false),
     MON6("MON6", 3, false),
     MON7("MON7", 3, false),
-    MON8("MON8", 3, false);
+    MON8("MON8", 3, false),
+    MON9("MON9", 3, false),
+    MON10("MON10", 2, false),
+    ;
 
     companion object {
         fun fromMap(mapName: String): UnitType = values().first { it.mapName.equals(mapName, ignoreCase = true) }
