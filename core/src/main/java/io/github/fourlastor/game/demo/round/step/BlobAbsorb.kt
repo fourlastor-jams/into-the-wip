@@ -83,10 +83,6 @@ class BlobAbsorb @AssistedInject constructor(
         doAttackAnimation(originalPosition, targetPosition, continuation)
     }
 
-    override fun exit(state: GameState) {
-        // optional cleanup
-    }
-
     /**
      * Factory interface for creating instances of the AttackMelee class.
      */
