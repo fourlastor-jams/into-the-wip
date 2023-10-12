@@ -15,6 +15,10 @@ class Context {
         color = promptColor
     }
 
+    fun doOnExit(action: () -> Unit) {
+        cleanups.add(action)
+    }
+
     fun Actor.doOnClick(click: () -> Unit) {
         val listener = object : ClickListener() {
             override fun clicked(event: InputEvent?, x: Float, y: Float) {

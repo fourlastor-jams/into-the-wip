@@ -17,7 +17,7 @@ class StepState<T>(private val step: Step<T>, private val next: Consumer<T>, pri
     }
 
     override fun exit(state: GameState) {
-        step.exit(state)
+        step.exit()
     }
 
     override fun onMessage(state: GameState, telegram: Telegram): Boolean {

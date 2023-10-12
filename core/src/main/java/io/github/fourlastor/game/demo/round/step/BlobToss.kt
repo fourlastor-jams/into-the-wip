@@ -84,10 +84,6 @@ class BlobToss @AssistedInject constructor(
         doAttackAnimation(state, originalPosition, targetPosition, continuation)
     }
 
-    override fun exit(state: GameState) {
-        // optional cleanup
-    }
-
     /**
      * Factory interface for creating instances of the AttackMelee class.
      */

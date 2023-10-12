@@ -6,14 +6,14 @@ import java.util.function.Consumer
 
 abstract class Step<T> {
 
-    var context: Context? = null
+    private var context: Context? = null
 
     fun enter(state: GameState, continuation: Consumer<T>, cancel: Runnable) {
         context = Context().apply { enter(state, continuation, cancel) }
     }
     abstract fun Context.enter(state: GameState, continuation: Consumer<T>, cancel: Runnable)
 
-    open fun exit(state: GameState) {
+    fun exit() {
         context?.cleanup()
     }
     open fun onMessage(state: GameState, telegram: Telegram): Boolean = false
@@ -28,15 +28,12 @@ abstract class Step<T> {
         ) = object : Step<Unit>() {
 
             override fun Context.enter(state: GameState, continuation: Consumer<Unit>, cancel: Runnable) {
+                doOnExit(onExit)
                 onEnter { continuation.accept(Unit) }
             }
 
             override fun onMessage(state: GameState, telegram: Telegram): Boolean {
                 return onMessage(telegram)
-            }
-
-            override fun exit(state: GameState) {
-                onExit()
             }
         }
     }
