@@ -18,18 +18,20 @@ class Round @Inject constructor(private val router: StateRouter, private val sta
     private var factions: List<CurrentFaction>? = null
     private var factionCounter = 0
     override fun enter(state: GameState) {
-        if (factions == null) {
-            stage.addAction(Actions.sequence(startOfRound(state), Actions.run { startFirstTurn(state) }))
+        val currentFactions = factions
+        if (currentFactions == null) {
+            stage.addAction(startOfRound(state))
         } else {
-            advanceToNextTurn(state)
+            advanceToNextTurn(state, currentFactions)
         }
     }
 
     private fun startOfRound(state: GameState): Action {
+        val currentFactions = Faction.values().map { CurrentFaction(state.byFaction(it)) }
         factions = Faction.values().map { CurrentFaction(state.byFaction(it)) }
-        val actions = factions!!
+        val actions = currentFactions
             .flatMap { it.units.map { unitInRound -> unitInRound.mon.onRoundStart() } }
-        return Actions.sequence(*actions.toTypedArray())
+        return Actions.sequence(*actions.toTypedArray(), Actions.run { startFirstTurn(state, currentFactions) })
     }
 
     override fun exit(state: GameState) {
@@ -40,18 +42,18 @@ class Round @Inject constructor(private val router: StateRouter, private val sta
         }
     }
 
-    private fun startFirstTurn(state: GameState) {
+    private fun startFirstTurn(state: GameState, currentFactions: List<CurrentFaction>) {
         factionCounter = 0
-        startTurn(state)
+        startTurn(state, currentFactions)
     }
 
-    private fun advanceToNextTurn(state: GameState) {
-        val currentFaction = factions!![factionCounter]
+    private fun advanceToNextTurn(state: GameState, currentFactions: List<CurrentFaction>) {
+        val currentFaction = currentFactions[factionCounter]
         if (currentFaction.allUnitsActed()) {
             factionCounter += 1
         }
-        if (factionCounter >= factions!!.size) {
-            factions!!.forEach(
+        if (factionCounter >= currentFactions.size) {
+            currentFactions.forEach(
                 Consumer { faction: CurrentFaction ->
                     faction.units.forEach(
                         Consumer { unitInRound: UnitInRound -> unitInRound.mon.onRoundEnd() }
@@ -61,11 +63,11 @@ class Round @Inject constructor(private val router: StateRouter, private val sta
             router.round()
             return
         }
-        startTurn(state)
+        startTurn(state, currentFactions)
     }
 
-    private fun startTurn(state: GameState) {
-        val currentFaction = factions!![factionCounter]
+    private fun startTurn(state: GameState, currentFactions: List<CurrentFaction>) {
+        val currentFaction = currentFactions[factionCounter]
         currentFaction.units.asSequence()
             .filter { unitInTurn: UnitInRound -> !unitInTurn.hasActed }
             .forEach { unitInTurn: UnitInRound ->
