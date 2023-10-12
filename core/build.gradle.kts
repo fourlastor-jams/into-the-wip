@@ -1,6 +1,4 @@
 import com.badlogic.gdx.tools.texturepacker.TexturePacker
-import org.jetbrains.kotlin.gradle.dsl.JvmTarget
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 @Suppress(
     // known false positive: https://youtrack.jetbrains.com/issue/KTIJ-19369
@@ -69,7 +67,6 @@ dependencies {
     implementation(libs.squidLib.core)
     implementation(libs.textratypist)
     implementation(libs.dagger.core)
-    api(libs.dagger.gwt)
     kapt(libs.dagger.compiler)
     implementation(libs.ktx.actors)
     implementation(libs.ktx.ai)
