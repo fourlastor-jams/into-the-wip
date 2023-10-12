@@ -19,7 +19,7 @@ import java.util.function.Consumer
 
 class SearchUnit @AssistedInject constructor(@Assisted private val filter: BiPredicate<GameState, Tile>) :
     Step<Hex>() {
-    override fun enter(state: GameState, continuation: Consumer<Hex>, cancel: Runnable) {
+    override fun Context.enter(state: GameState, continuation: Consumer<Hex>, cancel: Runnable) {
         val searched = state.search(filter)
         for (tile in searched) {
             val unit = state.unitAt(tile.hex)

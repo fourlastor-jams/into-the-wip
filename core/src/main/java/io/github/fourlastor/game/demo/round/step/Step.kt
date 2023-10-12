@@ -5,8 +5,17 @@ import io.github.fourlastor.game.demo.state.GameState
 import java.util.function.Consumer
 
 abstract class Step<T> {
-    abstract fun enter(state: GameState, continuation: Consumer<T>, cancel: Runnable)
-    open fun exit(state: GameState) {}
+
+    var context: Context? = null
+
+    fun enter(state: GameState, continuation: Consumer<T>, cancel: Runnable) {
+        context = Context().apply { enter(state, continuation, cancel) }
+    }
+    abstract fun Context.enter(state: GameState, continuation: Consumer<T>, cancel: Runnable)
+
+    open fun exit(state: GameState) {
+        context?.cleanup()
+    }
     open fun onMessage(state: GameState, telegram: Telegram): Boolean = false
 
     open fun update(state: GameState, next: Consumer<T>, cancel: Runnable) {}
@@ -18,7 +27,7 @@ abstract class Step<T> {
             onEnter: (continuation: Runnable) -> Unit
         ) = object : Step<Unit>() {
 
-            override fun enter(state: GameState, continuation: Consumer<Unit>, cancel: Runnable) {
+            override fun Context.enter(state: GameState, continuation: Consumer<Unit>, cancel: Runnable) {
                 onEnter { continuation.accept(Unit) }
             }
 
