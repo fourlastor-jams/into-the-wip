@@ -17,7 +17,8 @@ class SearchTile @AssistedInject constructor(@Assisted private val filter: BiPre
     override fun Context.enter(state: GameState, continuation: Consumer<Hex>, cancel: Runnable) {
         val searched = state.search(filter)
         for (tile in searched) {
-            tile.actor.selectable(Color.CORAL) { continuation.accept(tile.hex) }
+            tile.actor.doOnClick { continuation.accept(tile.hex) }
+            tile.actor.selectable(Color.CORAL)
         }
     }
 

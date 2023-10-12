@@ -10,18 +10,20 @@ class Context {
 
     private val cleanups: MutableList<() -> Unit> = LinkedList()
 
-    fun Actor.selectable(promptColor: Color, click: () -> Unit) {
+    fun Actor.selectable(promptColor: Color) {
+        cleanups.add { color = Color.WHITE }
+        color = promptColor
+    }
+
+    fun Actor.doOnClick(click: () -> Unit) {
         val listener = object : ClickListener() {
             override fun clicked(event: InputEvent?, x: Float, y: Float) {
                 click()
             }
         }
-        cleanups.add {
-            removeListener(listener)
-            color = Color.WHITE
-        }
+
+        cleanups.add { removeListener(listener) }
         addListener(listener)
-        color = promptColor
     }
 
     fun cleanup() = cleanups.forEach { it() }
