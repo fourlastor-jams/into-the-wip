@@ -30,5 +30,8 @@ class Context {
         addListener(listener)
     }
 
-    fun cleanup() = cleanups.forEach { it() }
+    fun cleanup() {
+        cleanups.forEach { it() }
+        cleanups.clear()
+    }
 }
